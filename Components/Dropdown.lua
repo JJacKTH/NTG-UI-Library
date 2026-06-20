@@ -224,11 +224,15 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.OptionButtons = {}
     self.GroupHeaders = {}
     
+    local layoutOrderCounter = 0
+    
     -- Create options
     local function createOption(optionText)
+        layoutOrderCounter = layoutOrderCounter + 1
         local optBtn = Instance.new("TextButton")
         optBtn.Name = "Option_" .. optionText
         optBtn.Size = UDim2.new(1, -4, 0, 25)
+        optBtn.LayoutOrder = layoutOrderCounter
         optBtn.BackgroundColor3 = Theme.Current.Secondary
         optBtn.BackgroundTransparency = 1
         optBtn.BorderSizePixel = 0
@@ -341,6 +345,8 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     
     -- Populate options helper
     local function populateOptions(optionsList)
+        layoutOrderCounter = 0
+        
         -- Clear existing
         for _, optData in pairs(self.OptionButtons) do
             if optData.Button then
@@ -368,11 +374,13 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
                 local items = groupData.Items or {}
                 
                 -- Create Group Header
+                layoutOrderCounter = layoutOrderCounter + 1
                 local groupFrame = Instance.new("Frame")
                 groupFrame.Name = "GroupHeader_" .. groupName
                 groupFrame.Size = UDim2.new(1, -4, 0, 22)
                 groupFrame.BackgroundTransparency = 1
                 groupFrame.ZIndex = 102
+                groupFrame.LayoutOrder = layoutOrderCounter
                 groupFrame.Parent = self.OptionsList
                 
                 local groupLabel = Instance.new("TextLabel")
