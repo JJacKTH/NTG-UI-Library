@@ -10,24 +10,46 @@ local BASE_URL = "https://raw.githubusercontent.com/JJacKTH/AntigravityUI/main/"
 
 local cb = "?cb=" .. tostring(os.time())
 
--- Load all modules
-local Theme = loadstring(game:HttpGet(BASE_URL .. "Core/Theme.lua" .. cb))()
-local Animation = loadstring(game:HttpGet(BASE_URL .. "Core/Animation.lua" .. cb))()
-local Utility = loadstring(game:HttpGet(BASE_URL .. "Core/Utility.lua" .. cb))()
-local ConfigManager = loadstring(game:HttpGet(BASE_URL .. "Config/ConfigManager.lua" .. cb))()
+-- Load all modules with safe wrapper
+local function safeLoad(url, name)
+    local content
+    local success, err = pcall(function()
+        content = game:HttpGet(url)
+    end)
+    if not success or not content or content == "" then
+        error("[AntigravityUI] Failed to download " .. name .. " from: " .. url .. " | Error: " .. tostring(err or "empty response"))
+    end
+    
+    local func, compileErr = loadstring(content)
+    if not func then
+        error("[AntigravityUI] Failed to compile " .. name .. " | Error: " .. tostring(compileErr))
+    end
+    
+    local ok, result = pcall(func)
+    if not ok then
+        error("[AntigravityUI] Failed to execute " .. name .. " | Error: " .. tostring(result))
+    end
+    
+    return result
+end
+
+local Theme = safeLoad(BASE_URL .. "Core/Theme.lua" .. cb, "Theme")
+local Animation = safeLoad(BASE_URL .. "Core/Animation.lua" .. cb, "Animation")
+local Utility = safeLoad(BASE_URL .. "Core/Utility.lua" .. cb, "Utility")
+local ConfigManager = safeLoad(BASE_URL .. "Config/ConfigManager.lua" .. cb, "ConfigManager")
 
 -- Load components
 local Components = {
-    Button = loadstring(game:HttpGet(BASE_URL .. "Components/Button.lua" .. cb))(),
-    Toggle = loadstring(game:HttpGet(BASE_URL .. "Components/Toggle.lua" .. cb))(),
-    Textbox = loadstring(game:HttpGet(BASE_URL .. "Components/Textbox.lua" .. cb))(),
-    Dropdown = loadstring(game:HttpGet(BASE_URL .. "Components/Dropdown.lua" .. cb))(),
-    Slider = loadstring(game:HttpGet(BASE_URL .. "Components/Slider.lua" .. cb))(),
-    ColorPicker = loadstring(game:HttpGet(BASE_URL .. "Components/ColorPicker.lua" .. cb))(),
-    Keybind = loadstring(game:HttpGet(BASE_URL .. "Components/Keybind.lua" .. cb))(),
-    Label = loadstring(game:HttpGet(BASE_URL .. "Components/Label.lua" .. cb))(),
-    Section = loadstring(game:HttpGet(BASE_URL .. "Components/Section.lua" .. cb))(),
-    Divider = loadstring(game:HttpGet(BASE_URL .. "Components/Divider.lua" .. cb))()
+    Button = safeLoad(BASE_URL .. "Components/Button.lua" .. cb, "Button"),
+    Toggle = safeLoad(BASE_URL .. "Components/Toggle.lua" .. cb, "Toggle"),
+    Textbox = safeLoad(BASE_URL .. "Components/Textbox.lua" .. cb, "Textbox"),
+    Dropdown = safeLoad(BASE_URL .. "Components/Dropdown.lua" .. cb, "Dropdown"),
+    Slider = safeLoad(BASE_URL .. "Components/Slider.lua" .. cb, "Slider"),
+    ColorPicker = safeLoad(BASE_URL .. "Components/ColorPicker.lua" .. cb, "ColorPicker"),
+    Keybind = safeLoad(BASE_URL .. "Components/Keybind.lua" .. cb, "Keybind"),
+    Label = safeLoad(BASE_URL .. "Components/Label.lua" .. cb, "Label"),
+    Section = safeLoad(BASE_URL .. "Components/Section.lua" .. cb, "Section"),
+    Divider = safeLoad(BASE_URL .. "Components/Divider.lua" .. cb, "Divider")
 }
 
 -- ================================================================
