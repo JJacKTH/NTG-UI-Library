@@ -114,6 +114,7 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
             function(value)
                 self.Value = value or ""
                 self.Input.Text = self.Value
+                self.Callback(self.Value)
             end
         )
     end
@@ -122,6 +123,7 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     function self:Set(text)
         self.Value = text or ""
         self.Input.Text = self.Value
+        self.Callback(self.Value)
     end
     
     function self:Get()
