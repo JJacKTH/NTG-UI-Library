@@ -1,5 +1,5 @@
 --[[
-    ████████╗██╗ ██████╗ ██████╗  █████╗ ██╗   ██╗██╗████████╗██╗   ██╗
+    ████████╗██╗ ██████╗ ██████╗  █████╗ ██╗   ██╗██║████████╗██╗   ██╗
     ██╔═══██║██║██╔════╝ ██╔══██╗██╔══██╗██║   ██║██║╚══██╔══╝╚██╗ ██╔╝
     ████████║██║██║  ███╗██████╔╝███████║██║   ██║██║   ██║    ╚████╔╝ 
     ██╔═══██║██║██║   ██║██╔══██╗██╔══██║╚██╗ ██╔╝██║   ██║     ╚██╔╝  
@@ -47,26 +47,26 @@ local function loadModule(path)
     return success and module or nil
 end
 
-local Theme = safeLoad(BASE_URL .. "Core/Theme.lua", "Theme")
-local Animation = safeLoad(BASE_URL .. "Core/Animation.lua", "Animation")
-local Utility = safeLoad(BASE_URL .. "Core/Utility.lua", "Utility")
-local ConfigManager = safeLoad(BASE_URL .. "Config/ConfigManager.lua", "ConfigManager")
+local cb = "?cb=" .. tostring(os.time())
+local Theme = safeLoad(BASE_URL .. "Core/Theme.lua" .. cb, "Theme")
+local Animation = safeLoad(BASE_URL .. "Core/Animation.lua" .. cb, "Animation")
+local Utility = safeLoad(BASE_URL .. "Core/Utility.lua" .. cb, "Utility")
+local ConfigManager = safeLoad(BASE_URL .. "Config/ConfigManager.lua" .. cb, "ConfigManager")
 local Components = {
-    Button = safeLoad(BASE_URL .. "Components/Button.lua", "Button"),
-    Toggle = safeLoad(BASE_URL .. "Components/Toggle.lua", "Toggle"),
-    Textbox = safeLoad(BASE_URL .. "Components/Textbox.lua", "Textbox"),
-    Dropdown = safeLoad(BASE_URL .. "Components/Dropdown.lua", "Dropdown"),
-    Slider = safeLoad(BASE_URL .. "Components/Slider.lua", "Slider"),
-    ColorPicker = safeLoad(BASE_URL .. "Components/ColorPicker.lua", "ColorPicker"),
-    Keybind = safeLoad(BASE_URL .. "Components/Keybind.lua", "Keybind"),
-    Label = safeLoad(BASE_URL .. "Components/Label.lua", "Label"),
-    Section = safeLoad(BASE_URL .. "Components/Section.lua", "Section"),
-    Divider = safeLoad(BASE_URL .. "Components/Divider.lua", "Divider")
+    Button = safeLoad(BASE_URL .. "Components/Button.lua" .. cb, "Button"),
+    Toggle = safeLoad(BASE_URL .. "Components/Toggle.lua" .. cb, "Toggle"),
+    Textbox = safeLoad(BASE_URL .. "Components/Textbox.lua" .. cb, "Textbox"),
+    Dropdown = safeLoad(BASE_URL .. "Components/Dropdown.lua" .. cb, "Dropdown"),
+    Slider = safeLoad(BASE_URL .. "Components/Slider.lua" .. cb, "Slider"),
+    ColorPicker = safeLoad(BASE_URL .. "Components/ColorPicker.lua" .. cb, "ColorPicker"),
+    Keybind = safeLoad(BASE_URL .. "Components/Keybind.lua" .. cb, "Keybind"),
+    Label = safeLoad(BASE_URL .. "Components/Label.lua" .. cb, "Label"),
+    Section = safeLoad(BASE_URL .. "Components/Section.lua" .. cb, "Section"),
+    Divider = safeLoad(BASE_URL .. "Components/Divider.lua" .. cb, "Divider")
 }
 
 -- Local require support is intentionally omitted here because some executors
 -- expose `script` as a table stub that does not implement Instance methods.
-
 -- If still nil, create inline versions
 if not Theme then
     Theme = {
