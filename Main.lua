@@ -148,6 +148,7 @@ function NTGUI:CreateWindow(options)
     Window.Visible = true
     Window.OnClose = options.OnClose -- Custom callback
     Window._connections = {}
+    Window._categories = {}
     
     -- Set theme
     if Theme.Presets and Theme.Presets[Window.Theme] then
@@ -260,11 +261,88 @@ function NTGUI:CreateWindow(options)
     subtitle.TextXAlignment = Enum.TextXAlignment.Left
     subtitle.Parent = Window.TitleBar
     
+    -- Search Bar in the middle of TitleBar (matching Image 2)
+    local searchBar = Instance.new("Frame")
+    searchBar.Name = "SearchBar"
+    searchBar.Size = UDim2.new(0, 220, 0, 28)
+    searchBar.Position = UDim2.new(0.5, 0, 0.5, 0)
+    searchBar.AnchorPoint = Vector2.new(0.5, 0.5)
+    searchBar.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    searchBar.BackgroundTransparency = 0.5
+    searchBar.BorderSizePixel = 0
+    searchBar.Parent = Window.TitleBar
+    
+    local searchCorner = Instance.new("UICorner")
+    searchCorner.CornerRadius = UDim.new(0, 8)
+    searchCorner.Parent = searchBar
+    
+    local searchStroke = Instance.new("UIStroke")
+    searchStroke.Color = Theme.Current.Stroke or Color3.fromRGB(255, 255, 255)
+    searchStroke.Transparency = 0.85
+    searchStroke.Thickness = 1
+    searchStroke.Parent = searchBar
+
+    local searchIcon = Instance.new("TextLabel")
+    searchIcon.Name = "SearchIcon"
+    searchIcon.Size = UDim2.new(0, 16, 0, 16)
+    searchIcon.Position = UDim2.new(0, 8, 0.5, 0)
+    searchIcon.AnchorPoint = Vector2.new(0, 0.5)
+    searchIcon.BackgroundTransparency = 1
+    searchIcon.Text = "🔍"
+    searchIcon.TextColor3 = Theme.Current.SubText
+    searchIcon.TextSize = 10
+    searchIcon.Parent = searchBar
+    
+    local searchBox = Instance.new("TextBox")
+    searchBox.Name = "SearchBox"
+    searchBox.Size = UDim2.new(1, -54, 1, 0)
+    searchBox.Position = UDim2.new(0, 28, 0, 0)
+    searchBox.BackgroundTransparency = 1
+    searchBox.Text = ""
+    searchBox.PlaceholderText = "Search anything..."
+    searchBox.PlaceholderColor3 = Theme.Current.SubText
+    searchBox.TextColor3 = Theme.Current.Text
+    searchBox.TextSize = 12
+    searchBox.Font = Enum.Font.GothamMedium
+    searchBox.TextXAlignment = Enum.TextXAlignment.Left
+    searchBox.ClearTextOnFocus = false
+    searchBox.Parent = searchBar
+    
+    local keyHint = Instance.new("Frame")
+    keyHint.Name = "KeyHint"
+    keyHint.Size = UDim2.new(0, 20, 0, 16)
+    keyHint.Position = UDim2.new(1, -26, 0.5, 0)
+    keyHint.AnchorPoint = Vector2.new(0, 0.5)
+    keyHint.BackgroundColor3 = Theme.Current.SurfaceGlow or Theme.Current.SurfaceAlt
+    keyHint.BackgroundTransparency = 0.3
+    keyHint.BorderSizePixel = 0
+    keyHint.Parent = searchBar
+    
+    local keyHintCorner = Instance.new("UICorner")
+    keyHintCorner.CornerRadius = UDim.new(0, 4)
+    keyHintCorner.Parent = keyHint
+    
+    local keyHintStroke = Instance.new("UIStroke")
+    keyHintStroke.Color = Theme.Current.Stroke or Color3.fromRGB(255, 255, 255)
+    keyHintStroke.Transparency = 0.9
+    keyHintStroke.Thickness = 1
+    keyHintStroke.Parent = keyHint
+
+    local keyHintText = Instance.new("TextLabel")
+    keyHintText.Name = "Text"
+    keyHintText.Size = UDim2.new(1, 0, 1, 0)
+    keyHintText.BackgroundTransparency = 1
+    keyHintText.Text = "K"
+    keyHintText.TextColor3 = Theme.Current.SubText
+    keyHintText.TextSize = 10
+    keyHintText.Font = Enum.Font.GothamBold
+    keyHintText.Parent = keyHint
+    
     -- Control buttons container
     local controlsContainer = Instance.new("Frame")
     controlsContainer.Name = "Controls"
-    controlsContainer.Size = UDim2.new(0, 104, 1, 0)
-    controlsContainer.Position = UDim2.new(1, -114, 0, 0)
+    controlsContainer.Size = UDim2.new(0, 72, 1, 0)
+    controlsContainer.Position = UDim2.new(1, -82, 0, 0)
     controlsContainer.BackgroundTransparency = 1
     controlsContainer.Parent = Window.TitleBar
     
@@ -272,47 +350,45 @@ function NTGUI:CreateWindow(options)
     controlsLayout.FillDirection = Enum.FillDirection.Horizontal
     controlsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
     controlsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    controlsLayout.Padding = UDim.new(0, 5)
+    controlsLayout.Padding = UDim.new(0, 6)
     controlsLayout.Parent = controlsContainer
     
     -- Minimize button
     local minimizeBtn = Instance.new("TextButton")
     minimizeBtn.Name = "Minimize"
-    minimizeBtn.Size = UDim2.new(0, 34, 0, 34)
+    minimizeBtn.Size = UDim2.new(0, 28, 0, 20)
     minimizeBtn.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    minimizeBtn.BackgroundTransparency = 0.18
+    minimizeBtn.BackgroundTransparency = 0.5
     minimizeBtn.BorderSizePixel = 0
     minimizeBtn.Text = "-"
-    minimizeBtn.TextColor3 = Theme.Current.Text
-    minimizeBtn.TextSize = 18
+    minimizeBtn.TextColor3 = Theme.Current.SubText
+    minimizeBtn.TextSize = 12
     minimizeBtn.Font = Enum.Font.GothamBold
     minimizeBtn.AutoButtonColor = false
     minimizeBtn.Parent = controlsContainer
     Theme:StyleCard(minimizeBtn, {
-        CornerRadius = UDim.new(0, 12),
-        BackgroundTransparency = 0.08,
-        StrokeTransparency = 0.9
+        CornerRadius = UDim.new(0, 6),
+        BackgroundTransparency = 0.5,
+        StrokeTransparency = 0.88
     })
     
     -- Close button
     local closeBtn = Instance.new("TextButton")
     closeBtn.Name = "Close"
-    closeBtn.Size = UDim2.new(0, 34, 0, 34)
-    closeBtn.BackgroundColor3 = Color3.fromRGB(200, 80, 80)
-    closeBtn.BackgroundTransparency = 0.18
+    closeBtn.Size = UDim2.new(0, 28, 0, 20)
+    closeBtn.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    closeBtn.BackgroundTransparency = 0.5
     closeBtn.BorderSizePixel = 0
-    closeBtn.Text = "X"
-    closeBtn.TextColor3 = Theme.Current.Text
-    closeBtn.TextColor3 = Theme.Current.Text
-    closeBtn.TextSize = 17
+    closeBtn.Text = "×"
+    closeBtn.TextColor3 = Theme.Current.SubText
+    closeBtn.TextSize = 14
     closeBtn.Font = Enum.Font.GothamBold
     closeBtn.AutoButtonColor = false
     closeBtn.Parent = controlsContainer
     Theme:StyleCard(closeBtn, {
-        CornerRadius = UDim.new(0, 12),
-        BackgroundColor3 = Color3.fromRGB(225, 90, 90),
-        BackgroundTransparency = 0.1,
-        StrokeTransparency = 0.92
+        CornerRadius = UDim.new(0, 6),
+        BackgroundTransparency = 0.5,
+        StrokeTransparency = 0.88
     })
     
     -- Hover effects
@@ -428,22 +504,11 @@ function NTGUI:CreateWindow(options)
     local UserInputService = game:GetService("UserInputService")
     local Lighting = game:GetService("Lighting")
     local function updateBlur()
-        -- ponytail: dynamic blur effect managed based on visibility and theme preset
+        -- ponytail: disabled screen blur to keep background clear
         local blurName = "NTG_UI_Blur_" .. string.gsub(Window.Title, "%s+", "_")
         local existingBlur = Lighting:FindFirstChild(blurName)
-        if Window.Visible and not Window.Minimized then
-            if not existingBlur then
-                local blur = Instance.new("BlurEffect")
-                blur.Name = blurName
-                blur.Size = Theme.Current.BlurStrength or 24
-                blur.Parent = Lighting
-            else
-                existingBlur.Size = Theme.Current.BlurStrength or 24
-            end
-        else
-            if existingBlur then
-                existingBlur:Destroy()
-            end
+        if existingBlur then
+            existingBlur:Destroy()
         end
     end
     
@@ -571,7 +636,45 @@ function NTGUI:CreateWindow(options)
         Tab.Name = tabOptions.Name or "Tab"
         Tab.Icon = tabOptions.Icon
         Tab.Elements = {}
-        Tab.LayoutOrder = #Window.Tabs + 1
+        Tab.LayoutOrder = #Window.Tabs * 10 + 1
+        
+        -- Resolve Category
+        local category = tabOptions.Category
+        if not category then
+            local nameLower = string.lower(Tab.Name)
+            if nameLower == "dashboard" or nameLower == "combat" or nameLower == "visuals" or nameLower == "world" or nameLower == "player" then
+                category = "MAIN"
+            elseif nameLower == "tools" or nameLower == "movement" or nameLower == "teleport" or nameLower == "auto farm" or nameLower == "miscellaneous" then
+                category = "UTILITY"
+            elseif nameLower == "settings" or nameLower == "theme" or nameLower == "keybinds" or nameLower == "about" then
+                category = "SETTINGS"
+            end
+        end
+        
+        if category and not Window._categories[category] then
+            Window._categories[category] = true
+            
+            local catHeader = Instance.new("Frame")
+            catHeader.Name = "Category_" .. category
+            catHeader.Size = UDim2.new(1, 0, 0, 32)
+            catHeader.BackgroundTransparency = 1
+            catHeader.BorderSizePixel = 0
+            catHeader.LayoutOrder = #Window.Tabs * 10
+            catHeader.Parent = Window.TabScroll
+            
+            local catLabel = Instance.new("TextLabel")
+            catLabel.Name = "Label"
+            catLabel.Size = UDim2.new(1, 0, 1, 0)
+            catLabel.Position = UDim2.new(0, 10, 0, 0)
+            catLabel.BackgroundTransparency = 1
+            catLabel.Text = string.upper(category)
+            catLabel.TextColor3 = Theme.Current.SubText
+            catLabel.TextSize = 10
+            catLabel.Font = Enum.Font.GothamBold
+            catLabel.TextXAlignment = Enum.TextXAlignment.Left
+            catLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+            catLabel.Parent = catHeader
+        end
         
         -- Tab button
         Tab.Button = Instance.new("TextButton")
