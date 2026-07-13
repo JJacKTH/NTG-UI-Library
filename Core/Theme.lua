@@ -8,55 +8,55 @@ local Theme = {}
 Theme.Presets = {
     GlassDark = {
         Name = "GlassDark",
-        Background = Color3.fromRGB(6, 10, 20),
-        Surface = Color3.fromRGB(18, 24, 38),
-        SurfaceAlt = Color3.fromRGB(25, 33, 51),
-        SurfaceGlow = Color3.fromRGB(34, 42, 68),
-        Accent = Color3.fromRGB(112, 141, 255),
-        AccentHover = Color3.fromRGB(140, 165, 255),
-        AccentSoft = Color3.fromRGB(112, 141, 255),
-        Text = Color3.fromRGB(248, 250, 255),
-        SubText = Color3.fromRGB(170, 179, 204),
+        Background = Color3.fromRGB(12, 10, 24), -- Cosmic dark purple
+        Surface = Color3.fromRGB(22, 18, 38), -- Cosmic purple translucent card
+        SurfaceAlt = Color3.fromRGB(30, 24, 52), -- Deep nested card
+        SurfaceGlow = Color3.fromRGB(44, 34, 76),
+        Accent = Color3.fromRGB(120, 95, 255), -- Glowing neon purple/indigo
+        AccentHover = Color3.fromRGB(145, 120, 255),
+        AccentSoft = Color3.fromRGB(120, 95, 255),
+        Text = Color3.fromRGB(245, 245, 255),
+        SubText = Color3.fromRGB(152, 146, 178),
         Divider = Color3.fromRGB(255, 255, 255),
         Stroke = Color3.fromRGB(255, 255, 255),
-        Glow = Color3.fromRGB(112, 141, 255),
+        Glow = Color3.fromRGB(120, 95, 255),
         Success = Color3.fromRGB(96, 214, 140),
         Error = Color3.fromRGB(255, 104, 104),
         Warning = Color3.fromRGB(255, 194, 92),
         Transparency = {
-            Background = 0.15,
-            Surface = 0.25,
-            SurfaceAlt = 0.32,
-            Stroke = 0.65, -- ponytail: slightly more visible stroke for mobile executor fallbacks
-            SoftStroke = 0.8,
-            Glow = 0.76
+            Background = 0.35, -- Sleek glassmorphism backdrop transparency
+            Surface = 0.55,
+            SurfaceAlt = 0.65,
+            Stroke = 0.88, -- Extremely thin, clean refracting borders
+            SoftStroke = 0.94,
+            Glow = 0.8
         },
         BlurStrength = 28
     },
 
     GlassLight = {
         Name = "GlassLight",
-        Background = Color3.fromRGB(240, 244, 250),
+        Background = Color3.fromRGB(242, 240, 248),
         Surface = Color3.fromRGB(255, 255, 255),
-        SurfaceAlt = Color3.fromRGB(245, 248, 253),
-        SurfaceGlow = Color3.fromRGB(235, 241, 251),
-        Accent = Color3.fromRGB(84, 108, 255),
-        AccentHover = Color3.fromRGB(106, 129, 255),
-        AccentSoft = Color3.fromRGB(84, 108, 255),
-        Text = Color3.fromRGB(23, 28, 40),
-        SubText = Color3.fromRGB(94, 104, 124),
-        Divider = Color3.fromRGB(28, 32, 44),
+        SurfaceAlt = Color3.fromRGB(248, 245, 253),
+        SurfaceGlow = Color3.fromRGB(238, 233, 251),
+        Accent = Color3.fromRGB(120, 95, 255),
+        AccentHover = Color3.fromRGB(135, 115, 255),
+        AccentSoft = Color3.fromRGB(120, 95, 255),
+        Text = Color3.fromRGB(25, 22, 38),
+        SubText = Color3.fromRGB(115, 110, 135),
+        Divider = Color3.fromRGB(44, 34, 76),
         Stroke = Color3.fromRGB(255, 255, 255),
-        Glow = Color3.fromRGB(84, 108, 255),
+        Glow = Color3.fromRGB(120, 95, 255),
         Success = Color3.fromRGB(52, 170, 102),
         Error = Color3.fromRGB(220, 70, 70),
         Warning = Color3.fromRGB(214, 156, 48),
         Transparency = {
-            Background = 0.12,
-            Surface = 0.22,
-            SurfaceAlt = 0.28,
-            Stroke = 0.7, -- ponytail: slightly more visible stroke for light theme fallbacks
-            SoftStroke = 0.85,
+            Background = 0.28,
+            Surface = 0.45,
+            SurfaceAlt = 0.55,
+            Stroke = 0.82,
+            SoftStroke = 0.9,
             Glow = 0.8
         },
         BlurStrength = 18
@@ -113,7 +113,7 @@ function Theme:StyleCard(frame, opts)
 
     local stroke = Instance.new("UIStroke")
     stroke.Color = opts.StrokeColor or Theme.Current.Stroke or Theme.Current.Divider
-    stroke.Transparency = opts.StrokeTransparency or (Theme.Current.Transparency and Theme.Current.Transparency.Stroke or 0.7)
+    stroke.Transparency = opts.StrokeTransparency or (Theme.Current.Transparency and Theme.Current.Transparency.Stroke or 0.88)
     stroke.Thickness = opts.StrokeThickness or 1
     stroke.Parent = frame
 
@@ -126,9 +126,9 @@ function Theme:StyleCard(frame, opts)
         ColorSequenceKeypoint.new(1, Theme.Current.Background or Color3.fromRGB(0, 0, 0))
     })
     strokeGradient.Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0, 0.1),
-        NumberSequenceKeypoint.new(0.5, 0.45),
-        NumberSequenceKeypoint.new(1, 0.9)
+        NumberSequenceKeypoint.new(0, 0.2),
+        NumberSequenceKeypoint.new(0.6, 0.65),
+        NumberSequenceKeypoint.new(1, 0.95)
     })
     strokeGradient.Parent = stroke
 
@@ -137,13 +137,13 @@ function Theme:StyleCard(frame, opts)
         gradient.Rotation = opts.GradientRotation or 90
         gradient.Color = opts.GradientColor or ColorSequence.new({
             ColorSequenceKeypoint.new(0, Theme.Current.SurfaceGlow or Theme.Current.Accent),
-            ColorSequenceKeypoint.new(0.25, Theme.Current.SurfaceAlt or Theme.Current.Surface),
+            ColorSequenceKeypoint.new(0.3, Theme.Current.SurfaceAlt or Theme.Current.Surface),
             ColorSequenceKeypoint.new(1, Theme.Current.Background)
         })
         gradient.Transparency = opts.GradientTransparency or NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.15),
-            NumberSequenceKeypoint.new(0.4, 0.35),
-            NumberSequenceKeypoint.new(1, 0.1)
+            NumberSequenceKeypoint.new(0, 0.25),
+            NumberSequenceKeypoint.new(0.5, 0.45),
+            NumberSequenceKeypoint.new(1, 0.3)
         })
         gradient.Parent = frame
     end

@@ -53,13 +53,19 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     self.SwitchBg.Position = UDim2.new(1, -52, 0.5, 0)
     self.SwitchBg.AnchorPoint = Vector2.new(0, 0.5)
     self.SwitchBg.BackgroundColor3 = self.Value and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.SwitchBg.BackgroundTransparency = 0.05
+    self.SwitchBg.BackgroundTransparency = 0.25
     self.SwitchBg.BorderSizePixel = 0
     self.SwitchBg.Parent = self.Container
     
     local switchBgCorner = Instance.new("UICorner")
     switchBgCorner.CornerRadius = UDim.new(1, 0)
     switchBgCorner.Parent = self.SwitchBg
+    
+    local switchBgStroke = Instance.new("UIStroke")
+    switchBgStroke.Color = Color3.fromRGB(255, 255, 255)
+    switchBgStroke.Transparency = 0.82
+    switchBgStroke.Thickness = 1
+    switchBgStroke.Parent = self.SwitchBg
     
     -- Toggle knob
     self.Knob = Instance.new("Frame")

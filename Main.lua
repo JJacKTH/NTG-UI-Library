@@ -272,39 +272,25 @@ function NTGUI:CreateWindow(options)
     -- Title text
     Window.TitleLabel = Instance.new("TextLabel")
     Window.TitleLabel.Name = "Title"
-    Window.TitleLabel.Size = UDim2.new(1, -160, 1, 0)
-    Window.TitleLabel.Position = UDim2.new(0, 18, 0, 2)
+    Window.TitleLabel.Size = UDim2.new(1, -160, 0, 22)
+    Window.TitleLabel.Position = UDim2.new(0, 18, 0, 10)
     Window.TitleLabel.BackgroundTransparency = 1
     Window.TitleLabel.Text = Window.Title
     Window.TitleLabel.TextColor3 = Theme.Current.Text
-    Window.TitleLabel.TextSize = 19
+    Window.TitleLabel.TextSize = 18
     Window.TitleLabel.Font = Enum.Font.GothamBold
     Window.TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     Window.TitleLabel.Parent = Window.TitleBar
 
-    local titleAccent = Instance.new("Frame")
-    titleAccent.Name = "AccentLine"
-    titleAccent.Size = UDim2.new(0, 72, 0, 3)
-    titleAccent.Position = UDim2.new(0, 18, 1, -8)
-    titleAccent.BackgroundColor3 = Theme.Current.Accent
-    titleAccent.BackgroundTransparency = 0.06
-    titleAccent.BorderSizePixel = 0
-    titleAccent.ZIndex = 3
-    titleAccent.Parent = Window.TitleBar
-
-    local titleAccentCorner = Instance.new("UICorner")
-    titleAccentCorner.CornerRadius = UDim.new(1, 0)
-    titleAccentCorner.Parent = titleAccent
-
     local subtitle = Instance.new("TextLabel")
     subtitle.Name = "Subtitle"
     subtitle.Size = UDim2.new(1, -160, 0, 14)
-    subtitle.Position = UDim2.new(0, 18, 0, 28)
+    subtitle.Position = UDim2.new(0, 18, 0, 31)
     subtitle.BackgroundTransparency = 1
-    subtitle.Text = "Glass 2.0 - Frosted depth"
+    subtitle.Text = "Modern • Frosted • Depth"
     subtitle.TextColor3 = Theme.Current.SubText
     subtitle.TextSize = 11
-    subtitle.Font = Enum.Font.Gotham
+    subtitle.Font = Enum.Font.GothamMedium
     subtitle.TextXAlignment = Enum.TextXAlignment.Left
     subtitle.Parent = Window.TitleBar
     
@@ -351,6 +337,7 @@ function NTGUI:CreateWindow(options)
     closeBtn.BorderSizePixel = 0
     closeBtn.Text = "X"
     closeBtn.TextColor3 = Theme.Current.Text
+    closeBtn.TextColor3 = Theme.Current.Text
     closeBtn.TextSize = 17
     closeBtn.Font = Enum.Font.GothamBold
     closeBtn.AutoButtonColor = false
@@ -375,16 +362,10 @@ function NTGUI:CreateWindow(options)
     Window.TabContainer.Name = "TabContainer"
     Window.TabContainer.Size = UDim2.new(0, 168, 1, -70)
     Window.TabContainer.Position = UDim2.new(0, 12, 0, 62)
-    Window.TabContainer.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    Window.TabContainer.BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Surface or 0.2
+    Window.TabContainer.BackgroundTransparency = 1
     Window.TabContainer.BorderSizePixel = 0
     Window.TabContainer.Active = true
     Window.TabContainer.Parent = Window.Container
-    Theme:StyleCard(Window.TabContainer, {
-        CornerRadius = UDim.new(0, 18),
-        BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Surface or 0.2,
-        StrokeTransparency = 0.86
-    })
     
     -- Tab buttons scroll
     Window.TabScroll = Instance.new("ScrollingFrame")
@@ -630,8 +611,8 @@ function NTGUI:CreateWindow(options)
         Tab.Button = Instance.new("TextButton")
         Tab.Button.Name = "Tab_" .. Tab.Name
         Tab.Button.Size = UDim2.new(1, 0, 0, 38)
-        Tab.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-        Tab.Button.BackgroundTransparency = 0.4
+        Tab.Button.BackgroundColor3 = Theme.Current.Accent
+        Tab.Button.BackgroundTransparency = 1
         Tab.Button.BorderSizePixel = 0
         Tab.Button.Text = Tab.Name
         Tab.Button.TextColor3 = Theme.Current.SubText
@@ -647,9 +628,19 @@ function NTGUI:CreateWindow(options)
 
         local tabStroke = Instance.new("UIStroke")
         tabStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-        tabStroke.Transparency = 0.86
+        tabStroke.Transparency = 0.85
         tabStroke.Thickness = 1
+        tabStroke.Enabled = false
         tabStroke.Parent = Tab.Button
+        
+        local tabGradient = Instance.new("UIGradient")
+        tabGradient.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Theme.Current.Accent),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 50, 200))
+        })
+        tabGradient.Rotation = 90
+        tabGradient.Enabled = false
+        tabGradient.Parent = Tab.Button
         
         -- Tab content page
         Tab.Page = Instance.new("ScrollingFrame")
@@ -669,8 +660,7 @@ function NTGUI:CreateWindow(options)
         pageBackground.Name = "PageBackground"
         pageBackground.Size = UDim2.new(1, -4, 1, -4)
         pageBackground.Position = UDim2.new(0, 2, 0, 2)
-        pageBackground.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-        pageBackground.BackgroundTransparency = 0.1
+        pageBackground.BackgroundTransparency = 1
         pageBackground.BorderSizePixel = 0
         pageBackground.ZIndex = 0
         pageBackground.Parent = Tab.Page
@@ -680,9 +670,7 @@ function NTGUI:CreateWindow(options)
         pageCorner.Parent = pageBackground
 
         local pageStroke = Instance.new("UIStroke")
-        pageStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-        pageStroke.Transparency = 0.84
-        pageStroke.Thickness = 1
+        pageStroke.Enabled = false
         pageStroke.Parent = pageBackground
         
         local pageLayout = Instance.new("UIListLayout")
@@ -710,14 +698,25 @@ function NTGUI:CreateWindow(options)
                 tab.Button.BackgroundTransparency = 1
                 tab.Button.TextColor3 = Theme.Current.SubText
                 tab.Page.Visible = false
+                if tab.Button:FindFirstChild("UIGradient") then
+                    tab.Button.UIGradient.Enabled = false
+                end
+                if tab.Button:FindFirstChild("UIStroke") then
+                    tab.Button.UIStroke.Enabled = false
+                end
             end
             
             -- Select this tab
-            Tab.Button.BackgroundTransparency = 0
-            Tab.Button.BackgroundColor3 = Theme.Current.Accent
+            Tab.Button.BackgroundTransparency = 0.15
             Tab.Button.TextColor3 = Theme.Current.Text
             Tab.Page.Visible = true
             Window.ActiveTab = Tab
+            if Tab.Button:FindFirstChild("UIGradient") then
+                Tab.Button.UIGradient.Enabled = true
+            end
+            if Tab.Button:FindFirstChild("UIStroke") then
+                Tab.Button.UIStroke.Enabled = true
+            end
         end
         
         -- Tab button click
