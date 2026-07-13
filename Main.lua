@@ -459,12 +459,13 @@ function NTGUI:CreateWindow(options)
     controlsLayout.Parent = controlsContainer
     
     -- Minimize button (on the left)
+    -- Minimize button (on the left)
     local minimizeBtn = Instance.new("TextButton")
     minimizeBtn.Name = "Minimize"
     minimizeBtn.LayoutOrder = 1
     minimizeBtn.Size = UDim2.new(0, 32, 0, 24)
-    minimizeBtn.BackgroundColor3 = Color3.fromRGB(235, 165, 35)
-    minimizeBtn.BackgroundTransparency = 0.1
+    minimizeBtn.BackgroundColor3 = Color3.fromRGB(235, 140, 20)
+    minimizeBtn.BackgroundTransparency = 0
     minimizeBtn.BorderSizePixel = 0
     minimizeBtn.Text = "-"
     minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -472,20 +473,24 @@ function NTGUI:CreateWindow(options)
     minimizeBtn.Font = Enum.Font.GothamBold
     minimizeBtn.AutoButtonColor = false
     minimizeBtn.Parent = controlsContainer
-    Theme:StyleCard(minimizeBtn, {
-        CornerRadius = UDim.new(0, 6),
-        BackgroundColor3 = Color3.fromRGB(235, 165, 35),
-        BackgroundTransparency = 0.1,
-        StrokeTransparency = 0.7
-    })
+    
+    local minCorner = Instance.new("UICorner")
+    minCorner.CornerRadius = UDim.new(0, 6)
+    minCorner.Parent = minimizeBtn
+
+    local minStroke = Instance.new("UIStroke")
+    minStroke.Color = Color3.fromRGB(255, 255, 255)
+    minStroke.Transparency = 0.85
+    minStroke.Thickness = 1
+    minStroke.Parent = minimizeBtn
     
     -- Close button (on the far right)
     local closeBtn = Instance.new("TextButton")
     closeBtn.Name = "Close"
     closeBtn.LayoutOrder = 2
     closeBtn.Size = UDim2.new(0, 32, 0, 24)
-    closeBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-    closeBtn.BackgroundTransparency = 0.1
+    closeBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+    closeBtn.BackgroundTransparency = 0
     closeBtn.BorderSizePixel = 0
     closeBtn.Text = "×"
     closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -493,17 +498,21 @@ function NTGUI:CreateWindow(options)
     closeBtn.Font = Enum.Font.GothamBold
     closeBtn.AutoButtonColor = false
     closeBtn.Parent = controlsContainer
-    Theme:StyleCard(closeBtn, {
-        CornerRadius = UDim.new(0, 6),
-        BackgroundColor3 = Color3.fromRGB(220, 60, 60),
-        BackgroundTransparency = 0.1,
-        StrokeTransparency = 0.7
-    })
+    
+    local closeCorner = Instance.new("UICorner")
+    closeCorner.CornerRadius = UDim.new(0, 6)
+    closeCorner.Parent = closeBtn
+
+    local closeStroke = Instance.new("UIStroke")
+    closeStroke.Color = Color3.fromRGB(255, 255, 255)
+    closeStroke.Transparency = 0.85
+    closeStroke.Thickness = 1
+    closeStroke.Parent = closeBtn
     
     -- Hover effects
     if Animation then
-        Animation:CreateHoverEffect(minimizeBtn, Color3.fromRGB(255, 185, 55), Color3.fromRGB(235, 165, 35), {Lift = false, Grow = false})
-        Animation:CreateHoverEffect(closeBtn, Color3.fromRGB(250, 90, 90), Color3.fromRGB(220, 60, 60), {Lift = false, Grow = false})
+        Animation:CreateHoverEffect(minimizeBtn, Color3.fromRGB(255, 175, 45), Color3.fromRGB(235, 140, 20), {Lift = false, Grow = false})
+        Animation:CreateHoverEffect(closeBtn, Color3.fromRGB(250, 80, 80), Color3.fromRGB(220, 50, 50), {Lift = false, Grow = false})
         Animation:CreatePressEffect(minimizeBtn, 0.94, 1)
         Animation:CreatePressEffect(closeBtn, 0.94, 1)
     end
