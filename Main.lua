@@ -284,18 +284,20 @@ function NTGUI:CreateWindow(options)
     subtitle.Parent = Window.TitleBar
     
     -- Search Bar in the middle of TitleBar (matching Image 2)
-    local searchBar = Instance.new("Frame")
+    local searchBar = Instance.new("TextButton")
     searchBar.Name = "SearchBar"
-    searchBar.Size = UDim2.new(0, 220, 0, 28)
+    searchBar.Size = UDim2.new(0, 28, 0, 28)
     searchBar.Position = UDim2.new(0.5, 0, 0.5, 0)
     searchBar.AnchorPoint = Vector2.new(0.5, 0.5)
     searchBar.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
     searchBar.BackgroundTransparency = 0.5
     searchBar.BorderSizePixel = 0
+    searchBar.Text = ""
+    searchBar.AutoButtonColor = false
     searchBar.Parent = Window.TitleBar
     
     local searchCorner = Instance.new("UICorner")
-    searchCorner.CornerRadius = UDim.new(0, 8)
+    searchCorner.CornerRadius = UDim.new(0, 14)
     searchCorner.Parent = searchBar
     
     local searchStroke = Instance.new("UIStroke")
@@ -306,60 +308,140 @@ function NTGUI:CreateWindow(options)
 
     local searchIcon = Instance.new("TextLabel")
     searchIcon.Name = "SearchIcon"
-    searchIcon.Size = UDim2.new(0, 16, 0, 16)
-    searchIcon.Position = UDim2.new(0, 8, 0.5, 0)
-    searchIcon.AnchorPoint = Vector2.new(0, 0.5)
+    searchIcon.Size = UDim2.new(1, 0, 1, 0)
+    searchIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
+    searchIcon.AnchorPoint = Vector2.new(0.5, 0.5)
     searchIcon.BackgroundTransparency = 1
     searchIcon.Text = "🔍"
     searchIcon.TextColor3 = Theme.Current.SubText
-    searchIcon.TextSize = 10
+    searchIcon.TextSize = 12
     searchIcon.Parent = searchBar
     
     local searchBox = Instance.new("TextBox")
     searchBox.Name = "SearchBox"
-    searchBox.Size = UDim2.new(1, -54, 1, 0)
+    searchBox.Size = UDim2.new(1, -40, 1, 0)
     searchBox.Position = UDim2.new(0, 28, 0, 0)
     searchBox.BackgroundTransparency = 1
     searchBox.Text = ""
-    searchBox.PlaceholderText = "Search anything..."
+    searchBox.PlaceholderText = "Search active tab..."
     searchBox.PlaceholderColor3 = Theme.Current.SubText
     searchBox.TextColor3 = Theme.Current.Text
     searchBox.TextSize = 12
     searchBox.Font = Enum.Font.GothamMedium
     searchBox.TextXAlignment = Enum.TextXAlignment.Left
     searchBox.ClearTextOnFocus = false
+    searchBox.Visible = false
     searchBox.Parent = searchBar
-    
-    local keyHint = Instance.new("Frame")
-    keyHint.Name = "KeyHint"
-    keyHint.Size = UDim2.new(0, 20, 0, 16)
-    keyHint.Position = UDim2.new(1, -26, 0.5, 0)
-    keyHint.AnchorPoint = Vector2.new(0, 0.5)
-    keyHint.BackgroundColor3 = Theme.Current.SurfaceGlow or Theme.Current.SurfaceAlt
-    keyHint.BackgroundTransparency = 0.3
-    keyHint.BorderSizePixel = 0
-    keyHint.Parent = searchBar
-    
-    local keyHintCorner = Instance.new("UICorner")
-    keyHintCorner.CornerRadius = UDim.new(0, 4)
-    keyHintCorner.Parent = keyHint
-    
-    local keyHintStroke = Instance.new("UIStroke")
-    keyHintStroke.Color = Theme.Current.Stroke or Color3.fromRGB(255, 255, 255)
-    keyHintStroke.Transparency = 0.9
-    keyHintStroke.Thickness = 1
-    keyHintStroke.Parent = keyHint
 
-    local keyHintText = Instance.new("TextLabel")
-    keyHintText.Name = "Text"
-    keyHintText.Size = UDim2.new(1, 0, 1, 0)
-    keyHintText.BackgroundTransparency = 1
-    keyHintText.Text = "K"
-    keyHintText.TextColor3 = Theme.Current.SubText
-    keyHintText.TextSize = 10
-    keyHintText.Font = Enum.Font.GothamBold
-    keyHintText.Parent = keyHint
+    local isExpanded = false
     
+    local function getElementName(container)
+        local name = container.Name
+        local underscoreIndex = string.find(name, "_")
+        if underscoreIndex then
+            return string.sub(name, underscoreIndex + 1)
+        end
+        return name
+    end
+
+    local function performSearch(text)
+        if not Window.ActiveTab then return end
+        local query = string.lower(text)
+        
+        local function searchContainer(parentFrame)
+            local hasVisibleChild = false
+            for _, child in ipairs(parentFrame:GetChildren()) do
+                if child:IsA("Frame") and child.Name ~= "Header" and child.Name ~= "Content" then
+                    local elemName = getElementName(child)
+                    local isMatch = query == "" or string.find(string.lower(elemName), query, 1, true)
+                    
+                    local sectionContent = child:FindFirstChild("Content")
+                    if sectionContent then
+                        local anyChildMatch = searchContainer(sectionContent)
+                        if isMatch or anyChildMatch then
+                            child.Visible = true
+                            hasVisibleChild = true
+                        else
+                            child.Visible = false
+                        end
+                    else
+                        if isMatch then
+                            child.Visible = true
+                            hasVisibleChild = true
+                        else
+                            child.Visible = false
+                        end
+                    end
+                end
+            end
+            return hasVisibleChild
+        end
+        
+        searchContainer(Window.ActiveTab.Page)
+    end
+
+    local function expandSearch()
+        if isExpanded then return end
+        isExpanded = true
+        
+        if Animation then
+            Animation:Play(searchBar, {Size = UDim2.new(1, -120, 0, 28)}, 0.22, Enum.EasingStyle.Quint)
+            Animation:Play(searchIcon, {
+                Position = UDim2.new(0, 8, 0.5, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                Size = UDim2.new(0, 16, 0, 16)
+            }, 0.22, Enum.EasingStyle.Quint)
+        else
+            searchBar.Size = UDim2.new(1, -120, 0, 28)
+            searchIcon.Position = UDim2.new(0, 8, 0.5, 0)
+            searchIcon.AnchorPoint = Vector2.new(0, 0.5)
+            searchIcon.Size = UDim2.new(0, 16, 0, 16)
+        end
+        
+        task.delay(0.05, function()
+            searchBox.Visible = true
+            searchBox:CaptureFocus()
+        end)
+    end
+    
+    local function collapseSearch()
+        if not isExpanded then return end
+        isExpanded = false
+        
+        searchBox.Text = ""
+        performSearch("")
+        searchBox.Visible = false
+        
+        if Animation then
+            Animation:Play(searchBar, {Size = UDim2.new(0, 28, 0, 28)}, 0.22, Enum.EasingStyle.Quint)
+            Animation:Play(searchIcon, {
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Size = UDim2.new(1, 0, 1, 0)
+            }, 0.22, Enum.EasingStyle.Quint)
+        else
+            searchBar.Size = UDim2.new(0, 28, 0, 28)
+            searchIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
+            searchIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+            searchIcon.Size = UDim2.new(1, 0, 1, 0)
+        end
+    end
+    
+    searchBar.MouseButton1Click:Connect(function()
+        if not isExpanded then
+            expandSearch()
+        end
+    end)
+    
+    searchBox.FocusLost:Connect(function(enterPressed)
+        if searchBox.Text == "" then
+            collapseSearch()
+        end
+    end)
+
+    searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        performSearch(searchBox.Text)
+    end)
     -- Control buttons container
     local controlsContainer = Instance.new("Frame")
     controlsContainer.Name = "Controls"
@@ -373,14 +455,16 @@ function NTGUI:CreateWindow(options)
     controlsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
     controlsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
     controlsLayout.Padding = UDim.new(0, 8)
+    controlsLayout.SortOrder = Enum.SortOrder.LayoutOrder
     controlsLayout.Parent = controlsContainer
     
-    -- Minimize button
+    -- Minimize button (on the left)
     local minimizeBtn = Instance.new("TextButton")
     minimizeBtn.Name = "Minimize"
+    minimizeBtn.LayoutOrder = 1
     minimizeBtn.Size = UDim2.new(0, 32, 0, 24)
-    minimizeBtn.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    minimizeBtn.BackgroundTransparency = 0.3
+    minimizeBtn.BackgroundColor3 = Color3.fromRGB(235, 165, 35)
+    minimizeBtn.BackgroundTransparency = 0.1
     minimizeBtn.BorderSizePixel = 0
     minimizeBtn.Text = "-"
     minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -390,16 +474,18 @@ function NTGUI:CreateWindow(options)
     minimizeBtn.Parent = controlsContainer
     Theme:StyleCard(minimizeBtn, {
         CornerRadius = UDim.new(0, 6),
-        BackgroundTransparency = 0.3,
-        StrokeTransparency = 0.8
+        BackgroundColor3 = Color3.fromRGB(235, 165, 35),
+        BackgroundTransparency = 0.1,
+        StrokeTransparency = 0.7
     })
     
-    -- Close button
+    -- Close button (on the far right)
     local closeBtn = Instance.new("TextButton")
     closeBtn.Name = "Close"
+    closeBtn.LayoutOrder = 2
     closeBtn.Size = UDim2.new(0, 32, 0, 24)
-    closeBtn.BackgroundColor3 = Color3.fromRGB(200, 75, 75)
-    closeBtn.BackgroundTransparency = 0.25
+    closeBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+    closeBtn.BackgroundTransparency = 0.1
     closeBtn.BorderSizePixel = 0
     closeBtn.Text = "×"
     closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -409,15 +495,15 @@ function NTGUI:CreateWindow(options)
     closeBtn.Parent = controlsContainer
     Theme:StyleCard(closeBtn, {
         CornerRadius = UDim.new(0, 6),
-        BackgroundColor3 = Color3.fromRGB(200, 75, 75),
-        BackgroundTransparency = 0.25,
-        StrokeTransparency = 0.78
+        BackgroundColor3 = Color3.fromRGB(220, 60, 60),
+        BackgroundTransparency = 0.1,
+        StrokeTransparency = 0.7
     })
     
     -- Hover effects
     if Animation then
-        Animation:CreateHoverEffect(minimizeBtn, Theme.Current.Accent, Theme.Current.SurfaceAlt or Theme.Current.Surface, {Lift = false, Grow = false})
-        Animation:CreateHoverEffect(closeBtn, Color3.fromRGB(255, 100, 100), Color3.fromRGB(200, 75, 75), {Lift = false, Grow = false})
+        Animation:CreateHoverEffect(minimizeBtn, Color3.fromRGB(255, 185, 55), Color3.fromRGB(235, 165, 35), {Lift = false, Grow = false})
+        Animation:CreateHoverEffect(closeBtn, Color3.fromRGB(250, 90, 90), Color3.fromRGB(220, 60, 60), {Lift = false, Grow = false})
         Animation:CreatePressEffect(minimizeBtn, 0.94, 1)
         Animation:CreatePressEffect(closeBtn, 0.94, 1)
     end
@@ -742,6 +828,7 @@ function NTGUI:CreateWindow(options)
         pageLayout.FillDirection = Enum.FillDirection.Vertical
         pageLayout.Padding = UDim.new(0, 8)
         pageLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        pageLayout.SortOrder = Enum.SortOrder.LayoutOrder
         pageLayout.Parent = Tab.Page
         
         local pagePadding = Instance.new("UIPadding")
