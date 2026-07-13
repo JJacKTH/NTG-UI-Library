@@ -363,8 +363,8 @@ function NTGUI:CreateWindow(options)
     -- Control buttons container
     local controlsContainer = Instance.new("Frame")
     controlsContainer.Name = "Controls"
-    controlsContainer.Size = UDim2.new(0, 72, 1, 0)
-    controlsContainer.Position = UDim2.new(1, -82, 0, 0)
+    controlsContainer.Size = UDim2.new(0, 84, 1, 0)
+    controlsContainer.Position = UDim2.new(1, -94, 0, 0)
     controlsContainer.BackgroundTransparency = 1
     controlsContainer.Parent = Window.TitleBar
     
@@ -372,53 +372,54 @@ function NTGUI:CreateWindow(options)
     controlsLayout.FillDirection = Enum.FillDirection.Horizontal
     controlsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
     controlsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    controlsLayout.Padding = UDim.new(0, 6)
+    controlsLayout.Padding = UDim.new(0, 8)
     controlsLayout.Parent = controlsContainer
     
     -- Minimize button
     local minimizeBtn = Instance.new("TextButton")
     minimizeBtn.Name = "Minimize"
-    minimizeBtn.Size = UDim2.new(0, 28, 0, 20)
+    minimizeBtn.Size = UDim2.new(0, 32, 0, 24)
     minimizeBtn.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    minimizeBtn.BackgroundTransparency = 0.5
+    minimizeBtn.BackgroundTransparency = 0.3
     minimizeBtn.BorderSizePixel = 0
     minimizeBtn.Text = "-"
-    minimizeBtn.TextColor3 = Theme.Current.SubText
-    minimizeBtn.TextSize = 12
+    minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    minimizeBtn.TextSize = 16
     minimizeBtn.Font = Enum.Font.GothamBold
     minimizeBtn.AutoButtonColor = false
     minimizeBtn.Parent = controlsContainer
     Theme:StyleCard(minimizeBtn, {
         CornerRadius = UDim.new(0, 6),
-        BackgroundTransparency = 0.5,
-        StrokeTransparency = 0.88
+        BackgroundTransparency = 0.3,
+        StrokeTransparency = 0.8
     })
     
     -- Close button
     local closeBtn = Instance.new("TextButton")
     closeBtn.Name = "Close"
-    closeBtn.Size = UDim2.new(0, 28, 0, 20)
-    closeBtn.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    closeBtn.BackgroundTransparency = 0.5
+    closeBtn.Size = UDim2.new(0, 32, 0, 24)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(200, 75, 75)
+    closeBtn.BackgroundTransparency = 0.25
     closeBtn.BorderSizePixel = 0
     closeBtn.Text = "×"
-    closeBtn.TextColor3 = Theme.Current.SubText
-    closeBtn.TextSize = 14
+    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeBtn.TextSize = 18
     closeBtn.Font = Enum.Font.GothamBold
     closeBtn.AutoButtonColor = false
     closeBtn.Parent = controlsContainer
     Theme:StyleCard(closeBtn, {
         CornerRadius = UDim.new(0, 6),
-        BackgroundTransparency = 0.5,
-        StrokeTransparency = 0.88
+        BackgroundColor3 = Color3.fromRGB(200, 75, 75),
+        BackgroundTransparency = 0.25,
+        StrokeTransparency = 0.78
     })
     
     -- Hover effects
     if Animation then
-        Animation:CreateHoverEffect(minimizeBtn, Theme.Current.AccentHover or Theme.Current.Accent, Theme.Current.SurfaceAlt or Theme.Current.Surface, {Lift = true, Grow = true})
-        Animation:CreateHoverEffect(closeBtn, Color3.fromRGB(220, 100, 100), Color3.fromRGB(200, 80, 80), {Lift = true, Grow = true})
-        Animation:CreatePressEffect(minimizeBtn, 0.96, 1)
-        Animation:CreatePressEffect(closeBtn, 0.96, 1)
+        Animation:CreateHoverEffect(minimizeBtn, Theme.Current.Accent, Theme.Current.SurfaceAlt or Theme.Current.Surface, {Lift = false, Grow = false})
+        Animation:CreateHoverEffect(closeBtn, Color3.fromRGB(255, 100, 100), Color3.fromRGB(200, 75, 75), {Lift = false, Grow = false})
+        Animation:CreatePressEffect(minimizeBtn, 0.94, 1)
+        Animation:CreatePressEffect(closeBtn, 0.94, 1)
     end
     
     -- Tab sidebar
@@ -790,7 +791,7 @@ function NTGUI:CreateWindow(options)
             end
             
             -- Select this tab
-            Tab.Button.BackgroundTransparency = 0.15
+            Tab.Button.BackgroundTransparency = 0.65
             local txt = Tab.Button:FindFirstChild("Text")
             if txt then
                 txt.TextColor3 = Theme.Current.Text
@@ -820,10 +821,14 @@ function NTGUI:CreateWindow(options)
         Tab.Button.MouseEnter:Connect(function()
             if Window.ActiveTab ~= Tab then
                 if Animation then
-                    Animation:Play(Tab.Button, {BackgroundTransparency = 0.35}, 0.14)
+                    Animation:Play(Tab.Button, {BackgroundTransparency = 0.85}, 0.14)
                     Animation:Play(Tab.Button, {Position = UDim2.new(0, 0, 0, -1)}, 0.14)
+                    local txt = Tab.Button:FindFirstChild("Text")
+                    if txt then Animation:Play(txt, {TextColor3 = Theme.Current.Text}, 0.14) end
+                    local icon = Tab.Button:FindFirstChild("Icon")
+                    if icon then Animation:Play(icon, {ImageColor3 = Theme.Current.Text}, 0.14) end
                 else
-                    Tab.Button.BackgroundTransparency = 0.35
+                    Tab.Button.BackgroundTransparency = 0.85
                 end
             end
         end)
@@ -833,6 +838,10 @@ function NTGUI:CreateWindow(options)
                 if Animation then
                     Animation:Play(Tab.Button, {BackgroundTransparency = 1}, 0.16)
                     Animation:Play(Tab.Button, {Position = UDim2.new(0, 0, 0, 0)}, 0.16)
+                    local txt = Tab.Button:FindFirstChild("Text")
+                    if txt then Animation:Play(txt, {TextColor3 = Theme.Current.SubText}, 0.16) end
+                    local icon = Tab.Button:FindFirstChild("Icon")
+                    if icon then Animation:Play(icon, {ImageColor3 = Theme.Current.SubText}, 0.16) end
                 else
                     Tab.Button.BackgroundTransparency = 1
                 end
