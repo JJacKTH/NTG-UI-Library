@@ -37,7 +37,7 @@ A modern, feature-rich UI library for Roblox Luau scripting.
 
 ```lua
 -- Load library
-local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Loader.lua"))()
+local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI-Library/main/Loader.lua"))()
 
 -- Create window
 local Window = UI:CreateWindow({
@@ -173,7 +173,7 @@ UI Library ที่ทันสมัยและมีฟีเจอร์ค
 
 ```lua
 -- โหลด library
-local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Loader.lua"))()
+local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI-Library/main/Loader.lua"))()
 
 -- สร้างหน้าต่าง
 local Window = UI:CreateWindow({

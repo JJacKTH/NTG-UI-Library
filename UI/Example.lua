@@ -10,7 +10,7 @@
 ]]
 
 -- โหลด Library
-local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Loader.lua"))()
+local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI-Library/main/Loader.lua"))()
 
 -- ================================================================
 -- สร้าง Window (พร้อม Resize)

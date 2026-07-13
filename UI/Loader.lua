@@ -3,10 +3,10 @@
     โหลด library จาก GitHub ผ่าน loadstring
     
     วิธีใช้:
-    local NTGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Loader.lua"))()
+    local NTGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI-Library/main/Loader.lua"))()
 ]]
 
-local BASE_URL = "https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/"
+local BASE_URL = "https://raw.githubusercontent.com/JJacKTH/NTG-UI-Library/main/"
 
 local cb = "?cb=" .. tostring(os.time())
 

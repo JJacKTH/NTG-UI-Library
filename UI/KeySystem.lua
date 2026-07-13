@@ -5,14 +5,14 @@ local HttpService = game:GetService("HttpService")
 
 -- Load NTG UI Library (Assuming it's hosted or local)
 -- For local development, we load from the file path we know
-local NTGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Loader.lua"))()
+local NTGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI-Library/main/Loader.lua"))()
 
 -- Configuration
 local Config = {
     Key = "KEY-1234", -- Example fixed key
     KeyLink = "https://example.com/getkey",
     DiscordLink = "https://discord.gg/example",
-    MainScript = "https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Example.lua"
+    MainScript = "https://raw.githubusercontent.com/JJacKTH/NTG-UI-Library/main/Example.lua"
 }
 
 -- Create Window (Smaller size for Login)
