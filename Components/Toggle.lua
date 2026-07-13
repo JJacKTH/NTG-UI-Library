@@ -24,19 +24,19 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Toggle_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 35)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.14
+    self.Container.BackgroundTransparency = 0.12
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 12)
+    containerCorner.CornerRadius = UDim.new(0, 16)
     containerCorner.Parent = self.Container
 
     local containerStroke = Instance.new("UIStroke")
     containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    containerStroke.Transparency = 0.88
+    containerStroke.Transparency = 0.84
     containerStroke.Thickness = 1
     containerStroke.Parent = self.Container
     
@@ -56,10 +56,11 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     -- Toggle switch background
     self.SwitchBg = Instance.new("Frame")
     self.SwitchBg.Name = "SwitchBg"
-    self.SwitchBg.Size = UDim2.new(0, 44, 0, 22)
+    self.SwitchBg.Size = UDim2.new(0, 46, 0, 24)
     self.SwitchBg.Position = UDim2.new(1, -52, 0.5, 0)
     self.SwitchBg.AnchorPoint = Vector2.new(0, 0.5)
     self.SwitchBg.BackgroundColor3 = self.Value and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
+    self.SwitchBg.BackgroundTransparency = 0.05
     self.SwitchBg.BorderSizePixel = 0
     self.SwitchBg.Parent = self.Container
     
@@ -70,8 +71,8 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     -- Toggle knob
     self.Knob = Instance.new("Frame")
     self.Knob.Name = "Knob"
-    self.Knob.Size = UDim2.new(0, 18, 0, 18)
-    self.Knob.Position = self.Value and UDim2.new(1, -20, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
+    self.Knob.Size = UDim2.new(0, 20, 0, 20)
+    self.Knob.Position = self.Value and UDim2.new(1, -22, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
     self.Knob.AnchorPoint = Vector2.new(0, 0.5)
     self.Knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     self.Knob.BorderSizePixel = 0
@@ -79,7 +80,7 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
 
     local knobStroke = Instance.new("UIStroke")
     knobStroke.Color = Color3.fromRGB(255, 255, 255)
-    knobStroke.Transparency = 0.8
+    knobStroke.Transparency = 0.72
     knobStroke.Thickness = 1
     knobStroke.Parent = self.Knob
     
@@ -91,7 +92,7 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     local function toggle()
         self.Value = not self.Value
         
-        local targetPos = self.Value and UDim2.new(1, -20, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
+        local targetPos = self.Value and UDim2.new(1, -22, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
         local targetColor = self.Value and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
         
         if Animation then
@@ -117,6 +118,11 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
             toggle()
         end
     end)
+
+    if Animation then
+        Animation:CreateHoverEffect(self.Container, Theme.Current.SurfaceAlt or Theme.Current.Surface, Theme.Current.Surface or Theme.Current.Background, {Lift = true})
+        Animation:CreatePressEffect(self.Container, 0.988, 1)
+    end
     
     -- Register to config
     if ConfigHandler and self.Flag then

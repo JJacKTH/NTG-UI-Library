@@ -32,7 +32,7 @@ function Button.new(tab, options, Theme, Animation, ConfigHandler)
     self.Element.Name = "ButtonElement"
     self.Element.Size = UDim2.new(1, 0, 1, 0)
     self.Element.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.Element.BackgroundTransparency = 0.18
+    self.Element.BackgroundTransparency = 0.16
     self.Element.BorderSizePixel = 0
     self.Element.Text = self.Name
     self.Element.TextColor3 = Theme.Current.Text
@@ -42,19 +42,19 @@ function Button.new(tab, options, Theme, Animation, ConfigHandler)
     self.Element.Parent = self.Container
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 12)
+    corner.CornerRadius = UDim.new(0, 16)
     corner.Parent = self.Element
 
     local stroke = Instance.new("UIStroke")
     stroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    stroke.Transparency = 0.86
+    stroke.Transparency = 0.84
     stroke.Thickness = 1
     stroke.Parent = self.Element
     
     -- Hover effect with dynamic Theme colors
     self.Element.MouseEnter:Connect(function()
         if Animation then
-            Animation:Play(self.Element, {BackgroundColor3 = Theme.Current.AccentHover or Theme.Current.Accent}, 0.15)
+            Animation:Play(self.Element, {BackgroundColor3 = Theme.Current.AccentHover or Theme.Current.Accent, BackgroundTransparency = 0.06}, 0.14)
         else
             self.Element.BackgroundColor3 = Theme.Current.AccentHover or Theme.Current.Accent
         end
@@ -62,7 +62,7 @@ function Button.new(tab, options, Theme, Animation, ConfigHandler)
     
     self.Element.MouseLeave:Connect(function()
         if Animation then
-            Animation:Play(self.Element, {BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface}, 0.15)
+            Animation:Play(self.Element, {BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface, BackgroundTransparency = 0.16}, 0.16)
         else
             self.Element.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
         end
@@ -72,6 +72,10 @@ function Button.new(tab, options, Theme, Animation, ConfigHandler)
     self.Element.MouseButton1Click:Connect(function()
         self.Callback()
     end)
+
+    if Animation then
+        Animation:CreatePressEffect(self.Element, 0.985, 1)
+    end
     
     -- Methods
     function self:SetText(text)

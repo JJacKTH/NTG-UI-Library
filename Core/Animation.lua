@@ -19,6 +19,13 @@ Animation.DefaultDuration = 0.22
 Animation.DefaultStyle = Enum.EasingStyle.Quint
 Animation.DefaultDirection = Enum.EasingDirection.Out
 
+Animation.Motion = {
+    Hover = 0.14,
+    Leave = 0.18,
+    Press = 0.09,
+    Release = 0.14
+}
+
 -- Create tween
 function Animation:Tween(object, properties, duration, style, direction)
     duration = duration or Animation.DefaultDuration
@@ -96,10 +103,12 @@ end
 -- Hover effect with subtle lift
 function Animation:CreateHoverEffect(button, hoverColor, normalColor, options)
     options = options or {}
-    local hoverDuration = options.HoverDuration or 0.14
-    local leaveDuration = options.LeaveDuration or 0.16
+    local hoverDuration = options.HoverDuration or self.Motion.Hover
+    local leaveDuration = options.LeaveDuration or self.Motion.Leave
     local hoverOffset = options.HoverOffset or -1
+    local pressScale = options.PressScale or 0.985
     local originalPosition = button.Position
+    local originalSize = button.Size
 
     local connection1 = button.MouseEnter:Connect(function()
         self:Play(button, {BackgroundColor3 = hoverColor}, hoverDuration, Enum.EasingStyle.Quad)
@@ -111,6 +120,14 @@ function Animation:CreateHoverEffect(button, hoverColor, normalColor, options)
                 )
             }, hoverDuration, Enum.EasingStyle.Quad)
         end
+        if options.Grow and button.Size then
+            self:Play(button, {
+                Size = UDim2.new(
+                    originalSize.X.Scale, math.floor(originalSize.X.Offset / pressScale),
+                    originalSize.Y.Scale, math.floor(originalSize.Y.Offset / pressScale)
+                )
+            }, hoverDuration, Enum.EasingStyle.Quad)
+        end
     end)
     
     local connection2 = button.MouseLeave:Connect(function()
@@ -118,9 +135,38 @@ function Animation:CreateHoverEffect(button, hoverColor, normalColor, options)
         if options.Lift and button.Position then
             self:Play(button, {Position = originalPosition}, leaveDuration, Enum.EasingStyle.Quad)
         end
+        if options.Grow and button.Size then
+            self:Play(button, {Size = originalSize}, leaveDuration, Enum.EasingStyle.Quad)
+        end
     end)
     
     return {connection1, connection2}
+end
+
+function Animation:CreatePressEffect(button, pressedScale, releasedScale)
+    pressedScale = pressedScale or 0.98
+    releasedScale = releasedScale or 1
+    local originalSize = button.Size
+    local function scaledSize(scale)
+        return UDim2.new(
+            originalSize.X.Scale * scale, math.floor(originalSize.X.Offset * scale),
+            originalSize.Y.Scale * scale, math.floor(originalSize.Y.Offset * scale)
+        )
+    end
+
+    local down = button.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            self:Play(button, {Size = scaledSize(pressedScale)}, self.Motion.Press, Enum.EasingStyle.Quad)
+        end
+    end)
+
+    local up = button.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            self:Play(button, {Size = scaledSize(releasedScale)}, self.Motion.Release, Enum.EasingStyle.Quad)
+        end
+    end)
+
+    return {down, up}
 end
 
 -- Ripple effect for buttons

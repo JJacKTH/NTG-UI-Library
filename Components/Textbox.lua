@@ -26,19 +26,19 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Textbox_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 55)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.14
+    self.Container.BackgroundTransparency = 0.12
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 12)
+    containerCorner.CornerRadius = UDim.new(0, 16)
     containerCorner.Parent = self.Container
 
     local containerStroke = Instance.new("UIStroke")
     containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    containerStroke.Transparency = 0.88
+    containerStroke.Transparency = 0.84
     containerStroke.Thickness = 1
     containerStroke.Parent = self.Container
     
@@ -61,7 +61,7 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     self.Input.Size = UDim2.new(1, -20, 0, 25)
     self.Input.Position = UDim2.new(0, 10, 0, 25)
     self.Input.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.Input.BackgroundTransparency = 0.16
+    self.Input.BackgroundTransparency = 0.08
     self.Input.BorderSizePixel = 0
     self.Input.Text = self.Value
     self.Input.PlaceholderText = self.Placeholder
@@ -74,7 +74,7 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     self.Input.Parent = self.Container
     
     local inputCorner = Instance.new("UICorner")
-    inputCorner.CornerRadius = UDim.new(0, 10)
+    inputCorner.CornerRadius = UDim.new(0, 12)
     inputCorner.Parent = self.Input
     
     local inputPadding = Instance.new("UIPadding")
@@ -86,12 +86,13 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     local inputStroke = Instance.new("UIStroke")
     inputStroke.Color = Theme.Current.Accent
     inputStroke.Thickness = 0
-    inputStroke.Transparency = 0
+    inputStroke.Transparency = 0.1
     inputStroke.Parent = self.Input
     
     self.Input.Focused:Connect(function()
         if Animation then
-            Animation:Play(inputStroke, {Thickness = 1.5}, 0.2)
+            Animation:Play(inputStroke, {Thickness = 1.5}, 0.16)
+            Animation:Play(self.Input, {BackgroundTransparency = 0.04}, 0.16)
         else
             inputStroke.Thickness = 1.5
         end
@@ -99,7 +100,8 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     
     self.Input.FocusLost:Connect(function(enterPressed)
         if Animation then
-            Animation:Play(inputStroke, {Thickness = 0}, 0.2)
+            Animation:Play(inputStroke, {Thickness = 0}, 0.16)
+            Animation:Play(self.Input, {BackgroundTransparency = 0.08}, 0.16)
         else
             inputStroke.Thickness = 0
         end
@@ -138,6 +140,10 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     
     function self:SetPlaceholder(text)
         self.Input.PlaceholderText = text
+    end
+
+    if Animation then
+        Animation:CreateHoverEffect(self.Container, Theme.Current.SurfaceAlt or Theme.Current.Surface, Theme.Current.Surface or Theme.Current.Background, {Lift = true})
     end
     
     function self:Destroy()

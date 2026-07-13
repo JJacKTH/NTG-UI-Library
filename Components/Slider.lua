@@ -31,19 +31,19 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Slider_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 50)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.14
+    self.Container.BackgroundTransparency = 0.12
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 12)
+    containerCorner.CornerRadius = UDim.new(0, 16)
     containerCorner.Parent = self.Container
 
     local containerStroke = Instance.new("UIStroke")
     containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    containerStroke.Transparency = 0.88
+    containerStroke.Transparency = 0.84
     containerStroke.Thickness = 1
     containerStroke.Parent = self.Container
     
@@ -79,7 +79,7 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     self.Track.Size = UDim2.new(1, -20, 0, 8)
     self.Track.Position = UDim2.new(0, 10, 0, 32)
     self.Track.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.Track.BackgroundTransparency = 0.1
+    self.Track.BackgroundTransparency = 0.06
     self.Track.BorderSizePixel = 0
     self.Track.Parent = self.Container
     
@@ -104,7 +104,7 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     -- Slider knob
     self.Knob = Instance.new("Frame")
     self.Knob.Name = "Knob"
-    self.Knob.Size = UDim2.new(0, 16, 0, 16)
+    self.Knob.Size = UDim2.new(0, 18, 0, 18)
     self.Knob.Position = UDim2.new(fillPercent, 0, 0.5, 0)
     self.Knob.AnchorPoint = Vector2.new(0.5, 0.5)
     self.Knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -115,7 +115,7 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     local knobStroke = Instance.new("UIStroke")
     knobStroke.Color = Theme.Current.Accent
     knobStroke.Thickness = 1
-    knobStroke.Transparency = 0.6
+    knobStroke.Transparency = 0.72
     knobStroke.Parent = self.Knob
     
     local knobCorner = Instance.new("UICorner")
@@ -125,7 +125,7 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     -- Knob shadow
     local knobStroke = Instance.new("UIStroke")
     knobStroke.Color = Theme.Current.Accent
-    knobStroke.Thickness = 2
+    knobStroke.Thickness = 1
     knobStroke.Parent = self.Knob
     
     -- Helper to update value
@@ -195,6 +195,11 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
             self.Dragging = true
         end
     end)
+
+    if Animation then
+        Animation:CreateHoverEffect(self.Track, Theme.Current.SurfaceAlt or Theme.Current.Surface, Theme.Current.Surface or Theme.Current.Background)
+        Animation:CreatePressEffect(self.Track, 0.992, 1)
+    end
     
     self.InputChanged = UserInputService.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement or

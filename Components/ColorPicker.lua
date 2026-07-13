@@ -43,7 +43,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "ColorPicker_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 35)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.14
+    self.Container.BackgroundTransparency = 0.12
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = false
     self.Container.ZIndex = 2
@@ -52,12 +52,12 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 12)
+    containerCorner.CornerRadius = UDim.new(0, 16)
     containerCorner.Parent = self.Container
 
     local containerStroke = Instance.new("UIStroke")
     containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    containerStroke.Transparency = 0.88
+    containerStroke.Transparency = 0.84
     containerStroke.Thickness = 1
     containerStroke.Parent = self.Container
     
@@ -78,10 +78,11 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     -- Color preview button
     self.Preview = Instance.new("TextButton")
     self.Preview.Name = "Preview"
-    self.Preview.Size = UDim2.new(0, 40, 0, 22)
+    self.Preview.Size = UDim2.new(0, 44, 0, 24)
     self.Preview.Position = UDim2.new(1, -50, 0.5, 0)
     self.Preview.AnchorPoint = Vector2.new(0, 0.5)
     self.Preview.BackgroundColor3 = self.Value
+    self.Preview.BackgroundTransparency = 0.05
     self.Preview.BorderSizePixel = 0
     self.Preview.Text = ""
     self.Preview.AutoButtonColor = false
@@ -89,13 +90,13 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.Preview.Parent = self.Container
     
     local previewCorner = Instance.new("UICorner")
-    previewCorner.CornerRadius = UDim.new(0, 10)
+    previewCorner.CornerRadius = UDim.new(0, 12)
     previewCorner.Parent = self.Preview
     
     local previewStroke = Instance.new("UIStroke")
     previewStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
     previewStroke.Thickness = 1
-    previewStroke.Transparency = 0.85
+    previewStroke.Transparency = 0.82
     previewStroke.Parent = self.Preview
     
     -- Picker panel
@@ -104,6 +105,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.PickerPanel.Size = UDim2.new(0, 200, 0, 180)
     self.PickerPanel.Position = UDim2.new(1, -210, 0, 38)
     self.PickerPanel.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    self.PickerPanel.BackgroundTransparency = 0.06
     self.PickerPanel.BorderSizePixel = 0
     self.PickerPanel.Visible = false
     self.PickerPanel.ZIndex = 100
@@ -111,12 +113,12 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.PickerPanel.Parent = self.Container
     
     local pickerCorner = Instance.new("UICorner")
-    pickerCorner.CornerRadius = UDim.new(0, 12)
+    pickerCorner.CornerRadius = UDim.new(0, 16)
     pickerCorner.Parent = self.PickerPanel
 
     local pickerStroke = Instance.new("UIStroke")
     pickerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    pickerStroke.Transparency = 0.88
+    pickerStroke.Transparency = 0.84
     pickerStroke.Thickness = 1
     pickerStroke.Parent = self.PickerPanel
     
@@ -132,7 +134,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.SVPicker.Parent = self.PickerPanel
     
     local svCorner = Instance.new("UICorner")
-    svCorner.CornerRadius = UDim.new(0, 4)
+    svCorner.CornerRadius = UDim.new(0, 8)
     svCorner.Parent = self.SVPicker
     
     -- SV cursor
@@ -158,7 +160,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     -- Hue slider
     self.HueSlider = Instance.new("ImageLabel")
     self.HueSlider.Name = "HueSlider"
-    self.HueSlider.Size = UDim2.new(0, 20, 0, 120)
+    self.HueSlider.Size = UDim2.new(0, 18, 0, 120)
     self.HueSlider.Position = UDim2.new(0, 170, 0, 10)
     self.HueSlider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     self.HueSlider.BorderSizePixel = 0
@@ -181,7 +183,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     hueGradient.Parent = self.HueSlider
     
     local hueCorner = Instance.new("UICorner")
-    hueCorner.CornerRadius = UDim.new(0, 4)
+    hueCorner.CornerRadius = UDim.new(0, 8)
     hueCorner.Parent = self.HueSlider
     
     -- Hue cursor

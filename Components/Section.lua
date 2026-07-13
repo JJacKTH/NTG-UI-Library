@@ -31,19 +31,19 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     self.Container.Name = "Section_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 34)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.14
+    self.Container.BackgroundTransparency = 0.12
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = true
     self.Container.LayoutOrder = elementCount
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 12)
+    containerCorner.CornerRadius = UDim.new(0, 16)
     containerCorner.Parent = self.Container
 
     local containerStroke = Instance.new("UIStroke")
     containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    containerStroke.Transparency = 0.88
+    containerStroke.Transparency = 0.84
     containerStroke.Thickness = 1
     containerStroke.Parent = self.Container
     
@@ -76,7 +76,7 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     self.Arrow.Size = UDim2.new(0, 20, 1, 0)
     self.Arrow.Position = UDim2.new(1, -25, 0, 0)
     self.Arrow.BackgroundTransparency = 1
-    self.Arrow.Text = self.Collapsed and "▶" or "▼"
+    self.Arrow.Text = self.Collapsed and ">" or "v"
     self.Arrow.TextColor3 = Theme.Current.SubText
     self.Arrow.TextSize = 10
     self.Arrow.Font = Enum.Font.GothamBold
@@ -112,10 +112,14 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
         self.Collapsed = not self.Collapsed
         self:UpdateSize()
         
-        self.Arrow.Text = self.Collapsed and "▶" or "▼"
+        self.Arrow.Text = self.Collapsed and ">" or "v"
     end
     
     self.Header.MouseButton1Click:Connect(toggleCollapse)
+
+    if Animation then
+        Animation:CreateHoverEffect(self.Header, Theme.Current.SurfaceAlt or Theme.Current.Surface, Theme.Current.Surface or Theme.Current.Background)
+    end
     
     -- Methods
     function self:UpdateSize()
@@ -135,7 +139,7 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
         if self.Collapsed ~= collapsed then
             self.Collapsed = collapsed
             self:UpdateSize()
-            self.Arrow.Text = self.Collapsed and "▶" or "▼"
+            self.Arrow.Text = self.Collapsed and ">" or "v"
         end
     end
     

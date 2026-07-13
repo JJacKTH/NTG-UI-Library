@@ -81,7 +81,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Dropdown_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 55)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.14
+    self.Container.BackgroundTransparency = 0.12
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = false
     self.Container.ZIndex = 2
@@ -90,12 +90,12 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 12)
+    containerCorner.CornerRadius = UDim.new(0, 16)
     containerCorner.Parent = self.Container
 
     local containerStroke = Instance.new("UIStroke")
     containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    containerStroke.Transparency = 0.88
+    containerStroke.Transparency = 0.84
     containerStroke.Thickness = 1
     containerStroke.Parent = self.Container
     
@@ -119,7 +119,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Button.Size = UDim2.new(1, -20, 0, 25)
     self.Button.Position = UDim2.new(0, 10, 0, 25)
     self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.Button.BackgroundTransparency = 0.14
+    self.Button.BackgroundTransparency = 0.08
     self.Button.BorderSizePixel = 0
     self.Button.Text = ""
     self.Button.AutoButtonColor = false
@@ -127,12 +127,12 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Button.Parent = self.Container
     
     local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 10)
+    buttonCorner.CornerRadius = UDim.new(0, 12)
     buttonCorner.Parent = self.Button
 
     local buttonStroke = Instance.new("UIStroke")
     buttonStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    buttonStroke.Transparency = 0.9
+    buttonStroke.Transparency = 0.86
     buttonStroke.Thickness = 1
     buttonStroke.Parent = self.Button
     
@@ -157,7 +157,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Arrow.Size = UDim2.new(0, 20, 1, 0)
     self.Arrow.Position = UDim2.new(1, -25, 0, 0)
     self.Arrow.BackgroundTransparency = 1
-    self.Arrow.Text = "▼"
+    self.Arrow.Text = "v"
     self.Arrow.TextColor3 = Theme.Current.SubText
     self.Arrow.TextSize = 10
     self.Arrow.Font = Enum.Font.GothamBold
@@ -170,7 +170,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.ListContainer.Size = UDim2.new(1, -20, 0, 0)
     self.ListContainer.Position = UDim2.new(0, 10, 0, 52)
     self.ListContainer.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.ListContainer.BackgroundTransparency = 0.1
+    self.ListContainer.BackgroundTransparency = 0.08
     self.ListContainer.BorderSizePixel = 0
     self.ListContainer.ClipsDescendants = true
     self.ListContainer.Visible = false
@@ -179,12 +179,12 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.ListContainer.Parent = self.Container
     
     local listCorner = Instance.new("UICorner")
-    listCorner.CornerRadius = UDim.new(0, 12)
+    listCorner.CornerRadius = UDim.new(0, 16)
     listCorner.Parent = self.ListContainer
 
     local listStroke = Instance.new("UIStroke")
     listStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    listStroke.Transparency = 0.88
+    listStroke.Transparency = 0.84
     listStroke.Thickness = 1
     listStroke.Parent = self.ListContainer
     
@@ -199,10 +199,10 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
         self.SearchBox.Size = UDim2.new(1, -10, 0, 25)
         self.SearchBox.Position = UDim2.new(0, 5, 0, 3)
         self.SearchBox.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-        self.SearchBox.BackgroundTransparency = 0.14
+        self.SearchBox.BackgroundTransparency = 0.08
         self.SearchBox.BorderSizePixel = 0
         self.SearchBox.Text = ""
-        self.SearchBox.PlaceholderText = "🔍 Search..."
+        self.SearchBox.PlaceholderText = "Search..."
         self.SearchBox.PlaceholderColor3 = Theme.Current.SubText
         self.SearchBox.TextColor3 = Theme.Current.Text
         self.SearchBox.TextSize = 12
@@ -212,7 +212,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
         self.SearchBox.Parent = self.ListContainer
         
         local searchCorner = Instance.new("UICorner")
-        searchCorner.CornerRadius = UDim.new(0, 10)
+        searchCorner.CornerRadius = UDim.new(0, 12)
         searchCorner.Parent = self.SearchBox
         
         local searchPadding = Instance.new("UIPadding")
@@ -261,7 +261,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
         optBtn.Parent = self.OptionsList
         
         local optCorner = Instance.new("UICorner")
-        optCorner.CornerRadius = UDim.new(0, 4)
+        optCorner.CornerRadius = UDim.new(0, 8)
         optCorner.Parent = optBtn
         
         -- Checkbox for multi
@@ -288,7 +288,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
             checkmark.Name = "Checkmark"
             checkmark.Size = UDim2.new(1, 0, 1, 0)
             checkmark.BackgroundTransparency = 1
-            checkmark.Text = self.Value[optionText] and "✓" or ""
+            checkmark.Text = self.Value[optionText] and "OK" or ""
             checkmark.TextColor3 = Theme.Current.Text
             checkmark.TextSize = 12
             checkmark.Font = Enum.Font.GothamBold
@@ -338,7 +338,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
                     local checkmark = checkbox:FindFirstChild("Checkmark")
                     checkbox.BackgroundColor3 = self.Value[optionText] and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
                     if checkmark then
-                        checkmark.Text = self.Value[optionText] and "✓" or ""
+                        checkmark.Text = self.Value[optionText] and "OK" or ""
                     end
                 end
                 
@@ -477,6 +477,11 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     end
     
     self.Button.MouseButton1Click:Connect(toggleDropdown)
+
+    if Animation then
+        Animation:CreateHoverEffect(self.Button, Theme.Current.AccentHover or Theme.Current.Accent, Theme.Current.SurfaceAlt or Theme.Current.Surface, {Lift = true})
+        Animation:CreatePressEffect(self.Button, 0.988, 1)
+    end
     
     -- Close when clicking outside
     self.ClickConnection = UserInputService.InputBegan:Connect(function(input)
@@ -605,7 +610,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
                         optData.Checkbox.BackgroundColor3 = self.Value[optText] and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
                         local checkmark = optData.Checkbox:FindFirstChild("Checkmark")
                         if checkmark then
-                            checkmark.Text = self.Value[optText] and "✓" or ""
+                            checkmark.Text = self.Value[optText] and "OK" or ""
                         end
                     end
                 end
