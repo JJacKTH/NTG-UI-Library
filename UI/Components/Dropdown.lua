@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Dropdown Component
+    NTG UI Library - Dropdown Component
     Supports Single/Multi select with Searchable feature
 ]]
 

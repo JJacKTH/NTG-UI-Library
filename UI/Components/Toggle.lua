@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Toggle Component
+    NTG UI Library - Toggle Component
 ]]
 
 local Toggle = {}

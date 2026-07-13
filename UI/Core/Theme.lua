@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Theme System
+    NTG UI Library - Theme System
     สี Themes: Dark, Light, Pastel Blue, Pastel Green
 ]]
 

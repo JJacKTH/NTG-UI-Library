@@ -3,20 +3,20 @@ local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
 local HttpService = game:GetService("HttpService")
 
--- Load Antigravity UI Library (Assuming it's hosted or local)
+-- Load NTG UI Library (Assuming it's hosted or local)
 -- For local development, we load from the file path we know
-local Antigravity = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/AntigravityUI/main/Loader.lua"))()
+local NTGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Loader.lua"))()
 
 -- Configuration
 local Config = {
     Key = "KEY-1234", -- Example fixed key
     KeyLink = "https://example.com/getkey",
     DiscordLink = "https://discord.gg/example",
-    MainScript = "https://raw.githubusercontent.com/JJacKTH/AntigravityUI/main/Example.lua"
+    MainScript = "https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Example.lua"
 }
 
 -- Create Window (Smaller size for Login)
-local Window = Antigravity:Load({
+local Window = NTGUI:Load({
     Title = "Authentication",
     Size = UDim2.fromOffset(400, 280),
     Resizing = false, -- Fixed size for login
@@ -45,7 +45,7 @@ KeyTab:AddButton({
     Name = "Check Key",
     Callback = function()
         if KeyInput.Value == Config.Key then
-            Antigravity:Notify({
+            NTGUI:Notify({
                 Title = "Success",
                 Message = "Key Valid! Loading script...",
                 Duration = 3
@@ -59,7 +59,7 @@ KeyTab:AddButton({
                 loadstring(game:HttpGet(Config.MainScript))()
             end)
         else
-            Antigravity:Notify({
+            NTGUI:Notify({
                 Title = "Error",
                 Message = "Invalid Key! Please try again.",
                 Duration = 3
@@ -71,7 +71,7 @@ KeyTab:AddButton({
     Name = "Get Key Link",
     Callback = function()
         setclipboard(Config.KeyLink)
-        Antigravity:Notify({
+        NTGUI:Notify({
             Title = "Link Copied",
             Message = "Key link copied to clipboard!",
             Duration = 2
@@ -83,7 +83,7 @@ KeyTab:AddButton({
     Name = "Join Discord",
     Callback = function()
         setclipboard(Config.DiscordLink)
-        Antigravity:Notify({
+        NTGUI:Notify({
             Title = "Discord",
             Message = "Discord link copied!",
             Duration = 2

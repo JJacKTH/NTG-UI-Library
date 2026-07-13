@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Textbox Component
+    NTG UI Library - Textbox Component
 ]]
 
 local Textbox = {}

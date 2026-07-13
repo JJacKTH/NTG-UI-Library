@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Utility Functions
+    NTG UI Library - Utility Functions
     Helper functions for UI creation
 ]]
 

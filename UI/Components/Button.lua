@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Button Component
+    NTG UI Library - Button Component
 ]]
 
 local Button = {}

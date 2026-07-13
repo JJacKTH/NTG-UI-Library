@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Animation Utilities
+    NTG UI Library - Animation Utilities
     Smooth tweens & animation helpers
 ]]
 

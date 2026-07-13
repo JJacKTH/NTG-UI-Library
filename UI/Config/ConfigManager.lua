@@ -1,9 +1,9 @@
 --[[
-    Antigravity UI Library - Config Manager
+    NTG UI Library - Config Manager
     Auto Save/Load system
     
     โครงสร้าง:
-    AntigravityUI/
+    NTGUI/
     └── {Username}/
         └── {GameName}/
             └── Config.json
@@ -14,7 +14,7 @@ local ConfigManager = {}
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 
-ConfigManager.BaseFolder = "AntigravityUI"
+ConfigManager.BaseFolder = "NTGUI"
 ConfigManager.Configs = {}
 ConfigManager.CurrentGame = "Default"
 
@@ -84,7 +84,7 @@ end
 -- Save config to file
 function ConfigManager:Save(configName, data)
     if not hasFileSystem() then
-        warn("[AntigravityUI] File system not available - config will not persist")
+        warn("[NTGUI] File system not available - config will not persist")
         return false
     end
     
@@ -98,10 +98,10 @@ function ConfigManager:Save(configName, data)
     
     if success then
         self.Configs[configName] = data
-        --print("[AntigravityUI] Config saved:", path)
+        --print("[NTGUI] Config saved:", path)
         return true
     else
-        warn("[AntigravityUI] Failed to save config:", err)
+        warn("[NTGUI] Failed to save config:", err)
         return false
     end
 end
@@ -109,7 +109,7 @@ end
 -- Load config from file
 function ConfigManager:Load(configName)
     if not hasFileSystem() then
-        warn("[AntigravityUI] File system not available")
+        warn("[NTGUI] File system not available")
         return nil
     end
     
@@ -126,10 +126,10 @@ function ConfigManager:Load(configName)
     
     if success then
         self.Configs[configName] = result
-        print("[AntigravityUI] Config loaded:", path)
+        print("[NTGUI] Config loaded:", path)
         return result
     else
-        warn("[AntigravityUI] Failed to load config:", result)
+        warn("[NTGUI] Failed to load config:", result)
         return nil
     end
 end
@@ -282,7 +282,7 @@ function ConfigManager:CreateHandler(gameName, configName, autoSave, autoLoad, b
                     end)
                     
                     if not success then
-                        warn("[AntigravityUI] Failed to load value for", id, ":", err)
+                        warn("[NTGUI] Failed to load value for", id, ":", err)
                     end
                 end
             end

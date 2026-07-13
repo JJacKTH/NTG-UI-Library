@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - ColorPicker Component
+    NTG UI Library - ColorPicker Component
 ]]
 
 local ColorPicker = {}

@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Slider Component
+    NTG UI Library - Slider Component
 ]]
 
 local Slider = {}

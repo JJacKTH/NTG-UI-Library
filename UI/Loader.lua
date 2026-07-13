@@ -1,12 +1,12 @@
 --[[
-    Antigravity UI Library - Loader
+    NTG UI Library - Loader
     โหลด library จาก GitHub ผ่าน loadstring
     
     วิธีใช้:
-    local AntigravityUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/AntigravityUI/main/Loader.lua"))()
+    local NTGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Loader.lua"))()
 ]]
 
-local BASE_URL = "https://raw.githubusercontent.com/JJacKTH/AntigravityUI/main/"
+local BASE_URL = "https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/"
 
 local cb = "?cb=" .. tostring(os.time())
 
@@ -17,17 +17,17 @@ local function safeLoad(url, name)
         content = game:HttpGet(url)
     end)
     if not success or not content or content == "" then
-        error("[AntigravityUI] Failed to download " .. name .. " from: " .. url .. " | Error: " .. tostring(err or "empty response"))
+        error("[NTGUI] Failed to download " .. name .. " from: " .. url .. " | Error: " .. tostring(err or "empty response"))
     end
     
     local func, compileErr = loadstring(content)
     if not func then
-        error("[AntigravityUI] Failed to compile " .. name .. " | Error: " .. tostring(compileErr))
+        error("[NTGUI] Failed to compile " .. name .. " | Error: " .. tostring(compileErr))
     end
     
     local ok, result = pcall(func)
     if not ok then
-        error("[AntigravityUI] Failed to execute " .. name .. " | Error: " .. tostring(result))
+        error("[NTGUI] Failed to execute " .. name .. " | Error: " .. tostring(result))
     end
     
     return result
@@ -56,23 +56,23 @@ local Components = {
 -- MAIN LIBRARY
 -- ================================================================
 
-local AntigravityUI = {}
-AntigravityUI.__index = AntigravityUI
-AntigravityUI.Version = "1.0.0"
+local NTGUI = {}
+NTGUI.__index = NTGUI
+NTGUI.Version = "1.0.0"
 
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
-AntigravityUI.Windows = {}
+NTGUI.Windows = {}
 
-function AntigravityUI:GetParent()
+function NTGUI:GetParent()
     local success, gui = pcall(function()
-        local existing = CoreGui:FindFirstChild("AntigravityUI")
+        local existing = CoreGui:FindFirstChild("NTGUI")
         if existing then return existing end
         local newGui = Instance.new("ScreenGui")
-        newGui.Name = "AntigravityUI"
+        newGui.Name = "NTGUI"
         newGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
         newGui.ResetOnSpawn = false
         newGui.Parent = CoreGui
@@ -85,11 +85,11 @@ function AntigravityUI:GetParent()
         local player = Players.LocalPlayer
         if player then
             local playerGui = player:WaitForChild("PlayerGui")
-            local existing = playerGui:FindFirstChild("AntigravityUI")
+            local existing = playerGui:FindFirstChild("NTGUI")
             if existing then return existing end
             
             local newGui = Instance.new("ScreenGui")
-            newGui.Name = "AntigravityUI"
+            newGui.Name = "NTGUI"
             newGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
             newGui.ResetOnSpawn = false
             newGui.Parent = playerGui
@@ -99,11 +99,11 @@ function AntigravityUI:GetParent()
     return nil
 end
 
-function AntigravityUI:CreateWindow(options)
+function NTGUI:CreateWindow(options)
     options = options or {}
     
     local Window = {}
-    Window.Title = options.Title or "Antigravity UI"
+    Window.Title = options.Title or "NTG UI"
     Window.Size = options.Size or UDim2.new(0, 500, 0, 400)
     Window.Theme = options.Theme or "Dark"
     Window.GameName = options.GameName or options.Title or "Default"
@@ -148,7 +148,7 @@ function AntigravityUI:CreateWindow(options)
     
     local parent = self:GetParent()
     if not parent then
-        warn("[AntigravityUI] Failed to get parent")
+        warn("[NTGUI] Failed to get parent")
         return nil
     end
     
@@ -1120,7 +1120,7 @@ function AntigravityUI:CreateWindow(options)
     Window.MinimizeBtn.MouseButton1Click:Connect(function() Window:Minimize() end)
     Window.CloseBtn.MouseButton1Click:Connect(function() Window:Destroy() end)
     
-    table.insert(AntigravityUI.Windows, Window)
+    table.insert(NTGUI.Windows, Window)
     
     Animation:ScaleIn(Window.Container, 0.4)
     Animation:Play(Window.Container, {BackgroundTransparency = 0}, 0.3)
@@ -1130,7 +1130,7 @@ end
 
 -- Notification system
 -- Notification system
-function AntigravityUI:Notify(options)
+function NTGUI:Notify(options)
     options = options or {}
     local title = options.Title or "Notification"
     local message = options.Message or ""
@@ -1245,17 +1245,17 @@ function AntigravityUI:Notify(options)
 end    
 
 
-function AntigravityUI:SetTheme(themeName)
+function NTGUI:SetTheme(themeName)
     if Theme.Set then Theme:Set(themeName) end
 end
 
-function AntigravityUI:DestroyAll()
+function NTGUI:DestroyAll()
     for _, window in ipairs(self.Windows) do
         if window.Destroy then window:Destroy() end
     end
     self.Windows = {}
 end
 
-AntigravityUI.Load = AntigravityUI.CreateWindow
+NTGUI.Load = NTGUI.CreateWindow
 
-return AntigravityUI
+return NTGUI

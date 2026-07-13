@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Divider Component
+    NTG UI Library - Divider Component
     แสดง Header แบบ ═══════ Title ═══════ กึ่งกลาง
 ]]
 

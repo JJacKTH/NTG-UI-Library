@@ -6,13 +6,13 @@
     ██║   ██║██║╚██████╔╝██║  ██║██║  ██║ ╚████╔╝ ██║   ██║      ██║   
     ╚═╝   ╚═╝╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝   ╚═╝      ╚═╝   
     
-    Antigravity UI Library v1.0
+    NTG UI Library v1.0
     A modern, feature-rich UI library for Roblox
 ]]
 
-local AntigravityUI = {}
-AntigravityUI.__index = AntigravityUI
-AntigravityUI.Version = "1.0.0"
+local NTGUI = {}
+NTGUI.__index = NTGUI
+NTGUI.Version = "1.0.0"
 
 -- Services
 local Players = game:GetService("Players")
@@ -57,17 +57,17 @@ if not Theme then
 end
 
 -- Store active windows
-AntigravityUI.Windows = {}
+NTGUI.Windows = {}
 
 -- Get safe parent for UI
-function AntigravityUI:GetParent()
+function NTGUI:GetParent()
     local success, gui = pcall(function()
-        return CoreGui:FindFirstChild("AntigravityUI") or 
+        return CoreGui:FindFirstChild("NTGUI") or 
                Instance.new("ScreenGui", CoreGui)
     end)
     
     if success then
-        gui.Name = "AntigravityUI"
+        gui.Name = "NTGUI"
         gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
         gui.ResetOnSpawn = false
         return gui
@@ -76,11 +76,11 @@ function AntigravityUI:GetParent()
         local player = Players.LocalPlayer
         if player then
             local playerGui = player:WaitForChild("PlayerGui")
-            local existing = playerGui:FindFirstChild("AntigravityUI")
+            local existing = playerGui:FindFirstChild("NTGUI")
             if existing then return existing end
             
             local newGui = Instance.new("ScreenGui")
-            newGui.Name = "AntigravityUI"
+            newGui.Name = "NTGUI"
             newGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
             newGui.ResetOnSpawn = false
             newGui.Parent = playerGui
@@ -92,11 +92,11 @@ function AntigravityUI:GetParent()
 end
 
 -- Create a new window
-function AntigravityUI:CreateWindow(options)
+function NTGUI:CreateWindow(options)
     options = options or {}
     
     local Window = {}
-    Window.Title = options.Title or "Antigravity UI"
+    Window.Title = options.Title or "NTG UI"
     Window.Size = options.Size or UDim2.new(0, 500, 0, 400)
     Window.Theme = options.Theme or "Dark"
     Window.ConfigName = options.ConfigName or "Default"
@@ -119,7 +119,7 @@ function AntigravityUI:CreateWindow(options)
     -- Get parent
     local parent = self:GetParent()
     if not parent then
-        warn("[AntigravityUI] Failed to get parent for UI")
+        warn("[NTGUI] Failed to get parent for UI")
         return nil
     end
     
@@ -406,7 +406,7 @@ function AntigravityUI:CreateWindow(options)
     function Window:Destroy()
         if Window.OnClose then
             local success, err = pcall(Window.OnClose)
-            if not success then warn("[AntigravityUI] Error in OnClose callback:", err) end
+            if not success then warn("[NTGUI] Error in OnClose callback:", err) end
         end
         Window.Container:Destroy()
         if Window.FloatingIcon then
@@ -570,7 +570,7 @@ function AntigravityUI:CreateWindow(options)
     end)
     
     -- Add to windows list
-    table.insert(AntigravityUI.Windows, Window)
+    table.insert(NTGUI.Windows, Window)
     
     -- Entry animation
     if Animation then
@@ -583,7 +583,7 @@ function AntigravityUI:CreateWindow(options)
 end
 
 -- Notification system
-function AntigravityUI:Notify(options)
+function NTGUI:Notify(options)
     options = options or {}
     local title = options.Title or "Notification"
     local message = options.Message or ""
@@ -686,7 +686,7 @@ function AntigravityUI:Notify(options)
 end
 
 -- Set global theme
-function AntigravityUI:SetTheme(themeName)
+function NTGUI:SetTheme(themeName)
     if Theme.Set then
         Theme:Set(themeName)
     end
@@ -695,7 +695,7 @@ function AntigravityUI:SetTheme(themeName)
 end
 
 -- Destroy all windows
-function AntigravityUI:DestroyAll()
+function NTGUI:DestroyAll()
     for _, window in ipairs(self.Windows) do
         if window.Destroy then
             window:Destroy()
@@ -704,4 +704,4 @@ function AntigravityUI:DestroyAll()
     self.Windows = {}
 end
 
-return AntigravityUI
+return NTGUI

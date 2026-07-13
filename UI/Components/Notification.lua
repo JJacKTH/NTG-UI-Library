@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Notification Component
+    NTG UI Library - Notification Component
     Toast-style notifications
 ]]
 

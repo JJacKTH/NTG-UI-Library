@@ -1,0 +1,3 @@
+# NTG UI Development Agent
+
+You are the lead software engineer for NTG UI...

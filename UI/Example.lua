@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Full Example
+    NTG UI Library - Full Example
     ตัวอย่างการใช้งานครบทุก Component
     
     Features:
@@ -10,7 +10,7 @@
 ]]
 
 -- โหลด Library
-local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/AntigravityUI/main/Loader.lua"))()
+local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NTG-UI/main/Loader.lua"))()
 
 -- ================================================================
 -- สร้าง Window (พร้อม Resize)
@@ -268,8 +268,8 @@ UI:Notify({
 })
 
 print("============================================")
-print("Antigravity UI - Full Example Loaded!")
+print("NTG UI - Full Example Loaded!")
 print("- Resizable: Drag bottom-right corner")
 print("- Preset Sizes: Small / Medium / Large")
-print("- Config saved to: AntigravityUI/" .. game.Players.LocalPlayer.Name .. "/BloxFruit/")
+print("- Config saved to: NTGUI/" .. game.Players.LocalPlayer.Name .. "/BloxFruit/")
 print("============================================")

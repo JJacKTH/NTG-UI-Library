@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Label Component
+    NTG UI Library - Label Component
 ]]
 
 local Label = {}

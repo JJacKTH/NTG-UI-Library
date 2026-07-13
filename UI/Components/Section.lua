@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Section Component
+    NTG UI Library - Section Component
     Collapsible section for grouping elements
     รองรับการเพิ่ม components ภายใน Section
 ]]

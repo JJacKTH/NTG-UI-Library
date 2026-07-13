@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
---! Antigravity — AutoExec Example
+--! NTG UI AutoExec Example
 --! วางไฟล์นี้ใน autoexec folder ของ executor
 --! เช่น: autoexec/antigravity_loader.lua
 -------------------------------------------------------------------------------

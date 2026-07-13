@@ -1,5 +1,5 @@
 --[[
-    Antigravity UI Library - Keybind Component
+    NTG UI Library - Keybind Component
 ]]
 
 local Keybind = {}
