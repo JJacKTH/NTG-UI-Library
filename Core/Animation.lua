@@ -1,6 +1,6 @@
 --[[
     NTG UI Library - Animation Utilities
-    Smooth tweens & animation helpers
+    Glass 2.0 motion helpers for soft premium UI feedback
 ]]
 
 local Animation = {}
@@ -10,14 +10,12 @@ local TweenService = game:GetService("TweenService")
 -- Default easing styles
 Animation.EasingStyles = {
     Smooth = Enum.EasingStyle.Quint,
-    Bounce = Enum.EasingStyle.Bounce,
-    Elastic = Enum.EasingStyle.Elastic,
-    Back = Enum.EasingStyle.Back,
-    Linear = Enum.EasingStyle.Linear,
-    Quad = Enum.EasingStyle.Quad
+    Soft = Enum.EasingStyle.Quad,
+    Snappy = Enum.EasingStyle.Cubic,
+    Linear = Enum.EasingStyle.Linear
 }
 
-Animation.DefaultDuration = 0.25
+Animation.DefaultDuration = 0.22
 Animation.DefaultStyle = Enum.EasingStyle.Quint
 Animation.DefaultDirection = Enum.EasingDirection.Out
 
@@ -49,58 +47,77 @@ end
 
 -- Fade in
 function Animation:FadeIn(object, duration)
-    duration = duration or 0.2
+    duration = duration or 0.18
     object.BackgroundTransparency = 1
-    return self:Play(object, {BackgroundTransparency = 0}, duration)
+    return self:Play(object, {BackgroundTransparency = 0}, duration, Enum.EasingStyle.Quad)
 end
 
 -- Fade out
 function Animation:FadeOut(object, duration)
-    duration = duration or 0.2
-    return self:Play(object, {BackgroundTransparency = 1}, duration)
+    duration = duration or 0.18
+    return self:Play(object, {BackgroundTransparency = 1}, duration, Enum.EasingStyle.Quad)
 end
 
--- Scale animation (pop in/out effect)
+-- Gentle pop animation for modal/window entry
 function Animation:ScaleIn(object, duration)
-    duration = duration or 0.3
+    duration = duration or 0.24
     local originalSize = object.Size
-    object.Size = UDim2.new(originalSize.X.Scale * 0.8, originalSize.X.Offset * 0.8, 
-                            originalSize.Y.Scale * 0.8, originalSize.Y.Offset * 0.8)
-    return self:Play(object, {Size = originalSize}, duration, Enum.EasingStyle.Back)
+    object.Size = UDim2.new(
+        originalSize.X.Scale * 0.96, math.floor(originalSize.X.Offset * 0.96),
+        originalSize.Y.Scale * 0.96, math.floor(originalSize.Y.Offset * 0.96)
+    )
+    return self:Play(object, {Size = originalSize}, duration, Enum.EasingStyle.Quint)
 end
 
--- Slide animation
+-- Soft slide animation
 function Animation:SlideIn(object, fromDirection, duration)
-    duration = duration or 0.3
+    duration = duration or 0.24
     local originalPosition = object.Position
     local startPos
     
     if fromDirection == "Left" then
-        startPos = UDim2.new(originalPosition.X.Scale - 0.1, originalPosition.X.Offset - 50, 
+        startPos = UDim2.new(originalPosition.X.Scale - 0.06, originalPosition.X.Offset - 28, 
                              originalPosition.Y.Scale, originalPosition.Y.Offset)
     elseif fromDirection == "Right" then
-        startPos = UDim2.new(originalPosition.X.Scale + 0.1, originalPosition.X.Offset + 50,
+        startPos = UDim2.new(originalPosition.X.Scale + 0.06, originalPosition.X.Offset + 28,
                              originalPosition.Y.Scale, originalPosition.Y.Offset)
     elseif fromDirection == "Top" then
         startPos = UDim2.new(originalPosition.X.Scale, originalPosition.X.Offset,
-                             originalPosition.Y.Scale - 0.1, originalPosition.Y.Offset - 50)
+                             originalPosition.Y.Scale - 0.06, originalPosition.Y.Offset - 28)
     else -- Bottom
         startPos = UDim2.new(originalPosition.X.Scale, originalPosition.X.Offset,
-                             originalPosition.Y.Scale + 0.1, originalPosition.Y.Offset + 50)
+                             originalPosition.Y.Scale + 0.06, originalPosition.Y.Offset + 28)
     end
     
     object.Position = startPos
-    return self:Play(object, {Position = originalPosition}, duration)
+    return self:Play(object, {Position = originalPosition}, duration, Enum.EasingStyle.Quint)
 end
 
--- Hover effect
-function Animation:CreateHoverEffect(button, hoverColor, normalColor)
+-- Hover effect with subtle lift
+function Animation:CreateHoverEffect(button, hoverColor, normalColor, options)
+    options = options or {}
+    local hoverDuration = options.HoverDuration or 0.14
+    local leaveDuration = options.LeaveDuration or 0.16
+    local hoverOffset = options.HoverOffset or -1
+    local originalPosition = button.Position
+
     local connection1 = button.MouseEnter:Connect(function()
-        self:Play(button, {BackgroundColor3 = hoverColor}, 0.15)
+        self:Play(button, {BackgroundColor3 = hoverColor}, hoverDuration, Enum.EasingStyle.Quad)
+        if options.Lift and button.Position then
+            self:Play(button, {
+                Position = UDim2.new(
+                    originalPosition.X.Scale, originalPosition.X.Offset,
+                    originalPosition.Y.Scale, originalPosition.Y.Offset + hoverOffset
+                )
+            }, hoverDuration, Enum.EasingStyle.Quad)
+        end
     end)
     
     local connection2 = button.MouseLeave:Connect(function()
-        self:Play(button, {BackgroundColor3 = normalColor}, 0.15)
+        self:Play(button, {BackgroundColor3 = normalColor}, leaveDuration, Enum.EasingStyle.Quad)
+        if options.Lift and button.Position then
+            self:Play(button, {Position = originalPosition}, leaveDuration, Enum.EasingStyle.Quad)
+        end
     end)
     
     return {connection1, connection2}
@@ -114,7 +131,7 @@ function Animation:CreateRipple(button)
         local ripple = Instance.new("Frame")
         ripple.Name = "Ripple"
         ripple.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        ripple.BackgroundTransparency = 0.7
+        ripple.BackgroundTransparency = 0.82
         ripple.BorderSizePixel = 0
         ripple.AnchorPoint = Vector2.new(0.5, 0.5)
         ripple.Position = UDim2.new(0, x, 0, y)
@@ -129,7 +146,7 @@ function Animation:CreateRipple(button)
         local tween = self:Play(ripple, {
             Size = UDim2.new(0, size, 0, size),
             BackgroundTransparency = 1
-        }, 0.5)
+        }, 0.35, Enum.EasingStyle.Quad)
         
         tween.Completed:Connect(function()
             ripple:Destroy()
@@ -144,6 +161,34 @@ function Animation:CreateRipple(button)
             doRipple(relativeX, relativeY)
         end
     end)
+end
+
+function Animation:SoftFade(object, duration, targetTransparency)
+    duration = duration or 0.18
+    targetTransparency = targetTransparency or 0
+    return self:Play(object, {BackgroundTransparency = targetTransparency}, duration, Enum.EasingStyle.Quad)
+end
+
+function Animation:MicroLift(object, duration, pixels)
+    duration = duration or 0.14
+    pixels = pixels or -1
+    local originalPosition = object.Position
+    return self:Play(object, {
+        Position = UDim2.new(
+            originalPosition.X.Scale, originalPosition.X.Offset,
+            originalPosition.Y.Scale, originalPosition.Y.Offset + pixels
+        )
+    }, duration, Enum.EasingStyle.Quad)
+end
+
+function Animation:GentlePop(object, duration)
+    duration = duration or 0.2
+    local originalSize = object.Size
+    object.Size = UDim2.new(
+        originalSize.X.Scale * 0.985, math.floor(originalSize.X.Offset * 0.985),
+        originalSize.Y.Scale * 0.985, math.floor(originalSize.Y.Offset * 0.985)
+    )
+    return self:Play(object, {Size = originalSize}, duration, Enum.EasingStyle.Quad)
 end
 
 return Animation

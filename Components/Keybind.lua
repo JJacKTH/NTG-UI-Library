@@ -35,8 +35,8 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container = Instance.new("Frame")
     self.Container.Name = "Keybind_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 35)
-    self.Container.BackgroundColor3 = Theme.Current.Secondary
-    self.Container.BackgroundTransparency = 0
+    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    self.Container.BackgroundTransparency = 0.24
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
@@ -65,7 +65,7 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
     self.Button.Size = UDim2.new(0, 80, 0, 25)
     self.Button.Position = UDim2.new(1, -90, 0.5, 0)
     self.Button.AnchorPoint = Vector2.new(0, 0.5)
-    self.Button.BackgroundColor3 = Theme.Current.Tertiary
+    self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
     self.Button.BorderSizePixel = 0
     self.Button.Text = self:GetKeyName()
     self.Button.TextColor3 = Theme.Current.Text
@@ -93,7 +93,7 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
             if input.UserInputType == Enum.UserInputType.Keyboard then
                 self.Value = input.KeyCode
                 self.Button.Text = self:GetKeyName()
-                self.Button.BackgroundColor3 = Theme.Current.Tertiary
+                self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
                 self.Listening = false
                 connection:Disconnect()
                 
@@ -109,7 +109,7 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
                    input.UserInputType == Enum.UserInputType.MouseButton2 then
                 -- Cancel on mouse click outside
                 self.Button.Text = self:GetKeyName()
-                self.Button.BackgroundColor3 = Theme.Current.Tertiary
+                self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
                 self.Listening = false
                 connection:Disconnect()
             end
@@ -129,17 +129,17 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
     -- Hover effect with dynamic Theme colors
     self.Button.MouseEnter:Connect(function()
         if Animation then
-            Animation:Play(self.Button, {BackgroundColor3 = Theme.Current.Accent}, 0.15)
+            Animation:Play(self.Button, {BackgroundColor3 = Theme.Current.AccentHover or Theme.Current.Accent}, 0.15)
         else
-            self.Button.BackgroundColor3 = Theme.Current.Accent
+            self.Button.BackgroundColor3 = Theme.Current.AccentHover or Theme.Current.Accent
         end
     end)
     
     self.Button.MouseLeave:Connect(function()
         if Animation then
-            Animation:Play(self.Button, {BackgroundColor3 = Theme.Current.Tertiary}, 0.15)
+            Animation:Play(self.Button, {BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface}, 0.15)
         else
-            self.Button.BackgroundColor3 = Theme.Current.Tertiary
+            self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
         end
     end)
     

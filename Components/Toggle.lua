@@ -23,8 +23,8 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container = Instance.new("Frame")
     self.Container.Name = "Toggle_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 35)
-    self.Container.BackgroundColor3 = Theme.Current.Secondary
-    self.Container.BackgroundTransparency = 0
+    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    self.Container.BackgroundTransparency = 0.24
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
@@ -53,7 +53,7 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     self.SwitchBg.Size = UDim2.new(0, 44, 0, 22)
     self.SwitchBg.Position = UDim2.new(1, -52, 0.5, 0)
     self.SwitchBg.AnchorPoint = Vector2.new(0, 0.5)
-    self.SwitchBg.BackgroundColor3 = self.Value and Theme.Current.Accent or Theme.Current.Tertiary
+    self.SwitchBg.BackgroundColor3 = self.Value and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
     self.SwitchBg.BorderSizePixel = 0
     self.SwitchBg.Parent = self.Container
     
@@ -80,7 +80,7 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
         self.Value = not self.Value
         
         local targetPos = self.Value and UDim2.new(1, -20, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
-        local targetColor = self.Value and Theme.Current.Accent or Theme.Current.Tertiary
+        local targetColor = self.Value and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
         
         if Animation then
             Animation:Play(self.Knob, {Position = targetPos}, 0.2)

@@ -42,8 +42,8 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container = Instance.new("Frame")
     self.Container.Name = "ColorPicker_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 35)
-    self.Container.BackgroundColor3 = Theme.Current.Secondary
-    self.Container.BackgroundTransparency = 0
+    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    self.Container.BackgroundTransparency = 0.24
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = false
     self.Container.ZIndex = 2
@@ -96,7 +96,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.PickerPanel.Name = "PickerPanel"
     self.PickerPanel.Size = UDim2.new(0, 200, 0, 180)
     self.PickerPanel.Position = UDim2.new(1, -210, 0, 38)
-    self.PickerPanel.BackgroundColor3 = Theme.Current.Tertiary
+    self.PickerPanel.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
     self.PickerPanel.BorderSizePixel = 0
     self.PickerPanel.Visible = false
     self.PickerPanel.ZIndex = 100
@@ -204,7 +204,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.HexInput.Name = "HexInput"
     self.HexInput.Size = UDim2.new(0, 80, 0, 20)
     self.HexInput.Position = UDim2.new(0, 110, 0, 140)
-    self.HexInput.BackgroundColor3 = Theme.Current.Secondary
+    self.HexInput.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
     self.HexInput.BorderSizePixel = 0
     self.HexInput.Text = self:GetHexText()
     self.HexInput.TextColor3 = Theme.Current.Text

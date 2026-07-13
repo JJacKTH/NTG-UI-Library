@@ -20,13 +20,26 @@ local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
--- Load modules
-local Theme = loadstring(game:HttpGet and game:HttpGet("") or "")() or require(script.Core.Theme)
-local Animation = loadstring(game:HttpGet and game:HttpGet("") or "")() or require(script.Core.Animation)
-local Utility = loadstring(game:HttpGet and game:HttpGet("") or "")() or require(script.Core.Utility)
-local ConfigManager = loadstring(game:HttpGet and game:HttpGet("") or "")() or require(script.Config.ConfigManager)
+local BASE_URL = "https://raw.githubusercontent.com/JJacKTH/NTG-UI-Library/main/"
+local function safeLoad(url, name)
+    local content
+    local ok, err = pcall(function()
+        content = game:HttpGet(url)
+    end)
+    if not ok or not content or content == "" then
+        error("[NTGUI] Failed to download " .. name .. " from: " .. url .. " | Error: " .. tostring(err or "empty response"))
+    end
+    local func, compileErr = loadstring(content)
+    if not func then
+        error("[NTGUI] Failed to compile " .. name .. " | Error: " .. tostring(compileErr))
+    end
+    local runOk, result = pcall(func)
+    if not runOk then
+        error("[NTGUI] Failed to execute " .. name .. " | Error: " .. tostring(result))
+    end
+    return result
+end
 
--- For local development, use require
 local function loadModule(path)
     local success, module = pcall(function()
         return require(path)
@@ -34,24 +47,64 @@ local function loadModule(path)
     return success and module or nil
 end
 
--- Try to load modules locally
-Theme = loadModule(script:FindFirstChild("Core") and script.Core:FindFirstChild("Theme")) or Theme
-Animation = loadModule(script:FindFirstChild("Core") and script.Core:FindFirstChild("Animation")) or Animation
-Utility = loadModule(script:FindFirstChild("Core") and script.Core:FindFirstChild("Utility")) or Utility
-ConfigManager = loadModule(script:FindFirstChild("Config") and script.Config:FindFirstChild("ConfigManager")) or ConfigManager
+local Theme = safeLoad(BASE_URL .. "Core/Theme.lua", "Theme")
+local Animation = safeLoad(BASE_URL .. "Core/Animation.lua", "Animation")
+local Utility = safeLoad(BASE_URL .. "Core/Utility.lua", "Utility")
+local ConfigManager = safeLoad(BASE_URL .. "Config/ConfigManager.lua", "ConfigManager")
+local Components = {
+    Button = safeLoad(BASE_URL .. "Components/Button.lua", "Button"),
+    Toggle = safeLoad(BASE_URL .. "Components/Toggle.lua", "Toggle"),
+    Textbox = safeLoad(BASE_URL .. "Components/Textbox.lua", "Textbox"),
+    Dropdown = safeLoad(BASE_URL .. "Components/Dropdown.lua", "Dropdown"),
+    Slider = safeLoad(BASE_URL .. "Components/Slider.lua", "Slider"),
+    ColorPicker = safeLoad(BASE_URL .. "Components/ColorPicker.lua", "ColorPicker"),
+    Keybind = safeLoad(BASE_URL .. "Components/Keybind.lua", "Keybind"),
+    Label = safeLoad(BASE_URL .. "Components/Label.lua", "Label"),
+    Section = safeLoad(BASE_URL .. "Components/Section.lua", "Section"),
+    Divider = safeLoad(BASE_URL .. "Components/Divider.lua", "Divider")
+}
+
+if script then
+    Theme = loadModule(script:FindFirstChild("Core") and script.Core:FindFirstChild("Theme")) or Theme
+    Animation = loadModule(script:FindFirstChild("Core") and script.Core:FindFirstChild("Animation")) or Animation
+    Utility = loadModule(script:FindFirstChild("Core") and script.Core:FindFirstChild("Utility")) or Utility
+    ConfigManager = loadModule(script:FindFirstChild("Config") and script.Config:FindFirstChild("ConfigManager")) or ConfigManager
+    Components.Button = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Button")) or Components.Button
+    Components.Toggle = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Toggle")) or Components.Toggle
+    Components.Textbox = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Textbox")) or Components.Textbox
+    Components.Dropdown = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Dropdown")) or Components.Dropdown
+    Components.Slider = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Slider")) or Components.Slider
+    Components.ColorPicker = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("ColorPicker")) or Components.ColorPicker
+    Components.Keybind = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Keybind")) or Components.Keybind
+    Components.Label = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Label")) or Components.Label
+    Components.Section = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Section")) or Components.Section
+    Components.Divider = loadModule(script:FindFirstChild("Components") and script.Components:FindFirstChild("Divider")) or Components.Divider
+end
 
 -- If still nil, create inline versions
 if not Theme then
     Theme = {
         Current = {
-            Background = Color3.fromRGB(25, 25, 35),
-            Secondary = Color3.fromRGB(35, 35, 50),
-            Tertiary = Color3.fromRGB(45, 45, 65),
-            Accent = Color3.fromRGB(100, 100, 255),
-            AccentHover = Color3.fromRGB(120, 120, 255),
-            Text = Color3.fromRGB(255, 255, 255),
-            SubText = Color3.fromRGB(180, 180, 180),
-            Divider = Color3.fromRGB(60, 60, 80)
+            Background = Color3.fromRGB(14, 16, 22),
+            Surface = Color3.fromRGB(22, 25, 34),
+            SurfaceAlt = Color3.fromRGB(28, 32, 43),
+            Accent = Color3.fromRGB(110, 160, 255),
+            AccentHover = Color3.fromRGB(135, 185, 255),
+            Text = Color3.fromRGB(245, 247, 255),
+            SubText = Color3.fromRGB(168, 175, 195),
+            Divider = Color3.fromRGB(255, 255, 255),
+            Stroke = Color3.fromRGB(255, 255, 255),
+            Transparency = {
+                Background = 0.18,
+                Surface = 0.28,
+                SurfaceAlt = 0.38,
+                Stroke = 0.82,
+                SoftStroke = 0.9
+            }
+        },
+        Presets = {
+            GlassDark = {},
+            GlassLight = {}
         }
     }
 end
@@ -98,7 +151,7 @@ function NTGUI:CreateWindow(options)
     local Window = {}
     Window.Title = options.Title or "NTG UI"
     Window.Size = options.Size or UDim2.new(0, 500, 0, 400)
-    Window.Theme = options.Theme or "Dark"
+    Window.Theme = options.Theme or "GlassDark"
     Window.ConfigName = options.ConfigName or "Default"
     Window.AutoSave = options.AutoSave or false
     Window.AutoLoad = options.AutoLoad or false
@@ -130,7 +183,7 @@ function NTGUI:CreateWindow(options)
     Window.Container.Position = UDim2.new(0.5, 0, 0.5, 0)
     Window.Container.AnchorPoint = Vector2.new(0.5, 0.5)
     Window.Container.BackgroundColor3 = Theme.Current.Background
-    Window.Container.BackgroundTransparency = 0
+    Window.Container.BackgroundTransparency = 0.18
     Window.Container.BorderSizePixel = 0
     Window.Container.ClipsDescendants = true
     Window.Container.Active = true
@@ -145,15 +198,15 @@ function NTGUI:CreateWindow(options)
     local shadow = Instance.new("UIStroke")
     shadow.Color = Color3.fromRGB(0, 0, 0)
     shadow.Thickness = 1
-    shadow.Transparency = 0.5
+    shadow.Transparency = 0.9
     shadow.Parent = Window.Container
     
     -- Title bar
     Window.TitleBar = Instance.new("Frame")
     Window.TitleBar.Name = "TitleBar"
     Window.TitleBar.Size = UDim2.new(1, 0, 0, 40)
-    Window.TitleBar.BackgroundColor3 = Theme.Current.Secondary
-    Window.TitleBar.BackgroundTransparency = 0
+    Window.TitleBar.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    Window.TitleBar.BackgroundTransparency = 0.28
     Window.TitleBar.BorderSizePixel = 0
     Window.TitleBar.Active = true
     Window.TitleBar.Parent = Window.Container
@@ -167,7 +220,7 @@ function NTGUI:CreateWindow(options)
     titleFix.Name = "CornerFix"
     titleFix.Size = UDim2.new(1, 0, 0, 15)
     titleFix.Position = UDim2.new(0, 0, 1, -15)
-    titleFix.BackgroundColor3 = Theme.Current.Secondary
+    titleFix.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
     titleFix.BorderSizePixel = 0
     titleFix.Parent = Window.TitleBar
     
@@ -203,8 +256,8 @@ function NTGUI:CreateWindow(options)
     local minimizeBtn = Instance.new("TextButton")
     minimizeBtn.Name = "Minimize"
     minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
-    minimizeBtn.BackgroundColor3 = Theme.Current.Tertiary
-    minimizeBtn.BackgroundTransparency = 0
+    minimizeBtn.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    minimizeBtn.BackgroundTransparency = 0.38
     minimizeBtn.BorderSizePixel = 0
     minimizeBtn.Text = "−"
     minimizeBtn.TextColor3 = Theme.Current.Text
@@ -222,7 +275,7 @@ function NTGUI:CreateWindow(options)
     closeBtn.Name = "Close"
     closeBtn.Size = UDim2.new(0, 30, 0, 30)
     closeBtn.BackgroundColor3 = Color3.fromRGB(200, 80, 80)
-    closeBtn.BackgroundTransparency = 0
+    closeBtn.BackgroundTransparency = 0.38
     closeBtn.BorderSizePixel = 0
     closeBtn.Text = "×"
     closeBtn.TextColor3 = Theme.Current.Text
@@ -237,7 +290,7 @@ function NTGUI:CreateWindow(options)
     
     -- Hover effects
     if Animation then
-        Animation:CreateHoverEffect(minimizeBtn, Theme.Current.AccentHover or Theme.Current.Accent, Theme.Current.Tertiary)
+        Animation:CreateHoverEffect(minimizeBtn, Theme.Current.AccentHover or Theme.Current.Accent, Theme.Current.SurfaceAlt or Theme.Current.Surface)
         Animation:CreateHoverEffect(closeBtn, Color3.fromRGB(220, 100, 100), Color3.fromRGB(200, 80, 80))
     end
     
@@ -246,8 +299,8 @@ function NTGUI:CreateWindow(options)
     Window.TabContainer.Name = "TabContainer"
     Window.TabContainer.Size = UDim2.new(0, 140, 1, -50)
     Window.TabContainer.Position = UDim2.new(0, 5, 0, 45)
-    Window.TabContainer.BackgroundColor3 = Theme.Current.Secondary
-    Window.TabContainer.BackgroundTransparency = 0.5
+    Window.TabContainer.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    Window.TabContainer.BackgroundTransparency = 0.38
     Window.TabContainer.BorderSizePixel = 0
     Window.TabContainer.Active = true
     Window.TabContainer.Parent = Window.Container
@@ -306,8 +359,8 @@ function NTGUI:CreateWindow(options)
         Window.FloatingIcon.Size = UDim2.new(0, 50, 0, 50)
         Window.FloatingIcon.Position = iconPosition
         Window.FloatingIcon.AnchorPoint = Vector2.new(0, 0.5)
-        Window.FloatingIcon.BackgroundColor3 = Theme.Current.Background
-        Window.FloatingIcon.BackgroundTransparency = 0
+        Window.FloatingIcon.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+        Window.FloatingIcon.BackgroundTransparency = 0.28
         Window.FloatingIcon.BorderSizePixel = 0
         Window.FloatingIcon.Image = iconImage
         Window.FloatingIcon.ImageColor3 = options.FloatingIcon.ImageColor3 or Theme.Current.Accent
@@ -447,7 +500,7 @@ function NTGUI:CreateWindow(options)
         Tab.Button = Instance.new("TextButton")
         Tab.Button.Name = "Tab_" .. Tab.Name
         Tab.Button.Size = UDim2.new(1, 0, 0, 35)
-        Tab.Button.BackgroundColor3 = Theme.Current.Tertiary
+        Tab.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
         Tab.Button.BackgroundTransparency = 1
         Tab.Button.BorderSizePixel = 0
         Tab.Button.Text = Tab.Name
@@ -547,15 +600,16 @@ function NTGUI:CreateWindow(options)
         
         -- Import component methods
         -- These will be populated by component modules
-        Tab.AddButton = function(self, opts) return require(script.Components.Button).new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
-        Tab.AddToggle = function(self, opts) return require(script.Components.Toggle).new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
-        Tab.AddTextbox = function(self, opts) return require(script.Components.Textbox).new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
-        Tab.AddDropdown = function(self, opts) return require(script.Components.Dropdown).new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
-        Tab.AddSlider = function(self, opts) return require(script.Components.Slider).new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
-        Tab.AddColorPicker = function(self, opts) return require(script.Components.ColorPicker).new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
-        Tab.AddKeybind = function(self, opts) return require(script.Components.Keybind).new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
-        Tab.AddLabel = function(self, opts) return require(script.Components.Label).new(Tab, opts, Theme, Animation) end
-        Tab.AddSection = function(self, opts) return require(script.Components.Section).new(Tab, opts, Theme, Animation) end
+        Tab.AddButton = function(self, opts) return Components.Button.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
+        Tab.AddToggle = function(self, opts) return Components.Toggle.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
+        Tab.AddTextbox = function(self, opts) return Components.Textbox.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
+        Tab.AddDropdown = function(self, opts) return Components.Dropdown.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
+        Tab.AddSlider = function(self, opts) return Components.Slider.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
+        Tab.AddColorPicker = function(self, opts) return Components.ColorPicker.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
+        Tab.AddKeybind = function(self, opts) return Components.Keybind.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
+        Tab.AddLabel = function(self, opts) return Components.Label.new(Tab, opts, Theme, Animation) end
+        Tab.AddSection = function(self, opts) return Components.Section.new(Tab, opts, Theme, Animation, Window.ConfigHandler, Components) end
+        Tab.AddDivider = function(self, opts) return Components.Divider.new(Tab, opts, Theme, Animation) end
         
         return Tab
     end
@@ -615,8 +669,8 @@ function NTGUI:Notify(options)
     local notif = Instance.new("Frame")
     notif.Name = "Notification"
     notif.Size = UDim2.new(1, 0, 0, 70)
-    notif.BackgroundColor3 = Theme.Current.Background
-    notif.BackgroundTransparency = 0
+    notif.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    notif.BackgroundTransparency = 0.22
     notif.BorderSizePixel = 0
     notif.ClipsDescendants = true
     notif.Parent = notifContainer

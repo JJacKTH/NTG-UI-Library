@@ -28,8 +28,8 @@ function Notification.new(parent, options, Theme, Animation)
     self.Container = Instance.new("Frame")
     self.Container.Name = "Notification"
     self.Container.Size = UDim2.new(1, 0, 0, 70)
-    self.Container.BackgroundColor3 = Theme.Current.Background
-    self.Container.BackgroundTransparency = 0
+    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    self.Container.BackgroundTransparency = 0.22
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = true
     self.Container.Parent = parent

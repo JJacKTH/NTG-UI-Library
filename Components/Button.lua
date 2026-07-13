@@ -31,8 +31,8 @@ function Button.new(tab, options, Theme, Animation, ConfigHandler)
     self.Element = Instance.new("TextButton")
     self.Element.Name = "ButtonElement"
     self.Element.Size = UDim2.new(1, 0, 1, 0)
-    self.Element.BackgroundColor3 = Theme.Current.Tertiary
-    self.Element.BackgroundTransparency = 0
+    self.Element.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    self.Element.BackgroundTransparency = 0.32
     self.Element.BorderSizePixel = 0
     self.Element.Text = self.Name
     self.Element.TextColor3 = Theme.Current.Text
@@ -48,17 +48,17 @@ function Button.new(tab, options, Theme, Animation, ConfigHandler)
     -- Hover effect with dynamic Theme colors
     self.Element.MouseEnter:Connect(function()
         if Animation then
-            Animation:Play(self.Element, {BackgroundColor3 = Theme.Current.Accent}, 0.15)
+            Animation:Play(self.Element, {BackgroundColor3 = Theme.Current.AccentHover or Theme.Current.Accent}, 0.15)
         else
-            self.Element.BackgroundColor3 = Theme.Current.Accent
+            self.Element.BackgroundColor3 = Theme.Current.AccentHover or Theme.Current.Accent
         end
     end)
     
     self.Element.MouseLeave:Connect(function()
         if Animation then
-            Animation:Play(self.Element, {BackgroundColor3 = Theme.Current.Tertiary}, 0.15)
+            Animation:Play(self.Element, {BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface}, 0.15)
         else
-            self.Element.BackgroundColor3 = Theme.Current.Tertiary
+            self.Element.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
         end
     end)
     

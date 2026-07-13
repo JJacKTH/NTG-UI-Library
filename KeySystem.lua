@@ -17,7 +17,7 @@ local Config = {
 
 -- Create Window (Smaller size for Login)
 local Window = NTGUI:Load({
-    Title = "Authentication",
+    Title = "NTG UI Auth",
     Size = UDim2.fromOffset(400, 280),
     Resizing = false, -- Fixed size for login
     MinSize = UDim2.fromOffset(400, 280),

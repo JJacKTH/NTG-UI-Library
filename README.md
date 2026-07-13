@@ -15,7 +15,7 @@ A modern, feature-rich UI library for Roblox Luau scripting.
 | **Draggable Window** | Freely movable window |
 | **Floating Icon** | Floating icon when minimized, draggable |
 | **Auto Save/Load** | Auto-save config per UserId |
-| **4 Themes** | Dark, Light, PastelBlue, PastelGreen |
+| **Glass Themes** | GlassDark, GlassLight |
 | **Searchable Dropdown** | Type to search in dropdown |
 
 ### 📦 Components
@@ -42,7 +42,7 @@ local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NT
 -- Create window
 local Window = UI:CreateWindow({
     Title = "My Hub",
-    Theme = "Dark", -- Dark, Light, PastelBlue, PastelGreen
+    Theme = "GlassDark", -- GlassDark, GlassLight
     ToggleKey = Enum.KeyCode.K, -- Global toggle key
     CenterOnToggle = true, -- Center UI when toggled via keybind
     AutoSave = true,
@@ -122,7 +122,7 @@ Tab:AddKeybind({
 ### 📁 File Structure
 
 ```
-NTGUI/
+NTG_UI/
 ├── Main.lua           -- Entry point
 ├── Example.lua        -- Usage example
 ├── Core/
@@ -151,7 +151,7 @@ UI Library ที่ทันสมัยและมีฟีเจอร์ค
 | **Draggable Window** | หน้าต่างลากย้ายได้อิสระ |
 | **Floating Icon** | ไอคอนลอยเมื่อ minimize ลากได้ |
 | **Auto Save/Load** | บันทึก config อัตโนมัติต่อ UserId |
-| **4 Themes** | Dark, Light, PastelBlue, PastelGreen |
+| **Glass Themes** | GlassDark, GlassLight |
 | **Searchable Dropdown** | พิมพ์ค้นหาใน dropdown ได้ |
 
 ### 📦 Components ทั้งหมด
@@ -178,7 +178,7 @@ local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JJacKTH/NT
 -- สร้างหน้าต่าง
 local Window = UI:CreateWindow({
     Title = "My Hub",
-    Theme = "Dark", -- Dark, Light, PastelBlue, PastelGreen
+    Theme = "GlassDark", -- GlassDark, GlassLight
     ToggleKey = Enum.KeyCode.K, -- ปุ่มลัดเปิด/ปิด UI ส่วนกลาง
     CenterOnToggle = true, -- จัด UI ให้อยู่ตรงกลางอัตโนมัติเมื่อกดเปิดผ่านปุ่มลัด
     AutoSave = true,
@@ -265,7 +265,7 @@ Tab:AddKeybind({
 ### 📁 โครงสร้างไฟล์
 
 ```
-NTGUI/
+NTG_UI/
 ├── Main.lua           -- จุดเริ่มต้น
 ├── Example.lua        -- ตัวอย่างการใช้งาน
 ├── Core/

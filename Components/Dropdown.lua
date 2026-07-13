@@ -80,8 +80,8 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container = Instance.new("Frame")
     self.Container.Name = "Dropdown_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 55)
-    self.Container.BackgroundColor3 = Theme.Current.Secondary
-    self.Container.BackgroundTransparency = 0
+    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    self.Container.BackgroundTransparency = 0.24
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = false
     self.Container.ZIndex = 2
@@ -112,8 +112,8 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Button.Name = "DropdownButton"
     self.Button.Size = UDim2.new(1, -20, 0, 25)
     self.Button.Position = UDim2.new(0, 10, 0, 25)
-    self.Button.BackgroundColor3 = Theme.Current.Tertiary
-    self.Button.BackgroundTransparency = 0
+    self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    self.Button.BackgroundTransparency = 0.3
     self.Button.BorderSizePixel = 0
     self.Button.Text = ""
     self.Button.AutoButtonColor = false
@@ -157,8 +157,8 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.ListContainer.Name = "ListContainer"
     self.ListContainer.Size = UDim2.new(1, -20, 0, 0)
     self.ListContainer.Position = UDim2.new(0, 10, 0, 52)
-    self.ListContainer.BackgroundColor3 = Theme.Current.Tertiary
-    self.ListContainer.BackgroundTransparency = 0
+    self.ListContainer.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    self.ListContainer.BackgroundTransparency = 0.24
     self.ListContainer.BorderSizePixel = 0
     self.ListContainer.ClipsDescendants = true
     self.ListContainer.Visible = false
@@ -180,8 +180,8 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
         self.SearchBox.Name = "SearchBox"
         self.SearchBox.Size = UDim2.new(1, -10, 0, 25)
         self.SearchBox.Position = UDim2.new(0, 5, 0, 3)
-        self.SearchBox.BackgroundColor3 = Theme.Current.Secondary
-        self.SearchBox.BackgroundTransparency = 0
+        self.SearchBox.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+        self.SearchBox.BackgroundTransparency = 0.28
         self.SearchBox.BorderSizePixel = 0
         self.SearchBox.Text = ""
         self.SearchBox.PlaceholderText = "🔍 Search..."
@@ -234,8 +234,8 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
         optBtn.Name = "Option_" .. optionText
         optBtn.Size = UDim2.new(1, -4, 0, 25)
         optBtn.LayoutOrder = layoutOrderCounter
-        optBtn.BackgroundColor3 = Theme.Current.Secondary
-        optBtn.BackgroundTransparency = 1
+        optBtn.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+        optBtn.BackgroundTransparency = 0.5
         optBtn.BorderSizePixel = 0
         optBtn.Text = ""
         optBtn.AutoButtonColor = false
@@ -256,7 +256,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
             checkbox.Size = UDim2.new(0, 16, 0, 16)
             checkbox.Position = UDim2.new(0, 6, 0.5, 0)
             checkbox.AnchorPoint = Vector2.new(0, 0.5)
-            checkbox.BackgroundColor3 = self.Value[optionText] and Theme.Current.Accent or Theme.Current.Tertiary
+            checkbox.BackgroundColor3 = self.Value[optionText] and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
             checkbox.BorderSizePixel = 0
             checkbox.ZIndex = 103
             checkbox.Parent = optBtn
@@ -318,7 +318,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
                 
                 if checkbox then
                     local checkmark = checkbox:FindFirstChild("Checkmark")
-                    checkbox.BackgroundColor3 = self.Value[optionText] and Theme.Current.Accent or Theme.Current.Tertiary
+                    checkbox.BackgroundColor3 = self.Value[optionText] and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
                     if checkmark then
                         checkmark.Text = self.Value[optionText] and "✓" or ""
                     end
@@ -584,7 +584,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
                 -- Update checkboxes
                 for optText, optData in pairs(self.OptionButtons) do
                     if optData.Checkbox then
-                        optData.Checkbox.BackgroundColor3 = self.Value[optText] and Theme.Current.Accent or Theme.Current.Tertiary
+                        optData.Checkbox.BackgroundColor3 = self.Value[optText] and Theme.Current.Accent or Theme.Current.SurfaceAlt or Theme.Current.Surface
                         local checkmark = optData.Checkbox:FindFirstChild("Checkmark")
                         if checkmark then
                             checkmark.Text = self.Value[optText] and "✓" or ""

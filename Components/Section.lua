@@ -30,8 +30,8 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     self.Container = Instance.new("Frame")
     self.Container.Name = "Section_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 30)
-    self.Container.BackgroundColor3 = Theme.Current.Secondary
-    self.Container.BackgroundTransparency = 0.5
+    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    self.Container.BackgroundTransparency = 0.3
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = true
     self.Container.LayoutOrder = elementCount
@@ -199,6 +199,14 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     function self:AddLabel(opts)
         if not self.Components or not self.Components.Label then return nil end
         local component = self.Components.Label.new(self, opts, Theme, Animation)
+        table.insert(self.Elements, component)
+        self:UpdateSize()
+        return component
+    end
+
+    function self:AddDivider(opts)
+        if not self.Components or not self.Components.Divider then return nil end
+        local component = self.Components.Divider.new(self, opts, Theme, Animation)
         table.insert(self.Elements, component)
         self:UpdateSize()
         return component

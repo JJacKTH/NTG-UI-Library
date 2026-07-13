@@ -30,8 +30,8 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container = Instance.new("Frame")
     self.Container.Name = "Slider_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 50)
-    self.Container.BackgroundColor3 = Theme.Current.Secondary
-    self.Container.BackgroundTransparency = 0
+    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    self.Container.BackgroundTransparency = 0.24
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
@@ -72,7 +72,7 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     self.Track.Name = "Track"
     self.Track.Size = UDim2.new(1, -20, 0, 8)
     self.Track.Position = UDim2.new(0, 10, 0, 32)
-    self.Track.BackgroundColor3 = Theme.Current.Tertiary
+    self.Track.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
     self.Track.BorderSizePixel = 0
     self.Track.Parent = self.Container
     

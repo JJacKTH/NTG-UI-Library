@@ -32,7 +32,7 @@ function Divider.new(tab, options, Theme, Animation)
     self.LeftLine.Position = UDim2.new(0, 5, 0.5, 0)
     self.LeftLine.AnchorPoint = Vector2.new(0, 0.5)
     self.LeftLine.BackgroundColor3 = Theme.Current.SubText
-    self.LeftLine.BackgroundTransparency = 0.5
+    self.LeftLine.BackgroundTransparency = 0.7
     self.LeftLine.BorderSizePixel = 0
     self.LeftLine.Parent = self.Container
     
@@ -56,7 +56,7 @@ function Divider.new(tab, options, Theme, Animation)
     self.RightLine.Position = UDim2.new(0.7, 5, 0.5, 0)
     self.RightLine.AnchorPoint = Vector2.new(0, 0.5)
     self.RightLine.BackgroundColor3 = Theme.Current.SubText
-    self.RightLine.BackgroundTransparency = 0.5
+    self.RightLine.BackgroundTransparency = 0.7
     self.RightLine.BorderSizePixel = 0
     self.RightLine.Parent = self.Container
     

@@ -19,7 +19,7 @@ local Window = UI:CreateWindow({
     Title = "BloxFruit Hub",
     GameName = "BloxFruit",
     ConfigName = "Config",
-    Theme = "Dark",
+    Theme = "GlassDark",
     Size = UDim2.new(0, 550, 0, 450),
     
     -- Resize Options
@@ -232,8 +232,8 @@ SettingsTab:AddDivider({ Name = "💾 Config" })
 -- Theme Dropdown
 SettingsTab:AddDropdown({
     Name = "UI Theme",
-    Options = {"Dark", "Light", "PastelBlue", "PastelGreen"},
-    Default = "Dark",
+    Options = {"GlassDark", "GlassLight"},
+    Default = "GlassDark",
     Callback = function(selected)
         Window:SetTheme(selected)
         UI:Notify({ Title = "Theme", Message = "Set to " .. selected, Type = "Success" })
@@ -271,5 +271,5 @@ print("============================================")
 print("NTG UI - Full Example Loaded!")
 print("- Resizable: Drag bottom-right corner")
 print("- Preset Sizes: Small / Medium / Large")
-print("- Config saved to: NTGUI/" .. game.Players.LocalPlayer.Name .. "/BloxFruit/")
+print("- Config saved to: NTG_UI/" .. game.Players.LocalPlayer.Name .. "/BloxFruit/")
 print("============================================")

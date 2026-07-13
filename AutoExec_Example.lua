@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --! NTG UI AutoExec Example
 --! วางไฟล์นี้ใน autoexec folder ของ executor
---! เช่น: autoexec/antigravity_loader.lua
+--! เช่น: autoexec/ntg_ui_loader.lua
 -------------------------------------------------------------------------------
 
 --[[
@@ -74,7 +74,7 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/0fbaa2aa75e1ef
 --! 2. ตั้ง MAIN_SCRIPT ใน KeySystem.lua ให้ชี้ไปยัง script.lua ที่ protect แล้ว
 --! 3. วาง autoexec ที่โหลด LuArmor loader
 --!
---! autoexec/antigravity.lua:
+--! autoexec/ntg_ui.lua:
 --!   _G.Authorize = "Cy2Z3eaTBvt7WN9joVTZto8JHPMT"
 --!   loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/0fbaa2aa75e1ef5d4da3dd2e849494c8.lua"))()
 --!
