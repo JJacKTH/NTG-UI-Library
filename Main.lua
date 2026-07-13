@@ -473,11 +473,33 @@ function NTGUI:CreateWindow(options)
         end
     end
     
+    
     -- Global Toggle Key support
     Window.ToggleKey = options.ToggleKey
     if Window.ToggleKey == nil then Window.ToggleKey = Enum.KeyCode.K end -- Default to K if not specified
     
     local UserInputService = game:GetService("UserInputService")
+    local Lighting = game:GetService("Lighting")
+    local function updateBlur()
+        -- ponytail: dynamic blur effect managed based on visibility and theme preset
+        local blurName = "NTG_UI_Blur_" .. string.gsub(Window.Title, "%s+", "_")
+        local existingBlur = Lighting:FindFirstChild(blurName)
+        if Window.Visible and not Window.Minimized then
+            if not existingBlur then
+                local blur = Instance.new("BlurEffect")
+                blur.Name = blurName
+                blur.Size = Theme.Current.BlurStrength or 24
+                blur.Parent = Lighting
+            else
+                existingBlur.Size = Theme.Current.BlurStrength or 24
+            end
+        else
+            if existingBlur then
+                existingBlur:Destroy()
+            end
+        end
+    end
+    
     local toggleConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if Window.ToggleKey and input.KeyCode == Window.ToggleKey then
             -- Avoid toggling UI when typing in text fields
@@ -494,6 +516,7 @@ function NTGUI:CreateWindow(options)
         if Window.FloatingIcon then
             Window.FloatingIcon.Visible = true
         end
+        updateBlur()
     end
     
     function Window:Maximize(forceCenter)
@@ -508,6 +531,7 @@ function NTGUI:CreateWindow(options)
         if Window.FloatingIcon then
             Window.FloatingIcon.Visible = true -- Keep visible
         end
+        updateBlur()
     end
     
     function Window:Toggle(forceCenter)
@@ -524,6 +548,7 @@ function NTGUI:CreateWindow(options)
         if Window.FloatingIcon then
             Window.FloatingIcon.Visible = false
         end
+        updateBlur()
     end
     
     function Window:Show()
@@ -532,6 +557,7 @@ function NTGUI:CreateWindow(options)
         if Window.FloatingIcon then
             Window.FloatingIcon.Visible = true
         end
+        updateBlur()
     end
     
     function Window:Destroy()
@@ -551,6 +577,13 @@ function NTGUI:CreateWindow(options)
                 end
             end
         end
+
+        local blurName = "NTG_UI_Blur_" .. string.gsub(Window.Title, "%s+", "_")
+        local existingBlur = Lighting:FindFirstChild(blurName)
+        if existingBlur then
+            existingBlur:Destroy()
+        end
+        
         Window.Container:Destroy()
         if Window.FloatingIcon then
             Window.FloatingIcon:Destroy()
@@ -566,6 +599,7 @@ function NTGUI:CreateWindow(options)
     function Window:SetTheme(themeName)
         if Theme.Presets and Theme.Presets[themeName] then
             Theme.Current = Theme.Presets[themeName]
+            updateBlur()
             -- Refresh UI colors would go here
         end
     end
@@ -727,7 +761,6 @@ function NTGUI:CreateWindow(options)
         end
         
         -- Import component methods
-        -- These will be populated by component modules
         Tab.AddButton = function(self, opts) return Components.Button.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
         Tab.AddToggle = function(self, opts) return Components.Toggle.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
         Tab.AddTextbox = function(self, opts) return Components.Textbox.new(Tab, opts, Theme, Animation, Window.ConfigHandler) end
@@ -753,6 +786,7 @@ function NTGUI:CreateWindow(options)
     
     -- Add to windows list
     table.insert(NTGUI.Windows, Window)
+    updateBlur()
     
     -- Entry animation
     if Animation then

@@ -24,11 +24,11 @@ Theme.Presets = {
         Error = Color3.fromRGB(255, 104, 104),
         Warning = Color3.fromRGB(255, 194, 92),
         Transparency = {
-            Background = 0.1,
-            Surface = 0.2,
-            SurfaceAlt = 0.28,
-            Stroke = 0.82,
-            SoftStroke = 0.9,
+            Background = 0.15,
+            Surface = 0.25,
+            SurfaceAlt = 0.32,
+            Stroke = 0.65, -- ponytail: slightly more visible stroke for mobile executor fallbacks
+            SoftStroke = 0.8,
             Glow = 0.76
         },
         BlurStrength = 28
@@ -36,27 +36,27 @@ Theme.Presets = {
 
     GlassLight = {
         Name = "GlassLight",
-        Background = Color3.fromRGB(232, 238, 248),
-        Surface = Color3.fromRGB(248, 250, 255),
-        SurfaceAlt = Color3.fromRGB(255, 255, 255),
-        SurfaceGlow = Color3.fromRGB(226, 233, 246),
+        Background = Color3.fromRGB(240, 244, 250),
+        Surface = Color3.fromRGB(255, 255, 255),
+        SurfaceAlt = Color3.fromRGB(245, 248, 253),
+        SurfaceGlow = Color3.fromRGB(235, 241, 251),
         Accent = Color3.fromRGB(84, 108, 255),
         AccentHover = Color3.fromRGB(106, 129, 255),
         AccentSoft = Color3.fromRGB(84, 108, 255),
         Text = Color3.fromRGB(23, 28, 40),
         SubText = Color3.fromRGB(94, 104, 124),
         Divider = Color3.fromRGB(28, 32, 44),
-        Stroke = Color3.fromRGB(28, 32, 44),
+        Stroke = Color3.fromRGB(255, 255, 255),
         Glow = Color3.fromRGB(84, 108, 255),
         Success = Color3.fromRGB(52, 170, 102),
         Error = Color3.fromRGB(220, 70, 70),
         Warning = Color3.fromRGB(214, 156, 48),
         Transparency = {
-            Background = 0.08,
-            Surface = 0.16,
-            SurfaceAlt = 0.24,
-            Stroke = 0.9,
-            SoftStroke = 0.95,
+            Background = 0.12,
+            Surface = 0.22,
+            SurfaceAlt = 0.28,
+            Stroke = 0.7, -- ponytail: slightly more visible stroke for light theme fallbacks
+            SoftStroke = 0.85,
             Glow = 0.8
         },
         BlurStrength = 18
@@ -104,7 +104,7 @@ end
 function Theme:StyleCard(frame, opts)
     opts = opts or {}
     frame.BackgroundColor3 = opts.BackgroundColor3 or Theme.Current.Surface or Theme.Current.Background
-    frame.BackgroundTransparency = opts.BackgroundTransparency or (Theme.Current.Transparency and Theme.Current.Transparency.Surface or 0.2)
+    frame.BackgroundTransparency = opts.BackgroundTransparency or (Theme.Current.Transparency and Theme.Current.Transparency.Surface or 0.25)
     frame.BorderSizePixel = 0
 
     local corner = Instance.new("UICorner")
@@ -113,9 +113,24 @@ function Theme:StyleCard(frame, opts)
 
     local stroke = Instance.new("UIStroke")
     stroke.Color = opts.StrokeColor or Theme.Current.Stroke or Theme.Current.Divider
-    stroke.Transparency = opts.StrokeTransparency or (Theme.Current.Transparency and Theme.Current.Transparency.Stroke or 0.85)
+    stroke.Transparency = opts.StrokeTransparency or (Theme.Current.Transparency and Theme.Current.Transparency.Stroke or 0.7)
     stroke.Thickness = opts.StrokeThickness or 1
     stroke.Parent = frame
+
+    -- Glass 2.0 gradient stroke effect for refractive bezels
+    local strokeGradient = Instance.new("UIGradient")
+    strokeGradient.Rotation = opts.StrokeGradientRotation or 45
+    strokeGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+        ColorSequenceKeypoint.new(0.5, Theme.Current.Stroke or Color3.fromRGB(255, 255, 255)),
+        ColorSequenceKeypoint.new(1, Theme.Current.Background or Color3.fromRGB(0, 0, 0))
+    })
+    strokeGradient.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.1),
+        NumberSequenceKeypoint.new(0.5, 0.45),
+        NumberSequenceKeypoint.new(1, 0.9)
+    })
+    strokeGradient.Parent = stroke
 
     if opts.EnableGradient ~= false then
         local gradient = Instance.new("UIGradient")
@@ -126,9 +141,9 @@ function Theme:StyleCard(frame, opts)
             ColorSequenceKeypoint.new(1, Theme.Current.Background)
         })
         gradient.Transparency = opts.GradientTransparency or NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.2),
-            NumberSequenceKeypoint.new(0.4, 0.45),
-            NumberSequenceKeypoint.new(1, 0.15)
+            NumberSequenceKeypoint.new(0, 0.15),
+            NumberSequenceKeypoint.new(0.4, 0.35),
+            NumberSequenceKeypoint.new(1, 0.1)
         })
         gradient.Parent = frame
     end
