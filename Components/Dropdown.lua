@@ -80,24 +80,17 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container = Instance.new("Frame")
     self.Container.Name = "Dropdown_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 55)
-    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.12
-    self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = false
     self.Container.ZIndex = 2
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
-    local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 16)
-    containerCorner.Parent = self.Container
-
-    local containerStroke = Instance.new("UIStroke")
-    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    containerStroke.Transparency = 0.84
-    containerStroke.Thickness = 1
-    containerStroke.Parent = self.Container
+    Theme:StyleCard(self.Container, {
+        CornerRadius = UDim.new(0, 12),
+        BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.SurfaceAlt or 0.32,
+        StrokeTransparency = 0.82
+    })
     
     -- Label
     self.Label = Instance.new("TextLabel")
@@ -119,7 +112,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Button.Size = UDim2.new(1, -20, 0, 25)
     self.Button.Position = UDim2.new(0, 10, 0, 25)
     self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.Button.BackgroundTransparency = 0.08
+    self.Button.BackgroundTransparency = 0.4
     self.Button.BorderSizePixel = 0
     self.Button.Text = ""
     self.Button.AutoButtonColor = false
@@ -132,12 +125,9 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
 
     local buttonStroke = Instance.new("UIStroke")
     buttonStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    buttonStroke.Transparency = 0.86
+    buttonStroke.Transparency = 0.88
     buttonStroke.Thickness = 1
     buttonStroke.Parent = self.Button
-    
-    -- Selected text
-    self.SelectedLabel = Instance.new("TextLabel")
     self.SelectedLabel.Name = "Selected"
     self.SelectedLabel.Size = UDim2.new(1, -30, 1, 0)
     self.SelectedLabel.Position = UDim2.new(0, 8, 0, 0)

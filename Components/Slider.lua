@@ -30,22 +30,15 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container = Instance.new("Frame")
     self.Container.Name = "Slider_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 50)
-    self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.12
-    self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
-    local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 16)
-    containerCorner.Parent = self.Container
-
-    local containerStroke = Instance.new("UIStroke")
-    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
-    containerStroke.Transparency = 0.84
-    containerStroke.Thickness = 1
-    containerStroke.Parent = self.Container
+    Theme:StyleCard(self.Container, {
+        CornerRadius = UDim.new(0, 12),
+        BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.SurfaceAlt or 0.32,
+        StrokeTransparency = 0.82
+    })
     
     -- Label
     self.Label = Instance.new("TextLabel")
