@@ -172,7 +172,7 @@ function NTGUI:CreateWindow(options)
     Window.Container.Position = UDim2.new(0.5, 0, 0.5, 0)
     Window.Container.AnchorPoint = Vector2.new(0.5, 0.5)
     Window.Container.BackgroundColor3 = Theme.Current.Background
-    Window.Container.BackgroundTransparency = 0.32
+    Window.Container.BackgroundTransparency = 0.15
     Window.Container.BorderSizePixel = 0
     Window.Container.ClipsDescendants = true
     Window.Container.Active = true
@@ -189,7 +189,7 @@ function NTGUI:CreateWindow(options)
     glassBg.BackgroundTransparency = 1
     glassBg.Image = "rbxassetid://10849615220"
     glassBg.ImageColor3 = Color3.fromRGB(255, 255, 255)
-    glassBg.ImageTransparency = 0.8
+    glassBg.ImageTransparency = 0.45
     glassBg.ScaleType = Enum.ScaleType.Slice
     glassBg.SliceCenter = Rect.new(10, 10, 90, 90)
     glassBg.ZIndex = 0
@@ -884,8 +884,8 @@ function NTGUI:CreateWindow(options)
         Window.Container.BackgroundTransparency = 1
         Window.GlassBackground.ImageTransparency = 1
         Animation:ScaleIn(Window.Container, 0.4)
-        Animation:Play(Window.Container, {BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Background or 0.32}, 0.3)
-        Animation:Play(Window.GlassBackground, {ImageTransparency = 0.8}, 0.3)
+        Animation:Play(Window.Container, {BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Background or 0.15}, 0.3)
+        Animation:Play(Window.GlassBackground, {ImageTransparency = 0.45}, 0.3)
     end
     
     return Window
