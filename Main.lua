@@ -171,12 +171,29 @@ function NTGUI:CreateWindow(options)
     Window.Container.Size = Window.Size
     Window.Container.Position = UDim2.new(0.5, 0, 0.5, 0)
     Window.Container.AnchorPoint = Vector2.new(0.5, 0.5)
-    Window.Container.BackgroundColor3 = Theme.Current.Background
-    Window.Container.BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Background or 0.1
+    Window.Container.BackgroundTransparency = 1
     Window.Container.BorderSizePixel = 0
     Window.Container.ClipsDescendants = true
     Window.Container.Active = true
     Window.Container.Parent = parent
+    
+    -- Frosted Glass texture background for Glass 2.0 effect (matching Image 2)
+    local glassBg = Instance.new("ImageLabel")
+    glassBg.Name = "GlassBackground"
+    glassBg.Size = UDim2.new(1, 0, 1, 0)
+    glassBg.BackgroundTransparency = 1
+    glassBg.Image = "rbxassetid://15623091142"
+    glassBg.ImageColor3 = Theme.Current.Background
+    glassBg.ImageTransparency = 0.28
+    glassBg.ScaleType = Enum.ScaleType.Slice
+    glassBg.SliceCenter = Rect.new(10, 10, 90, 90)
+    glassBg.ZIndex = 0
+    glassBg.Parent = Window.Container
+    Window.GlassBackground = glassBg
+    
+    local glassCorner = Instance.new("UICorner")
+    glassCorner.CornerRadius = UDim.new(0, 20)
+    glassCorner.Parent = glassBg
 
     local backgroundGlow = Instance.new("Frame")
     backgroundGlow.Name = "GlowLayer"
@@ -424,6 +441,7 @@ function NTGUI:CreateWindow(options)
     
     local tabLayout = Instance.new("UIListLayout")
     tabLayout.FillDirection = Enum.FillDirection.Vertical
+    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
     tabLayout.Padding = UDim.new(0, 5)
     tabLayout.Parent = Window.TabScroll
     
@@ -747,7 +765,16 @@ function NTGUI:CreateWindow(options)
             -- Deselect all tabs
             for _, tab in ipairs(Window.Tabs) do
                 tab.Button.BackgroundTransparency = 1
-                tab.Button.TextColor3 = Theme.Current.SubText
+                local txt = tab.Button:FindFirstChild("Text")
+                if txt then
+                    txt.TextColor3 = Theme.Current.SubText
+                else
+                    tab.Button.TextColor3 = Theme.Current.SubText
+                end
+                local icon = tab.Button:FindFirstChild("Icon")
+                if icon then
+                    icon.ImageColor3 = Theme.Current.SubText
+                end
                 tab.Page.Visible = false
                 if tab.Button:FindFirstChild("UIGradient") then
                     tab.Button.UIGradient.Enabled = false
@@ -759,7 +786,16 @@ function NTGUI:CreateWindow(options)
             
             -- Select this tab
             Tab.Button.BackgroundTransparency = 0.15
-            Tab.Button.TextColor3 = Theme.Current.Text
+            local txt = Tab.Button:FindFirstChild("Text")
+            if txt then
+                txt.TextColor3 = Theme.Current.Text
+            else
+                Tab.Button.TextColor3 = Theme.Current.Text
+            end
+            local icon = Tab.Button:FindFirstChild("Icon")
+            if icon then
+                icon.ImageColor3 = Theme.Current.Text
+            end
             Tab.Page.Visible = true
             Window.ActiveTab = Tab
             if Tab.Button:FindFirstChild("UIGradient") then
@@ -840,9 +876,9 @@ function NTGUI:CreateWindow(options)
     
     -- Entry animation
     if Animation then
-        Window.Container.BackgroundTransparency = 1
+        Window.GlassBackground.ImageTransparency = 1
         Animation:ScaleIn(Window.Container, 0.4)
-        Animation:Play(Window.Container, {BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Background or 0.35}, 0.3)
+        Animation:Play(Window.GlassBackground, {ImageTransparency = 0.28}, 0.3)
     end
     
     return Window
