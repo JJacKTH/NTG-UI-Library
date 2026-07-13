@@ -372,13 +372,16 @@ function NTGUI:CreateWindow(options)
             Window:Toggle()
         end)
         
-        -- Icon methods
-        function Window.FloatingIcon:SetPosition(pos)
-            Window.FloatingIcon.Position = pos
+        function Window:SetFloatingIconPosition(pos)
+            if Window.FloatingIcon then
+                Window.FloatingIcon.Position = pos
+            end
         end
-        
-        function Window.FloatingIcon:SetImage(img)
-            Window.FloatingIcon.Image = img
+
+        function Window:SetFloatingIconImage(img)
+            if Window.FloatingIcon then
+                Window.FloatingIcon.Image = img
+            end
         end
     end
     
