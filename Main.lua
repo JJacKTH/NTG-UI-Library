@@ -230,44 +230,10 @@ function NTGUI:CreateWindow(options)
     Window.TitleBar = Instance.new("Frame")
     Window.TitleBar.Name = "TitleBar"
     Window.TitleBar.Size = UDim2.new(1, 0, 0, 54)
-    Window.TitleBar.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    Window.TitleBar.BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Surface or 0.2
+    Window.TitleBar.BackgroundTransparency = 1
     Window.TitleBar.BorderSizePixel = 0
     Window.TitleBar.Active = true
     Window.TitleBar.Parent = Window.Container
-
-    local titleGlow = Instance.new("Frame")
-    titleGlow.Name = "TitleGlow"
-    titleGlow.Size = UDim2.new(1, 0, 1, 0)
-    titleGlow.BackgroundTransparency = 1
-    titleGlow.BorderSizePixel = 0
-    titleGlow.ZIndex = Window.TitleBar.ZIndex + 1
-    titleGlow.Parent = Window.TitleBar
-
-    local titleGlowGradient = Instance.new("UIGradient")
-    titleGlowGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-        ColorSequenceKeypoint.new(1, Theme.Current.Surface or Theme.Current.Background)
-    })
-    titleGlowGradient.Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0, 0.72),
-        NumberSequenceKeypoint.new(1, 1)
-    })
-    titleGlowGradient.Rotation = 90
-    titleGlowGradient.Parent = titleGlow
-    
-    local titleCorner = Instance.new("UICorner")
-    titleCorner.CornerRadius = UDim.new(0, 20)
-    titleCorner.Parent = Window.TitleBar
-    
-    -- Fix corner overlap
-    local titleFix = Instance.new("Frame")
-    titleFix.Name = "CornerFix"
-    titleFix.Size = UDim2.new(1, 0, 0, 22)
-    titleFix.Position = UDim2.new(0, 0, 1, -22)
-    titleFix.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    titleFix.BorderSizePixel = 0
-    titleFix.Parent = Window.TitleBar
     
     -- Title text
     Window.TitleLabel = Instance.new("TextLabel")
@@ -654,25 +620,7 @@ function NTGUI:CreateWindow(options)
         Tab.Page.CanvasSize = UDim2.new(0, 0, 0, 0)
         Tab.Page.Visible = false
         Tab.Page.Active = true
-        Tab.Page.Parent = Window.ContentContainer
-
-        local pageBackground = Instance.new("Frame")
-        pageBackground.Name = "PageBackground"
-        pageBackground.Size = UDim2.new(1, -4, 1, -4)
-        pageBackground.Position = UDim2.new(0, 2, 0, 2)
-        pageBackground.BackgroundTransparency = 1
-        pageBackground.BorderSizePixel = 0
-        pageBackground.ZIndex = 0
-        pageBackground.Parent = Tab.Page
-
-        local pageCorner = Instance.new("UICorner")
-        pageCorner.CornerRadius = UDim.new(0, 18)
-        pageCorner.Parent = pageBackground
-
-        local pageStroke = Instance.new("UIStroke")
-        pageStroke.Enabled = false
-        pageStroke.Parent = pageBackground
-        
+        Tab.Page.Parent = Window.ContentContainer        
         local pageLayout = Instance.new("UIListLayout")
         pageLayout.FillDirection = Enum.FillDirection.Vertical
         pageLayout.Padding = UDim.new(0, 8)
@@ -791,7 +739,7 @@ function NTGUI:CreateWindow(options)
     if Animation then
         Window.Container.BackgroundTransparency = 1
         Animation:ScaleIn(Window.Container, 0.4)
-        Animation:Play(Window.Container, {BackgroundTransparency = 0}, 0.3)
+        Animation:Play(Window.Container, {BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Background or 0.35}, 0.3)
     end
     
     return Window
