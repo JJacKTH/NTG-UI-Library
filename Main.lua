@@ -1021,14 +1021,18 @@ function NTGUI:CreateWindow(options)
     updateBlur()
     
     -- Resize Handle (bottom right)
-    local resizeHandle = Instance.new("ImageButton")
+    local resizeHandle = Instance.new("TextButton")
     resizeHandle.Name = "ResizeHandle"
     resizeHandle.Size = UDim2.new(0, 16, 0, 16)
-    resizeHandle.Position = UDim2.new(1, -4, 1, -4)
+    resizeHandle.Position = UDim2.new(1, -2, 1, -2)
     resizeHandle.AnchorPoint = Vector2.new(1, 1)
     resizeHandle.BackgroundTransparency = 1
-    resizeHandle.Image = "rbxassetid://9886659023"
-    resizeHandle.ImageColor3 = Theme.Current.SubText
+    resizeHandle.Text = "◢"
+    resizeHandle.TextColor3 = Theme.Current.SubText
+    resizeHandle.TextSize = 12
+    resizeHandle.Font = Enum.Font.GothamMedium
+    resizeHandle.TextXAlignment = Enum.TextXAlignment.Right
+    resizeHandle.TextYAlignment = Enum.TextYAlignment.Bottom
     resizeHandle.ZIndex = 10
     resizeHandle.Parent = Window.Container
 
