@@ -64,27 +64,8 @@ local Components = {
     Divider = safeLoad(BASE_URL .. "Components/Divider.lua", "Divider")
 }
 
-local canReadScript = typeof(script) == "Instance" and typeof(script.FindFirstChild) == "function"
-if canReadScript then
-    local coreFolder = script:FindFirstChild("Core")
-    local configFolder = script:FindFirstChild("Config")
-    local componentFolder = script:FindFirstChild("Components")
-
-    Theme = loadModule(coreFolder and coreFolder:FindFirstChild("Theme")) or Theme
-    Animation = loadModule(coreFolder and coreFolder:FindFirstChild("Animation")) or Animation
-    Utility = loadModule(coreFolder and coreFolder:FindFirstChild("Utility")) or Utility
-    ConfigManager = loadModule(configFolder and configFolder:FindFirstChild("ConfigManager")) or ConfigManager
-    Components.Button = loadModule(componentFolder and componentFolder:FindFirstChild("Button")) or Components.Button
-    Components.Toggle = loadModule(componentFolder and componentFolder:FindFirstChild("Toggle")) or Components.Toggle
-    Components.Textbox = loadModule(componentFolder and componentFolder:FindFirstChild("Textbox")) or Components.Textbox
-    Components.Dropdown = loadModule(componentFolder and componentFolder:FindFirstChild("Dropdown")) or Components.Dropdown
-    Components.Slider = loadModule(componentFolder and componentFolder:FindFirstChild("Slider")) or Components.Slider
-    Components.ColorPicker = loadModule(componentFolder and componentFolder:FindFirstChild("ColorPicker")) or Components.ColorPicker
-    Components.Keybind = loadModule(componentFolder and componentFolder:FindFirstChild("Keybind")) or Components.Keybind
-    Components.Label = loadModule(componentFolder and componentFolder:FindFirstChild("Label")) or Components.Label
-    Components.Section = loadModule(componentFolder and componentFolder:FindFirstChild("Section")) or Components.Section
-    Components.Divider = loadModule(componentFolder and componentFolder:FindFirstChild("Divider")) or Components.Divider
-end
+-- Local require support is intentionally omitted here because some executors
+-- expose `script` as a table stub that does not implement Instance methods.
 
 -- If still nil, create inline versions
 if not Theme then
