@@ -171,20 +171,25 @@ function NTGUI:CreateWindow(options)
     Window.Container.Size = Window.Size
     Window.Container.Position = UDim2.new(0.5, 0, 0.5, 0)
     Window.Container.AnchorPoint = Vector2.new(0.5, 0.5)
-    Window.Container.BackgroundTransparency = 1
+    Window.Container.BackgroundColor3 = Theme.Current.Background
+    Window.Container.BackgroundTransparency = 0.32
     Window.Container.BorderSizePixel = 0
     Window.Container.ClipsDescendants = true
     Window.Container.Active = true
     Window.Container.Parent = parent
     
-    -- Frosted Glass texture background for Glass 2.0 effect (matching Image 2)
+    local containerCorner = Instance.new("UICorner")
+    containerCorner.CornerRadius = UDim.new(0, 20)
+    containerCorner.Parent = Window.Container
+    
+    -- Frosted Glass specular texture overlay for Glass 2.0 (matching Image 2)
     local glassBg = Instance.new("ImageLabel")
     glassBg.Name = "GlassBackground"
     glassBg.Size = UDim2.new(1, 0, 1, 0)
     glassBg.BackgroundTransparency = 1
-    glassBg.Image = "rbxassetid://15623091142"
-    glassBg.ImageColor3 = Theme.Current.Background
-    glassBg.ImageTransparency = 0.28
+    glassBg.Image = "rbxassetid://10849615220"
+    glassBg.ImageColor3 = Color3.fromRGB(255, 255, 255)
+    glassBg.ImageTransparency = 0.8
     glassBg.ScaleType = Enum.ScaleType.Slice
     glassBg.SliceCenter = Rect.new(10, 10, 90, 90)
     glassBg.ZIndex = 0
@@ -876,9 +881,11 @@ function NTGUI:CreateWindow(options)
     
     -- Entry animation
     if Animation then
+        Window.Container.BackgroundTransparency = 1
         Window.GlassBackground.ImageTransparency = 1
         Animation:ScaleIn(Window.Container, 0.4)
-        Animation:Play(Window.GlassBackground, {ImageTransparency = 0.28}, 0.3)
+        Animation:Play(Window.Container, {BackgroundTransparency = Theme.Current.Transparency and Theme.Current.Transparency.Background or 0.32}, 0.3)
+        Animation:Play(Window.GlassBackground, {ImageTransparency = 0.8}, 0.3)
     end
     
     return Window
