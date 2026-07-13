@@ -31,7 +31,7 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     self.Container.Name = "Section_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 34)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.12
+    self.Container.BackgroundTransparency = Theme.Current.Transparency and (Theme.Current.Transparency.Surface + 0.15) or 0.68
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = true
     self.Container.LayoutOrder = elementCount

@@ -283,18 +283,128 @@ function NTGUI:CreateWindow(options)
     subtitle.TextXAlignment = Enum.TextXAlignment.Left
     subtitle.Parent = Window.TitleBar
     
-    -- Search Bar in the middle of TitleBar (matching Image 2)
+
+    -- Control buttons container
+    local controlsContainer = Instance.new("Frame")
+    controlsContainer.Name = "Controls"
+    controlsContainer.Size = UDim2.new(0, 84, 1, 0)
+    controlsContainer.Position = UDim2.new(1, -94, 0, 0)
+    controlsContainer.BackgroundTransparency = 1
+    controlsContainer.Parent = Window.TitleBar
+    
+    local controlsLayout = Instance.new("UIListLayout")
+    controlsLayout.FillDirection = Enum.FillDirection.Horizontal
+    controlsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+    controlsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    controlsLayout.Padding = UDim.new(0, 8)
+    controlsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    controlsLayout.Parent = controlsContainer
+    
+    -- Minimize button (on the left)
+    local minimizeBtn = Instance.new("TextButton")
+    minimizeBtn.Name = "Minimize"
+    minimizeBtn.LayoutOrder = 1
+    minimizeBtn.Size = UDim2.new(0, 32, 0, 24)
+    minimizeBtn.BackgroundTransparency = 1
+    minimizeBtn.BorderSizePixel = 0
+    minimizeBtn.Text = "-"
+    minimizeBtn.TextColor3 = Color3.fromRGB(235, 140, 20)
+    minimizeBtn.TextSize = 28
+    minimizeBtn.Font = Enum.Font.GothamBold
+    minimizeBtn.AutoButtonColor = false
+    minimizeBtn.Parent = controlsContainer
+    
+    -- Close button (on the far right)
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Name = "Close"
+    closeBtn.LayoutOrder = 2
+    closeBtn.Size = UDim2.new(0, 32, 0, 24)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.BorderSizePixel = 0
+    closeBtn.Text = "×"
+    closeBtn.TextColor3 = Color3.fromRGB(220, 50, 50)
+    closeBtn.TextSize = 24
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.AutoButtonColor = false
+    closeBtn.Parent = controlsContainer
+    
+    -- Hover effects for Minimize and Close
+    minimizeBtn.MouseEnter:Connect(function()
+        if Animation then
+            Animation:Play(minimizeBtn, {TextColor3 = Color3.fromRGB(255, 185, 55)}, 0.14)
+        else
+            minimizeBtn.TextColor3 = Color3.fromRGB(255, 185, 55)
+        end
+    end)
+    minimizeBtn.MouseLeave:Connect(function()
+        if Animation then
+            Animation:Play(minimizeBtn, {TextColor3 = Color3.fromRGB(235, 140, 20)}, 0.18)
+        else
+            minimizeBtn.TextColor3 = Color3.fromRGB(235, 140, 20)
+        end
+    end)
+    
+    closeBtn.MouseEnter:Connect(function()
+        if Animation then
+            Animation:Play(closeBtn, {TextColor3 = Color3.fromRGB(250, 90, 90)}, 0.14)
+        else
+            closeBtn.TextColor3 = Color3.fromRGB(250, 90, 90)
+        end
+    end)
+    closeBtn.MouseLeave:Connect(function()
+        if Animation then
+            Animation:Play(closeBtn, {TextColor3 = Color3.fromRGB(220, 50, 50)}, 0.18)
+        else
+            closeBtn.TextColor3 = Color3.fromRGB(220, 50, 50)
+        end
+    end)
+
+    if Animation then
+        Animation:CreatePressEffect(minimizeBtn, 0.94, 1)
+        Animation:CreatePressEffect(closeBtn, 0.94, 1)
+    end
+    
+    -- Tab sidebar
+    Window.TabContainer = Instance.new("Frame")
+    Window.TabContainer.Name = "TabContainer"
+    Window.TabContainer.Size = UDim2.new(0, 168, 1, -70)
+    Window.TabContainer.Position = UDim2.new(0, 12, 0, 62)
+    Window.TabContainer.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    Window.TabContainer.BackgroundTransparency = Theme.Current.Transparency and (Theme.Current.Transparency.Sidebar or 0.75) or 0.75
+    Window.TabContainer.BorderSizePixel = 0
+    Window.TabContainer.Active = true
+    Window.TabContainer.Parent = Window.Container
+
+    local tabCorner = Instance.new("UICorner")
+    tabCorner.CornerRadius = UDim.new(0, 16)
+    tabCorner.Parent = Window.TabContainer
+
+    local tabContainerStroke = Instance.new("UIStroke")
+    tabContainerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    tabContainerStroke.Transparency = 0.9
+    tabContainerStroke.Thickness = 1
+    tabContainerStroke.Parent = Window.TabContainer
+
+    -- Search Container at top of sidebar
+    local searchContainer = Instance.new("Frame")
+    searchContainer.Name = "SearchContainer"
+    searchContainer.Size = UDim2.new(1, -14, 0, 32)
+    searchContainer.Position = UDim2.new(0, 7, 0, 8)
+    searchContainer.BackgroundTransparency = 1
+    searchContainer.Parent = Window.TabContainer
+
+    -- Search Bar inside TabContainer
     local searchBar = Instance.new("TextButton")
     searchBar.Name = "SearchBar"
     searchBar.Size = UDim2.new(0, 28, 0, 28)
-    searchBar.Position = UDim2.new(0.5, 0, 0.5, 0)
-    searchBar.AnchorPoint = Vector2.new(0.5, 0.5)
+    searchBar.Position = UDim2.new(0, 0, 0.5, 0)
+    searchBar.AnchorPoint = Vector2.new(0, 0.5)
     searchBar.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
     searchBar.BackgroundTransparency = 0.5
     searchBar.BorderSizePixel = 0
     searchBar.Text = ""
     searchBar.AutoButtonColor = false
-    searchBar.Parent = Window.TitleBar
+    searchBar.Parent = searchContainer
     
     local searchCorner = Instance.new("UICorner")
     searchCorner.CornerRadius = UDim.new(0, 14)
@@ -323,7 +433,7 @@ function NTGUI:CreateWindow(options)
     searchBox.Position = UDim2.new(0, 28, 0, 0)
     searchBox.BackgroundTransparency = 1
     searchBox.Text = ""
-    searchBox.PlaceholderText = "Search active tab..."
+    searchBox.PlaceholderText = "Search..."
     searchBox.PlaceholderColor3 = Theme.Current.SubText
     searchBox.TextColor3 = Theme.Current.Text
     searchBox.TextSize = 12
@@ -385,14 +495,14 @@ function NTGUI:CreateWindow(options)
         isExpanded = true
         
         if Animation then
-            Animation:Play(searchBar, {Size = UDim2.new(1, -120, 0, 28)}, 0.22, Enum.EasingStyle.Quint)
+            Animation:Play(searchBar, {Size = UDim2.new(1, 0, 0, 28)}, 0.22, Enum.EasingStyle.Quint)
             Animation:Play(searchIcon, {
                 Position = UDim2.new(0, 8, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
                 Size = UDim2.new(0, 16, 0, 16)
             }, 0.22, Enum.EasingStyle.Quint)
         else
-            searchBar.Size = UDim2.new(1, -120, 0, 28)
+            searchBar.Size = UDim2.new(1, 0, 0, 28)
             searchIcon.Position = UDim2.new(0, 8, 0.5, 0)
             searchIcon.AnchorPoint = Vector2.new(0, 0.5)
             searchIcon.Size = UDim2.new(0, 16, 0, 16)
@@ -442,96 +552,12 @@ function NTGUI:CreateWindow(options)
     searchBox:GetPropertyChangedSignal("Text"):Connect(function()
         performSearch(searchBox.Text)
     end)
-    -- Control buttons container
-    local controlsContainer = Instance.new("Frame")
-    controlsContainer.Name = "Controls"
-    controlsContainer.Size = UDim2.new(0, 84, 1, 0)
-    controlsContainer.Position = UDim2.new(1, -94, 0, 0)
-    controlsContainer.BackgroundTransparency = 1
-    controlsContainer.Parent = Window.TitleBar
-    
-    local controlsLayout = Instance.new("UIListLayout")
-    controlsLayout.FillDirection = Enum.FillDirection.Horizontal
-    controlsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
-    controlsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    controlsLayout.Padding = UDim.new(0, 8)
-    controlsLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    controlsLayout.Parent = controlsContainer
-    
-    -- Minimize button (on the left)
-    -- Minimize button (on the left)
-    local minimizeBtn = Instance.new("TextButton")
-    minimizeBtn.Name = "Minimize"
-    minimizeBtn.LayoutOrder = 1
-    minimizeBtn.Size = UDim2.new(0, 32, 0, 24)
-    minimizeBtn.BackgroundColor3 = Color3.fromRGB(235, 140, 20)
-    minimizeBtn.BackgroundTransparency = 0
-    minimizeBtn.BorderSizePixel = 0
-    minimizeBtn.Text = "-"
-    minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    minimizeBtn.TextSize = 16
-    minimizeBtn.Font = Enum.Font.GothamBold
-    minimizeBtn.AutoButtonColor = false
-    minimizeBtn.Parent = controlsContainer
-    
-    local minCorner = Instance.new("UICorner")
-    minCorner.CornerRadius = UDim.new(0, 6)
-    minCorner.Parent = minimizeBtn
-
-    local minStroke = Instance.new("UIStroke")
-    minStroke.Color = Color3.fromRGB(255, 255, 255)
-    minStroke.Transparency = 0.85
-    minStroke.Thickness = 1
-    minStroke.Parent = minimizeBtn
-    
-    -- Close button (on the far right)
-    local closeBtn = Instance.new("TextButton")
-    closeBtn.Name = "Close"
-    closeBtn.LayoutOrder = 2
-    closeBtn.Size = UDim2.new(0, 32, 0, 24)
-    closeBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-    closeBtn.BackgroundTransparency = 0
-    closeBtn.BorderSizePixel = 0
-    closeBtn.Text = "×"
-    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeBtn.TextSize = 18
-    closeBtn.Font = Enum.Font.GothamBold
-    closeBtn.AutoButtonColor = false
-    closeBtn.Parent = controlsContainer
-    
-    local closeCorner = Instance.new("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 6)
-    closeCorner.Parent = closeBtn
-
-    local closeStroke = Instance.new("UIStroke")
-    closeStroke.Color = Color3.fromRGB(255, 255, 255)
-    closeStroke.Transparency = 0.85
-    closeStroke.Thickness = 1
-    closeStroke.Parent = closeBtn
-    
-    -- Hover effects
-    if Animation then
-        Animation:CreateHoverEffect(minimizeBtn, Color3.fromRGB(255, 175, 45), Color3.fromRGB(235, 140, 20), {Lift = false, Grow = false})
-        Animation:CreateHoverEffect(closeBtn, Color3.fromRGB(250, 80, 80), Color3.fromRGB(220, 50, 50), {Lift = false, Grow = false})
-        Animation:CreatePressEffect(minimizeBtn, 0.94, 1)
-        Animation:CreatePressEffect(closeBtn, 0.94, 1)
-    end
-    
-    -- Tab sidebar
-    Window.TabContainer = Instance.new("Frame")
-    Window.TabContainer.Name = "TabContainer"
-    Window.TabContainer.Size = UDim2.new(0, 168, 1, -70)
-    Window.TabContainer.Position = UDim2.new(0, 12, 0, 62)
-    Window.TabContainer.BackgroundTransparency = 1
-    Window.TabContainer.BorderSizePixel = 0
-    Window.TabContainer.Active = true
-    Window.TabContainer.Parent = Window.Container
     
     -- Tab buttons scroll
     Window.TabScroll = Instance.new("ScrollingFrame")
     Window.TabScroll.Name = "TabScroll"
-    Window.TabScroll.Size = UDim2.new(1, -14, 1, -14)
-    Window.TabScroll.Position = UDim2.new(0, 7, 0, 7)
+    Window.TabScroll.Size = UDim2.new(1, -14, 1, -50)
+    Window.TabScroll.Position = UDim2.new(0, 7, 0, 44)
     Window.TabScroll.BackgroundTransparency = 1
     Window.TabScroll.BorderSizePixel = 0
     Window.TabScroll.ScrollBarThickness = 2
@@ -961,6 +987,90 @@ function NTGUI:CreateWindow(options)
         return Tab
     end
     
+    -- Built-in Theme Settings Tab
+    local ThemeSettingsTab = Window:CreateTab({
+        Name = "Theme Settings",
+        Category = "SETTINGS"
+    })
+    
+    ThemeSettingsTab:AddDivider({ Name = "Sidebar Tweaks" })
+    
+    ThemeSettingsTab:AddSlider({
+        Name = "Sidebar Opacity %",
+        Min = 0,
+        Max = 100,
+        Default = math.floor((1 - (Theme.Current.Transparency and Theme.Current.Transparency.Sidebar or 0.75)) * 100),
+        Callback = function(val)
+            local trans = 1 - (val / 100)
+            if not Theme.Current.Transparency then Theme.Current.Transparency = {} end
+            Theme.Current.Transparency.Sidebar = trans
+            if Window.TabContainer then
+                Window.TabContainer.BackgroundTransparency = trans
+            end
+        end
+    })
+    
+    ThemeSettingsTab:AddDivider({ Name = "Window Background" })
+    
+    ThemeSettingsTab:AddSlider({
+        Name = "Window Opacity %",
+        Min = 0,
+        Max = 100,
+        Default = math.floor((1 - (Theme.Current.Transparency and Theme.Current.Transparency.Background or 0.15)) * 100),
+        Callback = function(val)
+            local trans = 1 - (val / 100)
+            if not Theme.Current.Transparency then Theme.Current.Transparency = {} end
+            Theme.Current.Transparency.Background = trans
+            if Window.Container then
+                Window.Container.BackgroundTransparency = trans
+            end
+        end
+    })
+    
+    ThemeSettingsTab:AddDivider({ Name = "Components & Blur" })
+    
+    ThemeSettingsTab:AddSlider({
+        Name = "Component Opacity %",
+        Min = 0,
+        Max = 100,
+        Default = math.floor((1 - (Theme.Current.Transparency and Theme.Current.Transparency.Surface or 0.55)) * 100),
+        Callback = function(val)
+            local trans = 1 - (val / 100)
+            if not Theme.Current.Transparency then Theme.Current.Transparency = {} end
+            Theme.Current.Transparency.Surface = trans
+            
+            -- Dynamically update all frames and buttons in pages
+            for _, tab in ipairs(Window.Tabs) do
+                for _, child in ipairs(tab.Page:GetChildren()) do
+                    if child:IsA("Frame") then
+                        local btnElem = child:FindFirstChild("ButtonElement")
+                        if btnElem then
+                            btnElem.BackgroundTransparency = trans
+                        end
+                        local toggleElem = child:FindFirstChild("ToggleElement")
+                        if toggleElem then
+                            toggleElem.BackgroundTransparency = trans
+                        end
+                        if child.Name:find("Section_") then
+                            child.BackgroundTransparency = trans + 0.15
+                        end
+                    end
+                end
+            end
+        end
+    })
+    
+    ThemeSettingsTab:AddSlider({
+        Name = "Blur Strength",
+        Min = 0,
+        Max = 60,
+        Default = Theme.Current.BlurStrength or 28,
+        Callback = function(val)
+            Theme.Current.BlurStrength = val
+            updateBlur()
+        end
+    })
+
     -- Button events
     minimizeBtn.MouseButton1Click:Connect(function()
         Window:Minimize()
