@@ -128,6 +128,9 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     buttonStroke.Transparency = 0.88
     buttonStroke.Thickness = 1
     buttonStroke.Parent = self.Button
+    
+    -- Selected text
+    self.SelectedLabel = Instance.new("TextLabel")
     self.SelectedLabel.Name = "Selected"
     self.SelectedLabel.Size = UDim2.new(1, -30, 1, 0)
     self.SelectedLabel.Position = UDim2.new(0, 8, 0, 0)
