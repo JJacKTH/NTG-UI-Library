@@ -664,16 +664,6 @@ function NTGUI:CreateWindow(options)
         
         -- Resolve Category
         local category = tabOptions.Category
-        if not category then
-            local nameLower = string.lower(Tab.Name)
-            if nameLower == "dashboard" or nameLower == "combat" or nameLower == "visuals" or nameLower == "world" or nameLower == "player" then
-                category = "MAIN"
-            elseif nameLower == "tools" or nameLower == "movement" or nameLower == "teleport" or nameLower == "auto farm" or nameLower == "miscellaneous" then
-                category = "UTILITY"
-            elseif nameLower == "settings" or nameLower == "theme" or nameLower == "keybinds" or nameLower == "about" then
-                category = "SETTINGS"
-            end
-        end
         
         if category and not Window._categories[category] then
             Window._categories[category] = true
