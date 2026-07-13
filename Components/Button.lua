@@ -32,7 +32,7 @@ function Button.new(tab, options, Theme, Animation, ConfigHandler)
     self.Element.Name = "ButtonElement"
     self.Element.Size = UDim2.new(1, 0, 1, 0)
     self.Element.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.Element.BackgroundTransparency = 0.32
+    self.Element.BackgroundTransparency = 0.18
     self.Element.BorderSizePixel = 0
     self.Element.Text = self.Name
     self.Element.TextColor3 = Theme.Current.Text
@@ -42,8 +42,14 @@ function Button.new(tab, options, Theme, Animation, ConfigHandler)
     self.Element.Parent = self.Container
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 6)
+    corner.CornerRadius = UDim.new(0, 12)
     corner.Parent = self.Element
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    stroke.Transparency = 0.86
+    stroke.Thickness = 1
+    stroke.Parent = self.Element
     
     -- Hover effect with dynamic Theme colors
     self.Element.MouseEnter:Connect(function()

@@ -24,6 +24,8 @@ function Divider.new(tab, options, Theme, Animation)
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Parent = tab.Page
+
+    local lineColor = Theme.Current.Stroke or Theme.Current.Divider
     
     -- Left line
     self.LeftLine = Instance.new("Frame")
@@ -31,8 +33,8 @@ function Divider.new(tab, options, Theme, Animation)
     self.LeftLine.Size = UDim2.new(0.3, -10, 0, 1)
     self.LeftLine.Position = UDim2.new(0, 5, 0.5, 0)
     self.LeftLine.AnchorPoint = Vector2.new(0, 0.5)
-    self.LeftLine.BackgroundColor3 = Theme.Current.SubText
-    self.LeftLine.BackgroundTransparency = 0.7
+    self.LeftLine.BackgroundColor3 = lineColor
+    self.LeftLine.BackgroundTransparency = 0.86
     self.LeftLine.BorderSizePixel = 0
     self.LeftLine.Parent = self.Container
     
@@ -43,7 +45,7 @@ function Divider.new(tab, options, Theme, Animation)
     self.Label.Position = UDim2.new(0.3, 0, 0, 0)
     self.Label.BackgroundTransparency = 1
     self.Label.Text = self.Name
-    self.Label.TextColor3 = Theme.Current.SubText
+    self.Label.TextColor3 = Theme.Current.Text
     self.Label.TextSize = 12
     self.Label.Font = Enum.Font.GothamMedium
     self.Label.TextXAlignment = Enum.TextXAlignment.Center
@@ -55,8 +57,8 @@ function Divider.new(tab, options, Theme, Animation)
     self.RightLine.Size = UDim2.new(0.3, -10, 0, 1)
     self.RightLine.Position = UDim2.new(0.7, 5, 0.5, 0)
     self.RightLine.AnchorPoint = Vector2.new(0, 0.5)
-    self.RightLine.BackgroundColor3 = Theme.Current.SubText
-    self.RightLine.BackgroundTransparency = 0.7
+    self.RightLine.BackgroundColor3 = lineColor
+    self.RightLine.BackgroundTransparency = 0.86
     self.RightLine.BorderSizePixel = 0
     self.RightLine.Parent = self.Container
     

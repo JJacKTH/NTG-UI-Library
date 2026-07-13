@@ -29,22 +29,28 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     -- Container
     self.Container = Instance.new("Frame")
     self.Container.Name = "Section_" .. self.Name
-    self.Container.Size = UDim2.new(1, -10, 0, 30)
+    self.Container.Size = UDim2.new(1, -10, 0, 34)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.3
+    self.Container.BackgroundTransparency = 0.14
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = true
     self.Container.LayoutOrder = elementCount
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 6)
+    containerCorner.CornerRadius = UDim.new(0, 12)
     containerCorner.Parent = self.Container
+
+    local containerStroke = Instance.new("UIStroke")
+    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    containerStroke.Transparency = 0.88
+    containerStroke.Thickness = 1
+    containerStroke.Parent = self.Container
     
     -- Header
     self.Header = Instance.new("TextButton")
     self.Header.Name = "Header"
-    self.Header.Size = UDim2.new(1, 0, 0, 30)
+    self.Header.Size = UDim2.new(1, 0, 0, 34)
     self.Header.BackgroundTransparency = 1
     self.Header.BorderSizePixel = 0
     self.Header.Text = ""
@@ -55,11 +61,11 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     self.Title = Instance.new("TextLabel")
     self.Title.Name = "Title"
     self.Title.Size = UDim2.new(1, -40, 1, 0)
-    self.Title.Position = UDim2.new(0, 10, 0, 0)
+    self.Title.Position = UDim2.new(0, 12, 0, 0)
     self.Title.BackgroundTransparency = 1
     self.Title.Text = self.Name
     self.Title.TextColor3 = Theme.Current.Text
-    self.Title.TextSize = 13
+    self.Title.TextSize = 14
     self.Title.Font = Enum.Font.GothamBold
     self.Title.TextXAlignment = Enum.TextXAlignment.Left
     self.Title.Parent = self.Header
@@ -80,7 +86,7 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     self.Content = Instance.new("Frame")
     self.Content.Name = "Content"
     self.Content.Size = UDim2.new(1, -10, 0, 0)
-    self.Content.Position = UDim2.new(0.5, 0, 0, 32)
+    self.Content.Position = UDim2.new(0.5, 0, 0, 36)
     self.Content.AnchorPoint = Vector2.new(0.5, 0)
     self.Content.BackgroundTransparency = 1
     self.Content.Parent = self.Container
@@ -114,7 +120,7 @@ function Section.new(tab, options, Theme, Animation, ConfigHandler, Components)
     -- Methods
     function self:UpdateSize()
         local contentHeight = self.ContentLayout.AbsoluteContentSize.Y
-        local targetHeight = self.Collapsed and 30 or (35 + contentHeight)
+        local targetHeight = self.Collapsed and 34 or (40 + contentHeight)
         
         if Animation then
             Animation:Play(self.Container, {Size = UDim2.new(1, -10, 0, targetHeight)}, 0.2)

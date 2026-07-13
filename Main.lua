@@ -171,7 +171,7 @@ function NTGUI:CreateWindow(options)
     Window.Container.Position = UDim2.new(0.5, 0, 0.5, 0)
     Window.Container.AnchorPoint = Vector2.new(0.5, 0.5)
     Window.Container.BackgroundColor3 = Theme.Current.Background
-    Window.Container.BackgroundTransparency = 0.18
+    Window.Container.BackgroundTransparency = 0.08
     Window.Container.BorderSizePixel = 0
     Window.Container.ClipsDescendants = true
     Window.Container.Active = true
@@ -186,28 +186,42 @@ function NTGUI:CreateWindow(options)
     local shadow = Instance.new("UIStroke")
     shadow.Color = Color3.fromRGB(0, 0, 0)
     shadow.Thickness = 1
-    shadow.Transparency = 0.9
+    shadow.Transparency = 0.76
     shadow.Parent = Window.Container
+
+    local containerStroke = Instance.new("UIStroke")
+    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    containerStroke.Thickness = 1
+    containerStroke.Transparency = Theme.Current.Transparency and Theme.Current.Transparency.Stroke or 0.8
+    containerStroke.Parent = Window.Container
+
+    local windowGradient = Instance.new("UIGradient")
+    windowGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+        ColorSequenceKeypoint.new(1, Theme.Current.Background)
+    })
+    windowGradient.Rotation = 90
+    windowGradient.Parent = Window.Container
     
     -- Title bar
     Window.TitleBar = Instance.new("Frame")
     Window.TitleBar.Name = "TitleBar"
-    Window.TitleBar.Size = UDim2.new(1, 0, 0, 40)
+    Window.TitleBar.Size = UDim2.new(1, 0, 0, 46)
     Window.TitleBar.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    Window.TitleBar.BackgroundTransparency = 0.28
+    Window.TitleBar.BackgroundTransparency = 0.18
     Window.TitleBar.BorderSizePixel = 0
     Window.TitleBar.Active = true
     Window.TitleBar.Parent = Window.Container
     
     local titleCorner = Instance.new("UICorner")
-    titleCorner.CornerRadius = UDim.new(0, 10)
+    titleCorner.CornerRadius = UDim.new(0, 14)
     titleCorner.Parent = Window.TitleBar
     
     -- Fix corner overlap
     local titleFix = Instance.new("Frame")
     titleFix.Name = "CornerFix"
-    titleFix.Size = UDim2.new(1, 0, 0, 15)
-    titleFix.Position = UDim2.new(0, 0, 1, -15)
+    titleFix.Size = UDim2.new(1, 0, 0, 18)
+    titleFix.Position = UDim2.new(0, 0, 1, -18)
     titleFix.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
     titleFix.BorderSizePixel = 0
     titleFix.Parent = Window.TitleBar
@@ -215,21 +229,33 @@ function NTGUI:CreateWindow(options)
     -- Title text
     Window.TitleLabel = Instance.new("TextLabel")
     Window.TitleLabel.Name = "Title"
-    Window.TitleLabel.Size = UDim2.new(1, -100, 1, 0)
+    Window.TitleLabel.Size = UDim2.new(1, -140, 1, 0)
     Window.TitleLabel.Position = UDim2.new(0, 15, 0, 0)
     Window.TitleLabel.BackgroundTransparency = 1
     Window.TitleLabel.Text = Window.Title
     Window.TitleLabel.TextColor3 = Theme.Current.Text
-    Window.TitleLabel.TextSize = 16
+    Window.TitleLabel.TextSize = 18
     Window.TitleLabel.Font = Enum.Font.GothamBold
     Window.TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     Window.TitleLabel.Parent = Window.TitleBar
+
+    local subtitle = Instance.new("TextLabel")
+    subtitle.Name = "Subtitle"
+    subtitle.Size = UDim2.new(1, -140, 0, 14)
+    subtitle.Position = UDim2.new(0, 15, 0, 24)
+    subtitle.BackgroundTransparency = 1
+    subtitle.Text = "Modern • Frosted • Depth"
+    subtitle.TextColor3 = Theme.Current.SubText
+    subtitle.TextSize = 11
+    subtitle.Font = Enum.Font.Gotham
+    subtitle.TextXAlignment = Enum.TextXAlignment.Left
+    subtitle.Parent = Window.TitleBar
     
     -- Control buttons container
     local controlsContainer = Instance.new("Frame")
     controlsContainer.Name = "Controls"
-    controlsContainer.Size = UDim2.new(0, 70, 1, 0)
-    controlsContainer.Position = UDim2.new(1, -80, 0, 0)
+    controlsContainer.Size = UDim2.new(0, 96, 1, 0)
+    controlsContainer.Position = UDim2.new(1, -106, 0, 0)
     controlsContainer.BackgroundTransparency = 1
     controlsContainer.Parent = Window.TitleBar
     
@@ -245,7 +271,7 @@ function NTGUI:CreateWindow(options)
     minimizeBtn.Name = "Minimize"
     minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
     minimizeBtn.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    minimizeBtn.BackgroundTransparency = 0.38
+    minimizeBtn.BackgroundTransparency = 0.22
     minimizeBtn.BorderSizePixel = 0
     minimizeBtn.Text = "−"
     minimizeBtn.TextColor3 = Theme.Current.Text
@@ -263,7 +289,7 @@ function NTGUI:CreateWindow(options)
     closeBtn.Name = "Close"
     closeBtn.Size = UDim2.new(0, 30, 0, 30)
     closeBtn.BackgroundColor3 = Color3.fromRGB(200, 80, 80)
-    closeBtn.BackgroundTransparency = 0.38
+    closeBtn.BackgroundTransparency = 0.22
     closeBtn.BorderSizePixel = 0
     closeBtn.Text = "×"
     closeBtn.TextColor3 = Theme.Current.Text
@@ -285,23 +311,23 @@ function NTGUI:CreateWindow(options)
     -- Tab sidebar
     Window.TabContainer = Instance.new("Frame")
     Window.TabContainer.Name = "TabContainer"
-    Window.TabContainer.Size = UDim2.new(0, 140, 1, -50)
-    Window.TabContainer.Position = UDim2.new(0, 5, 0, 45)
+    Window.TabContainer.Size = UDim2.new(0, 150, 1, -58)
+    Window.TabContainer.Position = UDim2.new(0, 8, 0, 54)
     Window.TabContainer.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    Window.TabContainer.BackgroundTransparency = 0.38
+    Window.TabContainer.BackgroundTransparency = 0.2
     Window.TabContainer.BorderSizePixel = 0
     Window.TabContainer.Active = true
     Window.TabContainer.Parent = Window.Container
     
     local tabCorner = Instance.new("UICorner")
-    tabCorner.CornerRadius = UDim.new(0, 8)
+    tabCorner.CornerRadius = UDim.new(0, 14)
     tabCorner.Parent = Window.TabContainer
     
     -- Tab buttons scroll
     Window.TabScroll = Instance.new("ScrollingFrame")
     Window.TabScroll.Name = "TabScroll"
-    Window.TabScroll.Size = UDim2.new(1, -10, 1, -10)
-    Window.TabScroll.Position = UDim2.new(0, 5, 0, 5)
+    Window.TabScroll.Size = UDim2.new(1, -12, 1, -12)
+    Window.TabScroll.Position = UDim2.new(0, 6, 0, 6)
     Window.TabScroll.BackgroundTransparency = 1
     Window.TabScroll.BorderSizePixel = 0
     Window.TabScroll.ScrollBarThickness = 2
@@ -323,8 +349,8 @@ function NTGUI:CreateWindow(options)
     -- Content area
     Window.ContentContainer = Instance.new("Frame")
     Window.ContentContainer.Name = "ContentContainer"
-    Window.ContentContainer.Size = UDim2.new(1, -160, 1, -55)
-    Window.ContentContainer.Position = UDim2.new(0, 150, 0, 45)
+    Window.ContentContainer.Size = UDim2.new(1, -174, 1, -62)
+    Window.ContentContainer.Position = UDim2.new(0, 166, 0, 54)
     Window.ContentContainer.BackgroundTransparency = 1
     Window.ContentContainer.BorderSizePixel = 0
     Window.ContentContainer.ClipsDescendants = true
@@ -348,7 +374,7 @@ function NTGUI:CreateWindow(options)
         Window.FloatingIcon.Position = iconPosition
         Window.FloatingIcon.AnchorPoint = Vector2.new(0, 0.5)
         Window.FloatingIcon.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-        Window.FloatingIcon.BackgroundTransparency = 0.28
+        Window.FloatingIcon.BackgroundTransparency = 0.18
         Window.FloatingIcon.BorderSizePixel = 0
         Window.FloatingIcon.Image = iconImage
         Window.FloatingIcon.ImageColor3 = options.FloatingIcon.ImageColor3 or Theme.Current.Accent
@@ -356,12 +382,12 @@ function NTGUI:CreateWindow(options)
         Window.FloatingIcon.Parent = parent
         
         local iconCorner = Instance.new("UICorner")
-        iconCorner.CornerRadius = UDim.new(0, 10)
+        iconCorner.CornerRadius = UDim.new(0, 14)
         iconCorner.Parent = Window.FloatingIcon
         
         local iconStroke = Instance.new("UIStroke")
         iconStroke.Color = Theme.Current.Accent
-        iconStroke.Thickness = 2
+        iconStroke.Thickness = 1
         iconStroke.Parent = Window.FloatingIcon
         
         -- Make icon draggable
@@ -509,9 +535,9 @@ function NTGUI:CreateWindow(options)
         -- Tab button
         Tab.Button = Instance.new("TextButton")
         Tab.Button.Name = "Tab_" .. Tab.Name
-        Tab.Button.Size = UDim2.new(1, 0, 0, 35)
+        Tab.Button.Size = UDim2.new(1, 0, 0, 38)
         Tab.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-        Tab.Button.BackgroundTransparency = 1
+        Tab.Button.BackgroundTransparency = 0.4
         Tab.Button.BorderSizePixel = 0
         Tab.Button.Text = Tab.Name
         Tab.Button.TextColor3 = Theme.Current.SubText
@@ -522,8 +548,14 @@ function NTGUI:CreateWindow(options)
         Tab.Button.Parent = Window.TabScroll
         
         local tabBtnCorner = Instance.new("UICorner")
-        tabBtnCorner.CornerRadius = UDim.new(0, 6)
+        tabBtnCorner.CornerRadius = UDim.new(0, 10)
         tabBtnCorner.Parent = Tab.Button
+
+        local tabStroke = Instance.new("UIStroke")
+        tabStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+        tabStroke.Transparency = 0.88
+        tabStroke.Thickness = 1
+        tabStroke.Parent = Tab.Button
         
         -- Tab content page
         Tab.Page = Instance.new("ScrollingFrame")
@@ -538,6 +570,26 @@ function NTGUI:CreateWindow(options)
         Tab.Page.Visible = false
         Tab.Page.Active = true
         Tab.Page.Parent = Window.ContentContainer
+
+        local pageBackground = Instance.new("Frame")
+        pageBackground.Name = "PageBackground"
+        pageBackground.Size = UDim2.new(1, -4, 1, -4)
+        pageBackground.Position = UDim2.new(0, 2, 0, 2)
+        pageBackground.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+        pageBackground.BackgroundTransparency = 0.14
+        pageBackground.BorderSizePixel = 0
+        pageBackground.ZIndex = 0
+        pageBackground.Parent = Tab.Page
+
+        local pageCorner = Instance.new("UICorner")
+        pageCorner.CornerRadius = UDim.new(0, 16)
+        pageCorner.Parent = pageBackground
+
+        local pageStroke = Instance.new("UIStroke")
+        pageStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+        pageStroke.Transparency = 0.88
+        pageStroke.Thickness = 1
+        pageStroke.Parent = pageBackground
         
         local pageLayout = Instance.new("UIListLayout")
         pageLayout.FillDirection = Enum.FillDirection.Vertical

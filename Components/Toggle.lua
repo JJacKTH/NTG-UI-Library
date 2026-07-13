@@ -24,15 +24,21 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Toggle_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 35)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.24
+    self.Container.BackgroundTransparency = 0.14
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 6)
+    containerCorner.CornerRadius = UDim.new(0, 12)
     containerCorner.Parent = self.Container
+
+    local containerStroke = Instance.new("UIStroke")
+    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    containerStroke.Transparency = 0.88
+    containerStroke.Thickness = 1
+    containerStroke.Parent = self.Container
     
     -- Label
     self.Label = Instance.new("TextLabel")
@@ -70,6 +76,12 @@ function Toggle.new(tab, options, Theme, Animation, ConfigHandler)
     self.Knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     self.Knob.BorderSizePixel = 0
     self.Knob.Parent = self.SwitchBg
+
+    local knobStroke = Instance.new("UIStroke")
+    knobStroke.Color = Color3.fromRGB(255, 255, 255)
+    knobStroke.Transparency = 0.8
+    knobStroke.Thickness = 1
+    knobStroke.Parent = self.Knob
     
     local knobCorner = Instance.new("UICorner")
     knobCorner.CornerRadius = UDim.new(1, 0)

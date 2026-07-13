@@ -36,15 +36,21 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Keybind_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 35)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.24
+    self.Container.BackgroundTransparency = 0.14
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 6)
+    containerCorner.CornerRadius = UDim.new(0, 12)
     containerCorner.Parent = self.Container
+
+    local containerStroke = Instance.new("UIStroke")
+    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    containerStroke.Transparency = 0.88
+    containerStroke.Thickness = 1
+    containerStroke.Parent = self.Container
     
     -- Label
     self.Label = Instance.new("TextLabel")
@@ -75,8 +81,14 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
     self.Button.Parent = self.Container
     
     local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 4)
+    buttonCorner.CornerRadius = UDim.new(0, 10)
     buttonCorner.Parent = self.Button
+
+    local buttonStroke = Instance.new("UIStroke")
+    buttonStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    buttonStroke.Transparency = 0.9
+    buttonStroke.Thickness = 1
+    buttonStroke.Parent = self.Button
     
     -- Click to change keybind
     self.Button.MouseButton1Click:Connect(function()

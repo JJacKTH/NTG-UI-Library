@@ -81,7 +81,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Dropdown_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 55)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.24
+    self.Container.BackgroundTransparency = 0.14
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = false
     self.Container.ZIndex = 2
@@ -90,8 +90,14 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 6)
+    containerCorner.CornerRadius = UDim.new(0, 12)
     containerCorner.Parent = self.Container
+
+    local containerStroke = Instance.new("UIStroke")
+    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    containerStroke.Transparency = 0.88
+    containerStroke.Thickness = 1
+    containerStroke.Parent = self.Container
     
     -- Label
     self.Label = Instance.new("TextLabel")
@@ -113,7 +119,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Button.Size = UDim2.new(1, -20, 0, 25)
     self.Button.Position = UDim2.new(0, 10, 0, 25)
     self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.Button.BackgroundTransparency = 0.3
+    self.Button.BackgroundTransparency = 0.14
     self.Button.BorderSizePixel = 0
     self.Button.Text = ""
     self.Button.AutoButtonColor = false
@@ -121,8 +127,14 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.Button.Parent = self.Container
     
     local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 4)
+    buttonCorner.CornerRadius = UDim.new(0, 10)
     buttonCorner.Parent = self.Button
+
+    local buttonStroke = Instance.new("UIStroke")
+    buttonStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    buttonStroke.Transparency = 0.9
+    buttonStroke.Thickness = 1
+    buttonStroke.Parent = self.Button
     
     -- Selected text
     self.SelectedLabel = Instance.new("TextLabel")
@@ -158,7 +170,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.ListContainer.Size = UDim2.new(1, -20, 0, 0)
     self.ListContainer.Position = UDim2.new(0, 10, 0, 52)
     self.ListContainer.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.ListContainer.BackgroundTransparency = 0.24
+    self.ListContainer.BackgroundTransparency = 0.1
     self.ListContainer.BorderSizePixel = 0
     self.ListContainer.ClipsDescendants = true
     self.ListContainer.Visible = false
@@ -167,8 +179,14 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     self.ListContainer.Parent = self.Container
     
     local listCorner = Instance.new("UICorner")
-    listCorner.CornerRadius = UDim.new(0, 4)
+    listCorner.CornerRadius = UDim.new(0, 12)
     listCorner.Parent = self.ListContainer
+
+    local listStroke = Instance.new("UIStroke")
+    listStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    listStroke.Transparency = 0.88
+    listStroke.Thickness = 1
+    listStroke.Parent = self.ListContainer
     
     -- Search box (if searchable)
     self.SearchBox = nil
@@ -181,7 +199,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
         self.SearchBox.Size = UDim2.new(1, -10, 0, 25)
         self.SearchBox.Position = UDim2.new(0, 5, 0, 3)
         self.SearchBox.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-        self.SearchBox.BackgroundTransparency = 0.28
+        self.SearchBox.BackgroundTransparency = 0.14
         self.SearchBox.BorderSizePixel = 0
         self.SearchBox.Text = ""
         self.SearchBox.PlaceholderText = "🔍 Search..."
@@ -194,7 +212,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
         self.SearchBox.Parent = self.ListContainer
         
         local searchCorner = Instance.new("UICorner")
-        searchCorner.CornerRadius = UDim.new(0, 4)
+        searchCorner.CornerRadius = UDim.new(0, 10)
         searchCorner.Parent = self.SearchBox
         
         local searchPadding = Instance.new("UIPadding")

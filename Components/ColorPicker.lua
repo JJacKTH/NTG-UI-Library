@@ -43,7 +43,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "ColorPicker_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 35)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.24
+    self.Container.BackgroundTransparency = 0.14
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = false
     self.Container.ZIndex = 2
@@ -52,8 +52,14 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 6)
+    containerCorner.CornerRadius = UDim.new(0, 12)
     containerCorner.Parent = self.Container
+
+    local containerStroke = Instance.new("UIStroke")
+    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    containerStroke.Transparency = 0.88
+    containerStroke.Thickness = 1
+    containerStroke.Parent = self.Container
     
     -- Label
     self.Label = Instance.new("TextLabel")
@@ -83,12 +89,13 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.Preview.Parent = self.Container
     
     local previewCorner = Instance.new("UICorner")
-    previewCorner.CornerRadius = UDim.new(0, 4)
+    previewCorner.CornerRadius = UDim.new(0, 10)
     previewCorner.Parent = self.Preview
     
     local previewStroke = Instance.new("UIStroke")
-    previewStroke.Color = Theme.Current.Divider
+    previewStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
     previewStroke.Thickness = 1
+    previewStroke.Transparency = 0.85
     previewStroke.Parent = self.Preview
     
     -- Picker panel
@@ -104,8 +111,14 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.PickerPanel.Parent = self.Container
     
     local pickerCorner = Instance.new("UICorner")
-    pickerCorner.CornerRadius = UDim.new(0, 6)
+    pickerCorner.CornerRadius = UDim.new(0, 12)
     pickerCorner.Parent = self.PickerPanel
+
+    local pickerStroke = Instance.new("UIStroke")
+    pickerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    pickerStroke.Transparency = 0.88
+    pickerStroke.Thickness = 1
+    pickerStroke.Parent = self.PickerPanel
     
     -- Saturation/Value picker
     self.SVPicker = Instance.new("ImageLabel")
@@ -205,6 +218,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.HexInput.Size = UDim2.new(0, 80, 0, 20)
     self.HexInput.Position = UDim2.new(0, 110, 0, 140)
     self.HexInput.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
+    self.HexInput.BackgroundTransparency = 0.14
     self.HexInput.BorderSizePixel = 0
     self.HexInput.Text = self:GetHexText()
     self.HexInput.TextColor3 = Theme.Current.Text
@@ -214,7 +228,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     self.HexInput.Parent = self.PickerPanel
     
     local hexCorner = Instance.new("UICorner")
-    hexCorner.CornerRadius = UDim.new(0, 3)
+    hexCorner.CornerRadius = UDim.new(0, 8)
     hexCorner.Parent = self.HexInput
     
     -- HSV values

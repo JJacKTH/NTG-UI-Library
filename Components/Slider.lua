@@ -31,15 +31,21 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Slider_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 50)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.24
+    self.Container.BackgroundTransparency = 0.14
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 6)
+    containerCorner.CornerRadius = UDim.new(0, 12)
     containerCorner.Parent = self.Container
+
+    local containerStroke = Instance.new("UIStroke")
+    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    containerStroke.Transparency = 0.88
+    containerStroke.Thickness = 1
+    containerStroke.Parent = self.Container
     
     -- Label
     self.Label = Instance.new("TextLabel")
@@ -73,6 +79,7 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     self.Track.Size = UDim2.new(1, -20, 0, 8)
     self.Track.Position = UDim2.new(0, 10, 0, 32)
     self.Track.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    self.Track.BackgroundTransparency = 0.1
     self.Track.BorderSizePixel = 0
     self.Track.Parent = self.Container
     
@@ -104,6 +111,12 @@ function Slider.new(tab, options, Theme, Animation, ConfigHandler)
     self.Knob.BorderSizePixel = 0
     self.Knob.ZIndex = 2
     self.Knob.Parent = self.Track
+
+    local knobStroke = Instance.new("UIStroke")
+    knobStroke.Color = Theme.Current.Accent
+    knobStroke.Thickness = 1
+    knobStroke.Transparency = 0.6
+    knobStroke.Parent = self.Knob
     
     local knobCorner = Instance.new("UICorner")
     knobCorner.CornerRadius = UDim.new(1, 0)

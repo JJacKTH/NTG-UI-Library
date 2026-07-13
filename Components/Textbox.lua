@@ -26,15 +26,21 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     self.Container.Name = "Textbox_" .. self.Name
     self.Container.Size = UDim2.new(1, -10, 0, 55)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.24
+    self.Container.BackgroundTransparency = 0.14
     self.Container.BorderSizePixel = 0
     self.Container.LayoutOrder = elementCount
     self.Container.Active = true
     self.Container.Parent = tab.Page
     
     local containerCorner = Instance.new("UICorner")
-    containerCorner.CornerRadius = UDim.new(0, 6)
+    containerCorner.CornerRadius = UDim.new(0, 12)
     containerCorner.Parent = self.Container
+
+    local containerStroke = Instance.new("UIStroke")
+    containerStroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    containerStroke.Transparency = 0.88
+    containerStroke.Thickness = 1
+    containerStroke.Parent = self.Container
     
     -- Label
     self.Label = Instance.new("TextLabel")
@@ -55,7 +61,7 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     self.Input.Size = UDim2.new(1, -20, 0, 25)
     self.Input.Position = UDim2.new(0, 10, 0, 25)
     self.Input.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    self.Input.BackgroundTransparency = 0.28
+    self.Input.BackgroundTransparency = 0.16
     self.Input.BorderSizePixel = 0
     self.Input.Text = self.Value
     self.Input.PlaceholderText = self.Placeholder
@@ -68,7 +74,7 @@ function Textbox.new(tab, options, Theme, Animation, ConfigHandler)
     self.Input.Parent = self.Container
     
     local inputCorner = Instance.new("UICorner")
-    inputCorner.CornerRadius = UDim.new(0, 4)
+    inputCorner.CornerRadius = UDim.new(0, 10)
     inputCorner.Parent = self.Input
     
     local inputPadding = Instance.new("UIPadding")

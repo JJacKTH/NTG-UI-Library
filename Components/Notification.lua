@@ -29,14 +29,28 @@ function Notification.new(parent, options, Theme, Animation)
     self.Container.Name = "Notification"
     self.Container.Size = UDim2.new(1, 0, 0, 70)
     self.Container.BackgroundColor3 = Theme.Current.Surface or Theme.Current.Background
-    self.Container.BackgroundTransparency = 0.22
+    self.Container.BackgroundTransparency = 0.1
     self.Container.BorderSizePixel = 0
     self.Container.ClipsDescendants = true
     self.Container.Parent = parent
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
+    corner.CornerRadius = UDim.new(0, 14)
     corner.Parent = self.Container
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Theme.Current.Stroke or Theme.Current.Divider
+    stroke.Transparency = 0.88
+    stroke.Thickness = 1
+    stroke.Parent = self.Container
+
+    local gradient = Instance.new("UIGradient")
+    gradient.Rotation = 90
+    gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+        ColorSequenceKeypoint.new(1, Theme.Current.Surface or Theme.Current.Background)
+    })
+    gradient.Parent = self.Container
     
     -- Type indicator
     self.Indicator = Instance.new("Frame")
@@ -50,7 +64,7 @@ function Notification.new(parent, options, Theme, Animation)
     self.TitleLabel = Instance.new("TextLabel")
     self.TitleLabel.Name = "Title"
     self.TitleLabel.Size = UDim2.new(1, -20, 0, 25)
-    self.TitleLabel.Position = UDim2.new(0, 15, 0, 8)
+    self.TitleLabel.Position = UDim2.new(0, 15, 0, 9)
     self.TitleLabel.BackgroundTransparency = 1
     self.TitleLabel.Text = self.Title
     self.TitleLabel.TextColor3 = Theme.Current.Text
@@ -63,7 +77,7 @@ function Notification.new(parent, options, Theme, Animation)
     self.MessageLabel = Instance.new("TextLabel")
     self.MessageLabel.Name = "Message"
     self.MessageLabel.Size = UDim2.new(1, -20, 0, 30)
-    self.MessageLabel.Position = UDim2.new(0, 15, 0, 32)
+    self.MessageLabel.Position = UDim2.new(0, 15, 0, 34)
     self.MessageLabel.BackgroundTransparency = 1
     self.MessageLabel.Text = self.Message
     self.MessageLabel.TextColor3 = Theme.Current.SubText
