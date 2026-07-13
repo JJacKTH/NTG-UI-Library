@@ -425,7 +425,7 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
     
     -- Search functionality
     if self.SearchBox then
-        self.SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        self.SearchBoxConnection = self.SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
             local searchText = self.SearchBox.Text:lower()
             
             -- Update option buttons visibility
@@ -621,6 +621,9 @@ function Dropdown.new(tab, options, Theme, Animation, ConfigHandler)
         end
         if self.SizeConn then
             self.SizeConn:Disconnect()
+        end
+        if self.SearchBoxConnection then
+            self.SearchBoxConnection:Disconnect()
         end
         if ConfigHandler and self.Flag then
             ConfigHandler:Unregister(self.Flag)

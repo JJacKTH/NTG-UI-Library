@@ -306,7 +306,7 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
     end)
     
     -- Hex input
-    self.HexInput.FocusLost:Connect(function()
+    self.HexInputConnection = self.HexInput.FocusLost:Connect(function()
         local hex = self.HexInput.Text:gsub("#", "")
         if #hex == 6 then
             local r = tonumber(hex:sub(1, 2), 16)
@@ -377,6 +377,9 @@ function ColorPicker.new(tab, options, Theme, Animation, ConfigHandler)
         end
         if self.ClickConnection then
             self.ClickConnection:Disconnect()
+        end
+        if self.HexInputConnection then
+            self.HexInputConnection:Disconnect()
         end
         if ConfigHandler and self.Flag then
             ConfigHandler:Unregister(self.Flag)

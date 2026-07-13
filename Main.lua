@@ -138,6 +138,7 @@ function NTGUI:CreateWindow(options)
     Window.Title = options.Title or "NTG UI"
     Window.Size = options.Size or UDim2.new(0, 500, 0, 400)
     Window.Theme = options.Theme or "GlassDark"
+    Window.GameName = options.GameName or "Default"
     Window.ConfigName = options.ConfigName or "Default"
     Window.AutoSave = options.AutoSave or false
     Window.AutoLoad = options.AutoLoad or false
@@ -146,6 +147,7 @@ function NTGUI:CreateWindow(options)
     Window.Minimized = false
     Window.Visible = true
     Window.OnClose = options.OnClose -- Custom callback
+    Window._connections = {}
     
     -- Set theme
     if Theme.Presets and Theme.Presets[Window.Theme] then
@@ -153,7 +155,7 @@ function NTGUI:CreateWindow(options)
     end
     
     -- Create config handler
-    Window.ConfigHandler = ConfigManager:CreateHandler(Window.ConfigName, Window.AutoSave, Window.AutoLoad)
+    Window.ConfigHandler = ConfigManager:CreateHandler(Window.GameName, Window.ConfigName, Window.AutoSave, Window.AutoLoad)
     
     -- Get parent
     local parent = self:GetParent()
@@ -331,7 +333,7 @@ function NTGUI:CreateWindow(options)
     
     -- Make window draggable
     if Utility then
-        Utility:MakeDraggable(Window.Container, Window.TitleBar)
+        Window._dragConnections = Utility:MakeDraggable(Window.Container, Window.TitleBar)
     end
     
     -- Floating Icon
@@ -390,7 +392,7 @@ function NTGUI:CreateWindow(options)
     if Window.ToggleKey == nil then Window.ToggleKey = Enum.KeyCode.K end -- Default to K if not specified
     
     local UserInputService = game:GetService("UserInputService")
-    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    local toggleConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if Window.ToggleKey and input.KeyCode == Window.ToggleKey then
             -- Avoid toggling UI when typing in text fields
             if not UserInputService:GetFocusedTextBox() then
@@ -398,6 +400,7 @@ function NTGUI:CreateWindow(options)
             end
         end
     end)
+    table.insert(Window._connections, toggleConnection)
 
     function Window:Minimize()
         Window.Minimized = true
@@ -450,9 +453,27 @@ function NTGUI:CreateWindow(options)
             local success, err = pcall(Window.OnClose)
             if not success then warn("[NTGUI] Error in OnClose callback:", err) end
         end
+        for _, connection in ipairs(Window._connections) do
+            if connection and connection.Disconnect then
+                connection:Disconnect()
+            end
+        end
+        if Window._dragConnections then
+            for _, connection in ipairs(Window._dragConnections) do
+                if connection and connection.Disconnect then
+                    connection:Disconnect()
+                end
+            end
+        end
         Window.Container:Destroy()
         if Window.FloatingIcon then
             Window.FloatingIcon:Destroy()
+        end
+        for index, window in ipairs(NTGUI.Windows) do
+            if window == Window then
+                table.remove(NTGUI.Windows, index)
+                break
+            end
         end
     end
     
@@ -739,7 +760,8 @@ end
 
 -- Destroy all windows
 function NTGUI:DestroyAll()
-    for _, window in ipairs(self.Windows) do
+    for i = #self.Windows, 1, -1 do
+        local window = self.Windows[i]
         if window.Destroy then
             window:Destroy()
         end

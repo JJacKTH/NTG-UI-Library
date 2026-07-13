@@ -212,6 +212,7 @@ function Utility:MakeDraggable(frame, dragHandle)
     dragHandle = dragHandle or frame
     local dragging = false
     local dragInput, dragStart, startPos
+    local connections = {}
     
     local function update(input)
         local delta = input.Position - dragStart
@@ -221,7 +222,7 @@ function Utility:MakeDraggable(frame, dragHandle)
         )
     end
     
-    dragHandle.InputBegan:Connect(function(input)
+    table.insert(connections, dragHandle.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or 
            input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
@@ -234,20 +235,22 @@ function Utility:MakeDraggable(frame, dragHandle)
                 end
             end)
         end
-    end)
+    end))
     
-    dragHandle.InputChanged:Connect(function(input)
+    table.insert(connections, dragHandle.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement or
            input.UserInputType == Enum.UserInputType.Touch then
             dragInput = input
         end
-    end)
+    end))
     
-    UserInputService.InputChanged:Connect(function(input)
+    table.insert(connections, UserInputService.InputChanged:Connect(function(input)
         if input == dragInput and dragging then
             update(input)
         end
-    end)
+    end))
+
+    return connections
 end
 
 -- Clamp number

@@ -85,7 +85,7 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
         self.Listening = true
         self.Button.Text = "..."
         self.Button.BackgroundColor3 = Theme.Current.Accent
-        
+
         local connection
         connection = UserInputService.InputBegan:Connect(function(input, processed)
             if processed then return end
@@ -96,6 +96,7 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
                 self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
                 self.Listening = false
                 connection:Disconnect()
+                self.ChangeConnection = nil
                 
                 if self.ChangedCallback then
                     self.ChangedCallback(self.Value)
@@ -112,8 +113,10 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
                 self.Button.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
                 self.Listening = false
                 connection:Disconnect()
+                self.ChangeConnection = nil
             end
         end)
+        self.ChangeConnection = connection
     end)
     
     -- Trigger callback on key press
@@ -154,6 +157,9 @@ function Keybind.new(tab, options, Theme, Animation, ConfigHandler)
     end
     
     function self:Destroy()
+        if self.ChangeConnection then
+            self.ChangeConnection:Disconnect()
+        end
         if self.InputConnection then
             self.InputConnection:Disconnect()
         end
