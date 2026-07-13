@@ -258,6 +258,15 @@ function NTGUI:CreateWindow(options)
     Window.TitleBar.Active = true
     Window.TitleBar.Parent = Window.Container
     
+    local titleLine = Instance.new("Frame")
+    titleLine.Name = "TitleLine"
+    titleLine.Size = UDim2.new(1, 0, 0, 1)
+    titleLine.Position = UDim2.new(0, 0, 1, -1)
+    titleLine.BackgroundColor3 = Theme.Current.Stroke or Theme.Current.Divider
+    titleLine.BackgroundTransparency = 0.84
+    titleLine.BorderSizePixel = 0
+    titleLine.Parent = Window.TitleBar
+    
     -- Title text
     Window.TitleLabel = Instance.new("TextLabel")
     Window.TitleLabel.Name = "Title"
@@ -385,52 +394,41 @@ function NTGUI:CreateWindow(options)
     tabContainerStroke.Thickness = 1
     tabContainerStroke.Parent = Window.TabContainer
 
-    -- Search Container at top of sidebar
+    -- Search Container at top of sidebar (Fixed slot with styled background)
     local searchContainer = Instance.new("Frame")
     searchContainer.Name = "SearchContainer"
-    searchContainer.Size = UDim2.new(1, -14, 0, 32)
+    searchContainer.Size = UDim2.new(1, -14, 0, 28)
     searchContainer.Position = UDim2.new(0, 7, 0, 8)
-    searchContainer.BackgroundTransparency = 1
+    searchContainer.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
+    searchContainer.BackgroundTransparency = 0.5
+    searchContainer.BorderSizePixel = 0
     searchContainer.Parent = Window.TabContainer
 
-    -- Search Bar inside TabContainer
-    local searchBar = Instance.new("TextButton")
-    searchBar.Name = "SearchBar"
-    searchBar.Size = UDim2.new(0, 28, 0, 28)
-    searchBar.Position = UDim2.new(0, 0, 0.5, 0)
-    searchBar.AnchorPoint = Vector2.new(0, 0.5)
-    searchBar.BackgroundColor3 = Theme.Current.SurfaceAlt or Theme.Current.Surface
-    searchBar.BackgroundTransparency = 0.5
-    searchBar.BorderSizePixel = 0
-    searchBar.Text = ""
-    searchBar.AutoButtonColor = false
-    searchBar.Parent = searchContainer
-    
     local searchCorner = Instance.new("UICorner")
-    searchCorner.CornerRadius = UDim.new(0, 14)
-    searchCorner.Parent = searchBar
+    searchCorner.CornerRadius = UDim.new(0, 8)
+    searchCorner.Parent = searchContainer
     
     local searchStroke = Instance.new("UIStroke")
     searchStroke.Color = Theme.Current.Stroke or Color3.fromRGB(255, 255, 255)
     searchStroke.Transparency = 0.85
     searchStroke.Thickness = 1
-    searchStroke.Parent = searchBar
+    searchStroke.Parent = searchContainer
 
-    local searchIcon = Instance.new("TextLabel")
+    -- Fixed Search Icon (ImageLabel instead of Emoji)
+    local searchIcon = Instance.new("ImageLabel")
     searchIcon.Name = "SearchIcon"
-    searchIcon.Size = UDim2.new(1, 0, 1, 0)
-    searchIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
-    searchIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+    searchIcon.Size = UDim2.new(0, 14, 0, 14)
+    searchIcon.Position = UDim2.new(0, 8, 0.5, 0)
+    searchIcon.AnchorPoint = Vector2.new(0, 0.5)
     searchIcon.BackgroundTransparency = 1
-    searchIcon.Text = "🔍"
-    searchIcon.TextColor3 = Theme.Current.SubText
-    searchIcon.TextSize = 12
-    searchIcon.Parent = searchBar
+    searchIcon.Image = "rbxassetid://6031154871" -- Magnifying glass vector image
+    searchIcon.ImageColor3 = Theme.Current.SubText
+    searchIcon.Parent = searchContainer
     
     local searchBox = Instance.new("TextBox")
     searchBox.Name = "SearchBox"
-    searchBox.Size = UDim2.new(1, -40, 1, 0)
-    searchBox.Position = UDim2.new(0, 28, 0, 0)
+    searchBox.Size = UDim2.new(1, -34, 1, 0)
+    searchBox.Position = UDim2.new(0, 26, 0, 0)
     searchBox.BackgroundTransparency = 1
     searchBox.Text = ""
     searchBox.PlaceholderText = "Search..."
@@ -440,11 +438,8 @@ function NTGUI:CreateWindow(options)
     searchBox.Font = Enum.Font.GothamMedium
     searchBox.TextXAlignment = Enum.TextXAlignment.Left
     searchBox.ClearTextOnFocus = false
-    searchBox.Visible = false
-    searchBox.Parent = searchBar
+    searchBox.Parent = searchContainer
 
-    local isExpanded = false
-    
     local function getElementName(container)
         local name = container.Name
         local underscoreIndex = string.find(name, "_")
@@ -458,7 +453,7 @@ function NTGUI:CreateWindow(options)
         if not Window.ActiveTab then return end
         local query = string.lower(text)
         
-        local function searchContainer(parentFrame)
+        local function searchContainerElements(parentFrame)
             local hasVisibleChild = false
             for _, child in ipairs(parentFrame:GetChildren()) do
                 if child:IsA("Frame") and child.Name ~= "Header" and child.Name ~= "Content" then
@@ -467,7 +462,7 @@ function NTGUI:CreateWindow(options)
                     
                     local sectionContent = child:FindFirstChild("Content")
                     if sectionContent then
-                        local anyChildMatch = searchContainer(sectionContent)
+                        local anyChildMatch = searchContainerElements(sectionContent)
                         if isMatch or anyChildMatch then
                             child.Visible = true
                             hasVisibleChild = true
@@ -487,67 +482,8 @@ function NTGUI:CreateWindow(options)
             return hasVisibleChild
         end
         
-        searchContainer(Window.ActiveTab.Page)
+        searchContainerElements(Window.ActiveTab.Page)
     end
-
-    local function expandSearch()
-        if isExpanded then return end
-        isExpanded = true
-        
-        if Animation then
-            Animation:Play(searchBar, {Size = UDim2.new(1, 0, 0, 28)}, 0.22, Enum.EasingStyle.Quint)
-            Animation:Play(searchIcon, {
-                Position = UDim2.new(0, 8, 0.5, 0),
-                AnchorPoint = Vector2.new(0, 0.5),
-                Size = UDim2.new(0, 16, 0, 16)
-            }, 0.22, Enum.EasingStyle.Quint)
-        else
-            searchBar.Size = UDim2.new(1, 0, 0, 28)
-            searchIcon.Position = UDim2.new(0, 8, 0.5, 0)
-            searchIcon.AnchorPoint = Vector2.new(0, 0.5)
-            searchIcon.Size = UDim2.new(0, 16, 0, 16)
-        end
-        
-        task.delay(0.05, function()
-            searchBox.Visible = true
-            searchBox:CaptureFocus()
-        end)
-    end
-    
-    local function collapseSearch()
-        if not isExpanded then return end
-        isExpanded = false
-        
-        searchBox.Text = ""
-        performSearch("")
-        searchBox.Visible = false
-        
-        if Animation then
-            Animation:Play(searchBar, {Size = UDim2.new(0, 28, 0, 28)}, 0.22, Enum.EasingStyle.Quint)
-            Animation:Play(searchIcon, {
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Size = UDim2.new(1, 0, 1, 0)
-            }, 0.22, Enum.EasingStyle.Quint)
-        else
-            searchBar.Size = UDim2.new(0, 28, 0, 28)
-            searchIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
-            searchIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-            searchIcon.Size = UDim2.new(1, 0, 1, 0)
-        end
-    end
-    
-    searchBar.MouseButton1Click:Connect(function()
-        if not isExpanded then
-            expandSearch()
-        end
-    end)
-    
-    searchBox.FocusLost:Connect(function(enterPressed)
-        if searchBox.Text == "" then
-            collapseSearch()
-        end
-    end)
 
     searchBox:GetPropertyChangedSignal("Text"):Connect(function()
         performSearch(searchBox.Text)
@@ -1083,6 +1019,44 @@ function NTGUI:CreateWindow(options)
     -- Add to windows list
     table.insert(NTGUI.Windows, Window)
     updateBlur()
+    
+    -- Resize Handle (bottom right)
+    local resizeHandle = Instance.new("ImageButton")
+    resizeHandle.Name = "ResizeHandle"
+    resizeHandle.Size = UDim2.new(0, 16, 0, 16)
+    resizeHandle.Position = UDim2.new(1, -4, 1, -4)
+    resizeHandle.AnchorPoint = Vector2.new(1, 1)
+    resizeHandle.BackgroundTransparency = 1
+    resizeHandle.Image = "rbxassetid://9886659023"
+    resizeHandle.ImageColor3 = Theme.Current.SubText
+    resizeHandle.ZIndex = 10
+    resizeHandle.Parent = Window.Container
+
+    local dragStart, startSize
+    resizeHandle.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragStart = input.Position
+            startSize = Window.Container.Size
+            
+            local moveConnection
+            moveConnection = UserInputService.InputChanged:Connect(function(input2)
+                if input2.UserInputType == Enum.UserInputType.MouseMovement or input2.UserInputType == Enum.UserInputType.Touch then
+                    local delta = input2.Position - dragStart
+                    local newWidth = math.clamp(startSize.X.Offset + delta.X, 450, 900)
+                    local newHeight = math.clamp(startSize.Y.Offset + delta.Y, 350, 700)
+                    Window.Container.Size = UDim2.new(0, newWidth, 0, newHeight)
+                end
+            end)
+            
+            local releaseConnection
+            releaseConnection = UserInputService.InputEnded:Connect(function(input3)
+                if input3.UserInputType == Enum.UserInputType.MouseButton1 or input3.UserInputType == Enum.UserInputType.Touch then
+                    if moveConnection then moveConnection:Disconnect() end
+                    if releaseConnection then releaseConnection:Disconnect() end
+                end
+            end)
+        end
+    end)
     
     -- Entry animation
     if Animation then
